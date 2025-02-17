@@ -31,27 +31,35 @@ const buttonVariants = cva(
       size: "default",
     },
   }
-);
-
+)
 
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
   asChild?: boolean
+  ariaLabel?: string // Thêm thuộc tính để hỗ trợ aria-label cho các button không có văn bản
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
+  ({ className, variant, size, asChild = false, ariaLabel, children, ...props }, ref) => {
     const Comp = asChild ? Slot : "button"
+
+    // Nếu không có văn bản con, sử dụng aria-label (cho các button icon)
+    const label = ariaLabel || (typeof children === 'string' ? children : undefined)
+
     return (
       <Comp
         className={cn(buttonVariants({ variant, size, className }))}
         ref={ref}
+        aria-label={label} // Thêm aria-label vào button
         {...props}
-      />
+      >
+        {children}
+      </Comp>
     )
   }
 )
+
 Button.displayName = "Button"
 
 export { Button, buttonVariants }
