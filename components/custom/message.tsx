@@ -49,7 +49,7 @@ export const Message = ({
             style={{
               backgroundColor: role === "user" ? "#acb7ff" : "transparent",
               color: "#383838",
-              padding: "8px 12px",
+              padding: "8px 0px",
               borderRadius: "16px",
               marginLeft: role === "user" ? "auto" : "0",
               marginRight: "0",
