@@ -1,7 +1,7 @@
 import { convertToCoreMessages, Message, streamText } from "ai";
 import { z } from "zod";
 
-import { geminiProModel } from "@/ai";
+import { vietchartTamaModel } from "@/ai";  // Thay đổi tên model phù hợp
 import { auth } from "@/app/(auth)/auth";
 import { deleteChatById, getChatById, saveChat } from "@/db/queries";
 import { generateUUID } from "@/lib/utils";
@@ -21,10 +21,8 @@ export async function POST(request: Request) {
   );
 
   const result = await streamText({
-    model: vietchartTamaModel,  // Thay đổi tên model phù hợp
-    system: `Bạn là Tama, AI dễ thương và thân thiện của Vietchart, trả lời ngắn gọn, vui vẻ và hữu ích!`
-});
-
+    model: geminiProModel,  // Thay đổi tên model phù hợp
+    system: `Bạn là Tama, AI dễ thương và thân thiện của Vietchart, trả lời ngắn gọn, vui vẻ và hữu ích!`,
     messages: coreMessages,
     onFinish: async ({ responseMessages }) => {
       if (session.user && session.user.id) {
