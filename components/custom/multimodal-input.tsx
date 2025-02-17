@@ -19,18 +19,19 @@ import useWindowSize from "./use-window-size";
 import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
 
-const suggestedActions = [
+const suggestedActions = [ 
   {
-    title: "Help me book a flight",
-    label: "from San Francisco to London",
-    action: "Help me book a flight from San Francisco to London",
+    title: "Tell me a fun fact",
+    label: "about the universe!",
+    action: "Tell me a fun fact about the universe!",
   },
   {
-    title: "What is the status",
-    label: "of flight BA142 flying tmrw?",
-    action: "What is the status of flight BA142 flying tmrw?",
+    title: "What’s your best joke?",
+    label: "Make me laugh!",
+    action: "What’s your best joke? Make me laugh!",
   },
 ];
+
 
 export function MultimodalInput({
   input,
