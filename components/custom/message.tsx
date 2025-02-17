@@ -37,14 +37,27 @@ export const Message = ({
         {content && typeof content === "string" && (
           <div
             className={`flex flex-col gap-4 ${
-              role === "user" ? "text-green-500" : "text-zinc-800 dark:text-zinc-300"
+              role === "user"
+                ? "text-green-500" // Tin nhắn của người dùng
+                : "text-zinc-800 dark:text-zinc-300" // Tin nhắn của bot
             }`}
+            style={{
+              backgroundColor: role === "user" ? "#acb7ff" : "transparent", // Màu nền xanh cho người dùng
+              color: "#383838", // Màu chữ cho người dùng
+              padding: "8px 12px", // Padding cho người dùng
+              borderRadius: "16px", // Bo tròn cho người dùng
+              marginLeft: role === "user" ? "auto" : "0", // Thụt sang phải cho người dùng
+              marginRight: "0",
+              textAlign: role === "user" ? "right" : "left", // Căn phải cho người dùng
+              maxWidth: "75%", // Giới hạn chiều rộng cho tin nhắn của người dùng
+              wordWrap: "break-word", // Đảm bảo văn bản không bị tràn
+              display: "inline-block", // Giúp căn chỉnh tốt hơn
+            }}
           >
             <Markdown>{content}</Markdown>
           </div>
         )}
 
-        {/* Continue with other content */}
         {toolInvocations && (
           <div className="flex flex-col gap-4">
             {toolInvocations.map((toolInvocation) => {
@@ -55,13 +68,47 @@ export const Message = ({
 
                 return (
                   <div key={toolCallId}>
-                    {/* Handle tool invocations */}
+                    {toolName === "getWeather" ? (
+                      <Weather weatherAtLocation={result} />
+                    ) : toolName === "displayFlightStatus" ? (
+                      <FlightStatus flightStatus={result} />
+                    ) : toolName === "searchFlights" ? (
+                      <ListFlights chatId={chatId} results={result} />
+                    ) : toolName === "selectSeats" ? (
+                      <SelectSeats chatId={chatId} availability={result} />
+                    ) : toolName === "createReservation" ? (
+                      Object.keys(result).includes("error") ? null : (
+                        <CreateReservation reservation={result} />
+                      )
+                    ) : toolName === "authorizePayment" ? (
+                      <AuthorizePayment intent={result} />
+                    ) : toolName === "displayBoardingPass" ? (
+                      <DisplayBoardingPass boardingPass={result} />
+                    ) : toolName === "verifyPayment" ? (
+                      <VerifyPayment result={result} />
+                    ) : (
+                      <div>{JSON.stringify(result, null, 2)}</div>
+                    )}
                   </div>
                 );
               } else {
                 return (
                   <div key={toolCallId} className="skeleton">
-                    {/* Handle skeleton loading */}
+                    {toolName === "getWeather" ? (
+                      <Weather />
+                    ) : toolName === "displayFlightStatus" ? (
+                      <FlightStatus />
+                    ) : toolName === "searchFlights" ? (
+                      <ListFlights chatId={chatId} />
+                    ) : toolName === "selectSeats" ? (
+                      <SelectSeats chatId={chatId} />
+                    ) : toolName === "createReservation" ? (
+                      <CreateReservation />
+                    ) : toolName === "authorizePayment" ? (
+                      <AuthorizePayment />
+                    ) : toolName === "displayBoardingPass" ? (
+                      <DisplayBoardingPass />
+                    ) : null}
                   </div>
                 );
               }
