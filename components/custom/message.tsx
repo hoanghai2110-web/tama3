@@ -49,7 +49,7 @@ export const Message = ({
               marginLeft: role === "user" ? "auto" : "0", // Thụt sang phải cho người dùng
               marginRight: "0",
               textAlign: role === "user" ? "right" : "left", // Căn phải cho người dùng
-              maxWidth: "75%", // Giới hạn chiều rộng cho tin nhắn của người dùng
+              maxWidth: "100%", // Giới hạn chiều rộng cho tin nhắn của người dùng
               wordWrap: "break-word", // Đảm bảo văn bản không bị tràn
               display: "inline-block", // Giúp căn chỉnh tốt hơn
             }}
