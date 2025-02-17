@@ -1,5 +1,3 @@
-"use client";
-
 import { Attachment, ToolInvocation } from "ai";
 import { motion } from "framer-motion";
 import { ReactNode } from "react";
@@ -16,8 +14,7 @@ import { ListFlights } from "../flights/list-flights";
 import { SelectSeats } from "../flights/select-seats";
 import { VerifyPayment } from "../flights/verify-payment";
 
-
-export const Message = ({ 
+export const Message = ({
   chatId,
   role,
   content,
@@ -32,25 +29,22 @@ export const Message = ({
 }) => {
   return (
     <motion.div
-      className={`flex flex-row gap-4 px-4 w-full md:w-[500px] md:px-0 first-of-type:pt-20
-        ${role === "user" ? "bg-[#E0E7FF] text-right text-[#1C1C1E] rounded-2xl p-3 ml-auto"
-                          : "bg-[#F1F3F4] text-left text-[#1C1C1E] rounded-2xl p-3 mr-auto"}`}
+      className={`flex flex-row gap-4 px-4 w-full md:w-[500px] md:px-0 first-of-type:pt-20`}
       initial={{ y: 5, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
     >
-      {/* Avatar bot */}
-      {role !== "user" && <BotIcon className="w-8 h-8 text-gray-500" />}
-      
-      {/* Avatar user */}
-      {role === "user" && <UserIcon className="w-8 h-8 text-blue-500" />}
-
       <div className="flex flex-col gap-2 w-full">
         {content && typeof content === "string" && (
-          <div className="text-zinc-800 dark:text-zinc-300 flex flex-col gap-4">
+          <div
+            className={`flex flex-col gap-4 ${
+              role === "user" ? "text-green-500" : "text-zinc-800 dark:text-zinc-300"
+            }`}
+          >
             <Markdown>{content}</Markdown>
           </div>
         )}
 
+        {/* Continue with other content */}
         {toolInvocations && (
           <div className="flex flex-col gap-4">
             {toolInvocations.map((toolInvocation) => {
@@ -61,47 +55,13 @@ export const Message = ({
 
                 return (
                   <div key={toolCallId}>
-                    {toolName === "getWeather" ? (
-                      <Weather weatherAtLocation={result} />
-                    ) : toolName === "displayFlightStatus" ? (
-                      <FlightStatus flightStatus={result} />
-                    ) : toolName === "searchFlights" ? (
-                      <ListFlights chatId={chatId} results={result} />
-                    ) : toolName === "selectSeats" ? (
-                      <SelectSeats chatId={chatId} availability={result} />
-                    ) : toolName === "createReservation" ? (
-                      Object.keys(result).includes("error") ? null : (
-                        <CreateReservation reservation={result} />
-                      )
-                    ) : toolName === "authorizePayment" ? (
-                      <AuthorizePayment intent={result} />
-                    ) : toolName === "displayBoardingPass" ? (
-                      <DisplayBoardingPass boardingPass={result} />
-                    ) : toolName === "verifyPayment" ? (
-                      <VerifyPayment result={result} />
-                    ) : (
-                      <div>{JSON.stringify(result, null, 2)}</div>
-                    )}
+                    {/* Handle tool invocations */}
                   </div>
                 );
               } else {
                 return (
                   <div key={toolCallId} className="skeleton">
-                    {toolName === "getWeather" ? (
-                      <Weather />
-                    ) : toolName === "displayFlightStatus" ? (
-                      <FlightStatus />
-                    ) : toolName === "searchFlights" ? (
-                      <ListFlights chatId={chatId} />
-                    ) : toolName === "selectSeats" ? (
-                      <SelectSeats chatId={chatId} />
-                    ) : toolName === "createReservation" ? (
-                      <CreateReservation />
-                    ) : toolName === "authorizePayment" ? (
-                      <AuthorizePayment />
-                    ) : toolName === "displayBoardingPass" ? (
-                      <DisplayBoardingPass />
-                    ) : null}
+                    {/* Handle skeleton loading */}
                   </div>
                 );
               }
