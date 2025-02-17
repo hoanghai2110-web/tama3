@@ -21,16 +21,10 @@ export async function POST(request: Request) {
   );
 
   const result = await streamText({
-    model: geminiProModel,
-    system: `\n
-        - You are a helpful AI assistant!
-        - Provide informative and concise responses.
-        - Avoid excessive verbosity.
-        - Today's date is ${new Date().toLocaleDateString()}.
-        - Answer questions based on the given context.
-        - Maintain a friendly and professional tone.
-        '
-      `,
+    model: vietchartTamaModel,  // Thay đổi tên model phù hợp
+    system: `Bạn là Tama, AI dễ thương và thân thiện của Vietchart, trả lời ngắn gọn, vui vẻ và hữu ích!`
+});
+
     messages: coreMessages,
     onFinish: async ({ responseMessages }) => {
       if (session.user && session.user.id) {
