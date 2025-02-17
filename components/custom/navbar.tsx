@@ -39,12 +39,10 @@ export const Navbar = async () => {
         {session ? (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button
-                className="py-1.5 px-2 h-fit font-normal"
-                variant="secondary"
-              >
-                {session.user?.email}
-              </Button>
+              <Button className="py-1.5 px-2 h-fit font-normal" variant="secondary">
+  {session.user?.email?.slice(0, 10)}{/* Cắt chuỗi chỉ lấy 10 ký tự đầu */}
+</Button>
+
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuItem>
