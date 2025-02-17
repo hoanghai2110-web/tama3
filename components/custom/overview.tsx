@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion } from "framer-motion"; 
 import Link from "next/link";
 
 import { LogoGoogle, MessageIcon, VercelIcon } from "./icons";
@@ -20,7 +20,7 @@ export const Overview = () => {
           <MessageIcon />
         </p>
         <p>
-          Meet <strong>Tama</strong> – your witty, confident, and all-knowing AI assistant! 🚀
+          Meet <strong>Tama</strong> &ndash; your witty, confident, and all-knowing AI assistant! 🚀
         </p>
         <p>
           Tama is built with Next.js and the AI SDK by Vercel, powered by the Google Gemini model. 
@@ -43,10 +43,9 @@ export const Overview = () => {
           >
             Docs
           </Link>
-          . But trust Tama, you won't need it! 😉
+          . But trust Tama, you won&apos;t need it! 😉
         </p>
       </div>
-
     </motion.div>
   );
 };
