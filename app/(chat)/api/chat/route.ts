@@ -1,7 +1,7 @@
 import { convertToCoreMessages, Message, streamText } from "ai";
 import { z } from "zod";
 
-import { vietchartTamaModel } from "@/ai";  // Thay đổi tên model phù hợp
+import { geminiProModel } from "@/ai";  // Thay đổi tên model phù hợp
 import { auth } from "@/app/(auth)/auth";
 import { deleteChatById, getChatById, saveChat } from "@/db/queries";
 import { generateUUID } from "@/lib/utils";
