@@ -47,7 +47,7 @@ export const Message = ({
               padding: "8px 12px", // Padding cho người dùng
               borderRadius: "16px", // Bo tròn cho người dùng
               marginLeft: role === "user" ? "auto" : "0", // Thụt sang phải cho người dùng
-              marginRight: "10px",
+              marginRight: "0",
               textAlign: role === "user" ? "right" : "left", // Căn phải cho người dùng
               maxWidth: "100%", // Giới hạn chiều rộng cho tin nhắn của người dùng
               wordWrap: "break-word", // Đảm bảo văn bản không bị tràn
