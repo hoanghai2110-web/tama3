@@ -39,10 +39,13 @@ export const Navbar = async () => {
         {session ? (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button className="py-1.5 px-2 h-fit font-normal" variant="secondary">
-  {session.user?.email?.slice(0, 10)}{/* Cắt chuỗi chỉ lấy 10 ký tự đầu */}
-</Button>
-
+              <Button
+                className="py-1.5 px-2 h-fit font-normal"
+                variant="secondary"
+                aria-label={`User account menu for ${session.user?.email}`}
+              >
+                {session.user?.email?.slice(0, 10)} {/* Cắt chuỗi chỉ lấy 10 ký tự đầu */}
+              </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuItem>
@@ -62,6 +65,7 @@ export const Navbar = async () => {
                   <button
                     type="submit"
                     className="w-full text-left px-1 py-0.5 text-red-500"
+                    aria-label="Sign out of account"
                   >
                     Sign out
                   </button>
@@ -70,7 +74,11 @@ export const Navbar = async () => {
             </DropdownMenuContent>
           </DropdownMenu>
         ) : (
-          <Button className="py-1.5 px-2 h-fit font-normal text-white" asChild>
+          <Button
+            className="py-1.5 px-2 h-fit font-normal text-white"
+            asChild
+            aria-label="Login button"
+          >
             <Link href="/login">Login</Link>
           </Button>
         )}
