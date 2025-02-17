@@ -3,6 +3,7 @@
 import { Attachment, ToolInvocation } from "ai";
 import { motion } from "framer-motion";
 import { ReactNode } from "react";
+import Markdown from "react-markdown";
 
 import { BotIcon, UserIcon } from "./icons";
 import { Markdown } from "./markdown";
@@ -16,7 +17,7 @@ import { ListFlights } from "../flights/list-flights";
 import { SelectSeats } from "../flights/select-seats";
 import { VerifyPayment } from "../flights/verify-payment";
 
-export const Message = ({
+export const Message = ({ 
   chatId,
   role,
   content,
@@ -31,11 +32,12 @@ export const Message = ({
 }) => {
   return (
     <motion.div
-      className={`flex flex-row gap-4 px-4 w-full md:w-[500px] md:px-0 first-of-type:pt-20`}
+      className={`flex flex-row gap-4 px-4 w-full md:w-[500px] md:px-0 first-of-type:pt-20
+        ${role === "user" ? "bg-[#E0E7FF] text-right text-[#1C1C1E] rounded-2xl p-3 ml-auto"
+                          : "bg-[#F1F3F4] text-left text-[#1C1C1E] rounded-2xl p-3 mr-auto"}`}
       initial={{ y: 5, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
     >
-
       <div className="flex flex-col gap-2 w-full">
         {content && typeof content === "string" && (
           <div className="text-zinc-800 dark:text-zinc-300 flex flex-col gap-4">
