@@ -13,27 +13,29 @@ export const Overview = () => {
       exit={{ opacity: 0, scale: 0.98 }}
       transition={{ delay: 0.5 }}
     >
-      <div className="border-none bg-muted/50 rounded-2xl p-6 flex flex-col gap-4 text-zinc-500 text-sm dark:text-zinc-400 dark:border-zinc-700">
+      <div className="border-none bg-muted/50 rounded-2xl p-6 flex flex-col gap-4 text-zinc-500 text-sm dark:text-zinc-400 dark:border-zinc-700"> 
         <p className="flex flex-row justify-center gap-4 items-center text-zinc-900 dark:text-zinc-50">
           <VercelIcon />
           <span>+</span>
           <MessageIcon />
         </p>
         <p>
-          This is an open source Chatbot template powered by the Google Gemini
-          model built with Next.js and the AI SDK by Vercel. It uses the{" "}
-          <code className="rounded-sm bg-muted-foreground/15 px-1.5 py-0.5">
-            streamText
-          </code>{" "}
-          function in the server and the{" "}
-          <code className="rounded-sm bg-muted-foreground/15 px-1.5 py-0.5">
-            useChat
-          </code>{" "}
-          hook on the client to create a seamless chat experience.
+          Meet <strong>Tama</strong> – your witty, confident, and all-knowing AI assistant! 🚀
         </p>
         <p>
-          {" "}
-          You can learn more about the AI SDK by visiting the{" "}
+          Tama is built with Next.js and the AI SDK by Vercel, powered by the Google Gemini model. 
+          It leverages the 
+          <code className="rounded-sm bg-muted-foreground/15 px-1.5 py-0.5">
+            streamText
+          </code> 
+          function on the server and the 
+          <code className="rounded-sm bg-muted-foreground/15 px-1.5 py-0.5">
+            useChat
+          </code> 
+          hook on the client to provide a seamless, entertaining, and ultra-intelligent chat experience.
+        </p>
+        <p>
+          Want to know more about how Tama works? Check out the 
           <Link
             className="text-blue-500 dark:text-blue-400"
             href="https://sdk.vercel.ai/docs"
@@ -41,9 +43,10 @@ export const Overview = () => {
           >
             Docs
           </Link>
-          .
+          . But trust Tama, you won't need it! 😉
         </p>
       </div>
+
     </motion.div>
   );
 };
