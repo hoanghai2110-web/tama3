@@ -22,18 +22,7 @@ export const Overview = () => {
         <p>
           Meet <strong>Tama</strong> &ndash; your witty, confident, and all-knowing AI assistant! 🚀
         </p>
-        <p>
-          Tama is built with Next.js and the AI SDK by Vercel, powered by the Google Gemini model. 
-          It leverages the 
-          <code className="rounded-sm bg-muted-foreground/15 px-1.5 py-0.5">
-            streamText
-          </code> 
-          function on the server and the 
-          <code className="rounded-sm bg-muted-foreground/15 px-1.5 py-0.5">
-            useChat
-          </code> 
-          hook on the client to provide a seamless, entertaining, and ultra-intelligent chat experience.
-        </p>
+       
         <p>
           Want to know more about how Tama works? Check out the 
           <Link
