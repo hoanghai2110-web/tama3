@@ -14,6 +14,11 @@ import { ListFlights } from "../flights/list-flights";
 import { SelectSeats } from "../flights/select-seats";
 import { VerifyPayment } from "../flights/verify-payment";
 
+const typingVariants = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1 },
+};
+
 export const Message = ({
   chatId,
   role,
@@ -38,89 +43,39 @@ export const Message = ({
           <div
             className={`flex flex-col gap-4 ${
               role === "user"
-                ? "text-green-500" // Tin nhắn của người dùng
-                : "text-zinc-800 dark:text-zinc-300" // Tin nhắn của bot
+                ? "text-green-500"
+                : "text-zinc-800 dark:text-zinc-300"
             }`}
             style={{
-              backgroundColor: role === "user" ? "#acb7ff" : "transparent", // Màu nền xanh cho người dùng
-              color: "#383838", // Màu chữ cho người dùng
-              padding: "8px 12px", // Padding cho người dùng
-              borderRadius: "16px", // Bo tròn cho người dùng
-              marginLeft: role === "user" ? "auto" : "0", // Thụt sang phải cho người dùng
+              backgroundColor: role === "user" ? "#acb7ff" : "transparent",
+              color: "#383838",
+              padding: "8px 12px",
+              borderRadius: "16px",
+              marginLeft: role === "user" ? "auto" : "0",
               marginRight: "0",
-              textAlign: role === "user" ? "right" : "left", // Căn phải cho người dùng
-              maxWidth: "100%", // Giới hạn chiều rộng cho tin nhắn của người dùng
-              wordWrap: "break-word", // Đảm bảo văn bản không bị tràn
-              display: "inline-block", // Giúp căn chỉnh tốt hơn
+              textAlign: role === "user" ? "right" : "left",
+              maxWidth: "100%",
+              wordWrap: "break-word",
+              display: "inline-block",
             }}
           >
-            <Markdown>{content}</Markdown>
-          </div>
-        )}
-
-        {toolInvocations && (
-          <div className="flex flex-col gap-4">
-            {toolInvocations.map((toolInvocation) => {
-              const { toolName, toolCallId, state } = toolInvocation;
-
-              if (state === "result") {
-                const { result } = toolInvocation;
-
-                return (
-                  <div key={toolCallId}>
-                    {toolName === "getWeather" ? (
-                      <Weather weatherAtLocation={result} />
-                    ) : toolName === "displayFlightStatus" ? (
-                      <FlightStatus flightStatus={result} />
-                    ) : toolName === "searchFlights" ? (
-                      <ListFlights chatId={chatId} results={result} />
-                    ) : toolName === "selectSeats" ? (
-                      <SelectSeats chatId={chatId} availability={result} />
-                    ) : toolName === "createReservation" ? (
-                      Object.keys(result).includes("error") ? null : (
-                        <CreateReservation reservation={result} />
-                      )
-                    ) : toolName === "authorizePayment" ? (
-                      <AuthorizePayment intent={result} />
-                    ) : toolName === "displayBoardingPass" ? (
-                      <DisplayBoardingPass boardingPass={result} />
-                    ) : toolName === "verifyPayment" ? (
-                      <VerifyPayment result={result} />
-                    ) : (
-                      <div>{JSON.stringify(result, null, 2)}</div>
-                    )}
-                  </div>
-                );
-              } else {
-                return (
-                  <div key={toolCallId} className="skeleton">
-                    {toolName === "getWeather" ? (
-                      <Weather />
-                    ) : toolName === "displayFlightStatus" ? (
-                      <FlightStatus />
-                    ) : toolName === "searchFlights" ? (
-                      <ListFlights chatId={chatId} />
-                    ) : toolName === "selectSeats" ? (
-                      <SelectSeats chatId={chatId} />
-                    ) : toolName === "createReservation" ? (
-                      <CreateReservation />
-                    ) : toolName === "authorizePayment" ? (
-                      <AuthorizePayment />
-                    ) : toolName === "displayBoardingPass" ? (
-                      <DisplayBoardingPass />
-                    ) : null}
-                  </div>
-                );
-              }
-            })}
-          </div>
-        )}
-
-        {attachments && (
-          <div className="flex flex-row gap-2">
-            {attachments.map((attachment) => (
-              <PreviewAttachment key={attachment.url} attachment={attachment} />
-            ))}
+            {role === "bot" ? (
+              <motion.span
+                initial="hidden"
+                animate="visible"
+                variants={typingVariants}
+                transition={{ duration: 0.05, staggerChildren: 0.05 }}
+                className="animate-pulse"
+              >
+                {content.split("").map((char, index) => (
+                  <motion.span key={index} variants={typingVariants}>
+                    {char}
+                  </motion.span>
+                ))}
+              </motion.span>
+            ) : (
+              <Markdown>{content}</Markdown>
+            )}
           </div>
         )}
       </div>
