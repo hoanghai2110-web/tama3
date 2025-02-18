@@ -30,9 +30,6 @@ export const Navbar = async () => {
               width={20}  
               alt="gemini logo"  
             />  
-            <div className="text-zinc-500">
-              <SlashIcon size={16} />
-            </div>
             <div className="text-sm dark:text-zinc-300 truncate w-28 md:w-fit">
               TamaAI
             </div>  
@@ -42,38 +39,39 @@ export const Navbar = async () => {
         </div>  
   
         {session ? (  
-          <DropdownMenu>  
-             <DropdownMenuTrigger asChild>
-  <Button className="py-1.5 px-2 h-fit font-normal" variant="secondary">
-    <UserIcon/> {/* Thay thế email bằng icon */}
-  </Button>
-</DropdownMenuTrigger>
+          <DropdownMenu>
+  <DropdownMenuTrigger asChild>
+    <Button className="py-1.5 px-2 h-fit font-normal" variant="secondary">
+      <UserIcon/> {/* Thay thế email bằng icon */}
+    </Button>
+  </DropdownMenuTrigger>
 
-            <DropdownMenuContent align="end">  
-              <DropdownMenuItem>  
-                <ThemeToggle />  
-              </DropdownMenuItem>  
-              <DropdownMenuItem className="p-1 z-50">  
-                <form  
-                  className="w-full"  
-                  action={async () => {  
-                    "use server";  
-  
-                    await signOut({  
-                      redirectTo: "/",  
-                    });  
-                  }}  
-                >  
-                  <button  
-                    type="submit"  
-                    className="w-full text-left px-1 py-0.5 text-red-500"  
-                  >  
-                    Sign out  
-                  </button>  
-                </form>  
-              </DropdownMenuItem>  
-            </DropdownMenuContent>  
-          </DropdownMenu>  
+  <DropdownMenuContent align="end" className="border-none"> {/* Thêm class border-none */}
+    <DropdownMenuItem>
+      <ThemeToggle />
+    </DropdownMenuItem>
+    <DropdownMenuItem className="p-1 z-50">
+      <form
+        className="w-full"
+        action={async () => {
+          "use server";
+
+          await signOut({
+            redirectTo: "/",
+          });
+        }}
+      >
+        <button
+          type="submit"
+          className="w-full text-left px-1 py-0.5 text-red-500"
+        >
+          Sign out
+        </button>
+      </form>
+    </DropdownMenuItem>
+  </DropdownMenuContent>
+</DropdownMenu>
+
         ) : (  
           <Button className="py-1.5 px-2 h-fit font-normal text-white" asChild>  
             <Link href="/login">Login</Link>  
