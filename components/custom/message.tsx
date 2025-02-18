@@ -2,6 +2,16 @@ import { motion } from "framer-motion";
 import { ReactNode, useState } from "react";
 import { Markdown } from "./markdown";
 import { Copy, ThumbsUp } from "lucide-react";
+import { Attachment, ToolInvocation } from "ai";
+import { PreviewAttachment } from "./preview-attachment";
+import { Weather } from "./weather";
+import { AuthorizePayment } from "../flights/authorize-payment";
+import { DisplayBoardingPass } from "../flights/boarding-pass";
+import { CreateReservation } from "../flights/create-reservation";
+import { FlightStatus } from "../flights/flight-status";
+import { ListFlights } from "../flights/list-flights";
+import { SelectSeats } from "../flights/select-seats";
+import { VerifyPayment } from "../flights/verify-payment";
 
 const typingVariants = {
   hidden: { opacity: 0 },
