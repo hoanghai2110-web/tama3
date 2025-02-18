@@ -43,7 +43,7 @@ export const Message = ({
           <div
             className={`flex flex-col gap-4 ${
               role === "user"
-                ? "text-white-500"
+                ? "text-white"
                 : "text-zinc-800 dark:text-zinc-300"
             }`}
             style={{
