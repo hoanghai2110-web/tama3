@@ -42,7 +42,7 @@ export const Navbar = async () => {
               <Button
                 className="py-1.5 px-2 h-fit font-normal"
                 variant="secondary"
-                aria-label={`User account menu for ${session.user?.email}`}
+                aria-label={`Open user account menu for ${session.user?.email}`} // Sửa lại aria-label
               >
                 {session.user?.email?.slice(0, 10)} {/* Cắt chuỗi chỉ lấy 10 ký tự đầu */}
               </Button>
@@ -65,7 +65,7 @@ export const Navbar = async () => {
                   <button
                     type="submit"
                     className="w-full text-left px-1 py-0.5 text-red-500"
-                    aria-label="Sign out of account"
+                    aria-label="Sign out of account" // Đảm bảo có aria-label
                   >
                     Sign out
                   </button>
@@ -77,7 +77,7 @@ export const Navbar = async () => {
           <Button
             className="py-1.5 px-2 h-fit font-normal text-white"
             asChild
-            aria-label="Login button"
+            aria-label="Login button" // Đảm bảo có aria-label
           >
             <Link href="/login">Login</Link>
           </Button>
