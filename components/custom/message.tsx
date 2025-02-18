@@ -47,8 +47,8 @@ export const Message = ({
                 : "text-zinc-800 dark:text-zinc-300"
             }`}
             style={{
-              backgroundColor: role === "user" ? "#acb7ff" : "transparent",
-
+              backgroundColor: role === "user" ? "#1c1c1c" : "transparent",
+              color: "#f3f0f0",
               padding: "8px 12px",
               borderRadius: "16px",
               marginLeft: role === "user" ? "auto" : "0",
