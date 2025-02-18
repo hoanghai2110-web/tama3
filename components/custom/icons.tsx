@@ -1,3 +1,5 @@
+export { Copy as CopyIcon, ThumbsUp as LikeIcon } from "lucide-react";
+
 export const BotIcon = () => {
   return (
     <svg
