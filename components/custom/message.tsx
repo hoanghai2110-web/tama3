@@ -19,6 +19,11 @@ const typingVariants = {
   visible: { opacity: 1 },
 };
 
+const lightEffectVariants = {
+  hidden: { opacity: 0, filter: "brightness(0)" },
+  visible: { opacity: 1, filter: "brightness(1.5)" },
+};
+
 export const Message = ({
   chatId,
   role,
@@ -41,11 +46,7 @@ export const Message = ({
       <div className="flex flex-col gap-2 w-full">
         {content && typeof content === "string" && (
           <div
-            className={`flex flex-col gap-4 ${
-              role === "user"
-                ? "text-white"
-                : "text-zinc-800 dark:text-zinc-300"
-            }`}
+            className={`flex flex-col gap-4 ${role === "user" ? "text-white" : "text-zinc-800 dark:text-zinc-300"}`}
             style={{
               backgroundColor: role === "user" ? "#1c1c1c" : "transparent",
               padding: "8px 12px",
@@ -59,21 +60,28 @@ export const Message = ({
             }}
           >
             {role === "bot" ? (
-              <motion.span
+              <motion.div
                 initial="hidden"
                 animate="visible"
-                variants={typingVariants}
-                transition={{ duration: 0.05, staggerChildren: 0.05 }}
-                className="animate-pulse"
+                variants={lightEffectVariants}  // Lóe sáng hiệu ứng
+                transition={{ duration: 0.05, repeat: Infinity, repeatType: "reverse" }}  // Hiệu ứng sáng đảo ngược
               >
-                {content.split("").map((char, index) => (
-                  <motion.span key={index} variants={typingVariants}>
-                    {char}
-                  </motion.span>
-                ))}
-              </motion.span>
+                <motion.span
+                  initial="hidden"
+                  animate="visible"
+                  variants={typingVariants}
+                  transition={{ duration: 0.05, staggerChildren: 0.05 }}
+                  className="animate-pulse"
+                >
+                  {content.split("").map((char, index) => (
+                    <motion.span key={index} variants={typingVariants}>
+                      {char}
+                    </motion.span>
+                  ))}
+                </motion.span>
+              </motion.div>
             ) : (
-              <Markdown>{content}</Markdown>
+              <div>{content}</div>
             )}
           </div>
         )}
