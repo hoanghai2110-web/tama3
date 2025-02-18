@@ -3,10 +3,10 @@ export { Copy as CopyIcon, ThumbsUp as LikeIcon } from "lucide-react";
 export const BotIcon = () => {
   return (
     <svg
-      height="16"
+      height="14"
       strokeLinejoin="round"
       viewBox="0 0 16 16"
-      width="16"
+      width="14"
       style={{ color: "currentcolor" }}
     >
       <path
