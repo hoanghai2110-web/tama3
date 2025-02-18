@@ -39,10 +39,11 @@ export const Navbar = async () => {
         {session ? (  
           <DropdownMenu>  
              <DropdownMenuTrigger asChild>
-              <Button className="py-1.5 px-2 h-fit font-normal" variant="secondary">
-                <MessageIcon/> {/* Thay thế email bằng icon */}
-              </Button>
-            </DropdownMenuTrigger>
+  <Button className="py-1.5 px-2 h-fit font-normal" variant="secondary">
+    <UserIcon className="h-5 w-5" /> {/* Thay thế email bằng icon */}
+  </Button>
+</DropdownMenuTrigger>
+
             <DropdownMenuContent align="end">  
               <DropdownMenuItem>  
                 <ThemeToggle />  
