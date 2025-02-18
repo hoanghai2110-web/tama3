@@ -74,7 +74,7 @@ export const Navbar = async () => {
 
         ) : (  
           <Button className="py-1.5 px-2 h-fit font-normal text-white" asChild>  
-            <Link href="/login">Login</Link>  
+            <Link href="/login"><MessageIcon /> Login</Link>  
           </Button>  
         )}  
       </div>  
