@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   openGraph: {
     images: [
       {
-        url: "https://storage.googleapis.com/gweb-uniblog-publish-prod/original_images/Updated_Grid_1.gif",
+        url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCc8Oka5KG7mzlkpeRZE8nVR_KjK4_mMg0NQ&s",
         width: 800,
         height: 600,
         alt: "Tama AI Assistant",
@@ -41,7 +41,7 @@ export default async function RootLayout({
 
   useEffect(() => {
     const timeout = setTimeout(() => {
-      setLoading(false); // Ẩn skeleton loader sau 2 giây (hoặc tùy vào thời gian tải trang)
+      setLoading(false); // Ẩn skeleton loader sau 2 giây
     }, 2000);
 
     return () => clearTimeout(timeout);
@@ -67,11 +67,11 @@ export default async function RootLayout({
 
 function SkeletonLoader() {
   return (
-    <div className="skeleton-loader">
+    <div className="skeleton">
       {/* Các skeleton item */}
-      <div className="skeleton skeleton-text"></div>
-      <div className="skeleton skeleton-text"></div>
-      <div className="skeleton skeleton-image"></div>
+      <div className="skeleton-div h-8 w-3/4"></div> {/* Placeholder text */}
+      <div className="skeleton-div h-8 w-1/2"></div> {/* Placeholder text */}
+      <div className="skeleton-bg h-48 w-full"></div> {/* Placeholder image */}
     </div>
   );
 }
