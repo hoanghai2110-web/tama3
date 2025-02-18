@@ -1,22 +1,23 @@
-"use client";  // Thêm dòng này ở đầu file
+// components/custom/navbar.tsx
+
+"use client";  // Đảm bảo đây là Client Component
 
 import Image from "next/image";
 import Link from "next/link";
-import { auth, signOut } from "@/app/(auth)/auth";
+import { auth } from "@/app/(auth)/auth";
 
 import { History } from "./history";
-import { SlashIcon } from "./icons";
 import { ThemeToggle } from "./theme-toggle";
 import { Button } from "../ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../ui/dropdown-menu";
+import { handleSignOut } from "@/app/actions/signOutServerAction"; // Import Server Action
 
 export const Navbar = async () => {
   let session = await auth();
+
+  const handleLogout = async () => {
+    await handleSignOut();  // Gọi Server Action để đăng xuất
+  };
 
   return (
     <>
@@ -53,12 +54,9 @@ export const Navbar = async () => {
               <DropdownMenuItem className="p-1 z-50">
                 <form
                   className="w-full"
-                  action={async () => {
-                    "use server";
-
-                    await signOut({
-                      redirectTo: "/",
-                    });
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    handleLogout();  // Gọi Server Action khi form được submit
                   }}
                 >
                   <button
@@ -82,48 +80,6 @@ export const Navbar = async () => {
           </Button>
         )}
       </div>
-
-      {/* Style jsx sẽ chỉ hoạt động khi bạn đánh dấu là client */}
-      <style jsx>{`
-        .btn-submit {
-          background-color: #007bff; /* Màu xanh dương */
-          color: white;
-          padding: 0.75rem 1.25rem;
-          font-weight: bold;
-          border-radius: 4px;
-          transition: background-color 0.3s ease;
-        }
-
-        .btn-submit:hover {
-          background-color: #0056b3; /* Màu xanh đậm khi hover */
-        }
-
-        .btn-pending {
-          background-color: #6c757d; /* Màu xám khi đang xử lý */
-          color: white;
-          padding: 0.75rem 1.25rem;
-          font-weight: bold;
-          border-radius: 4px;
-          cursor: not-allowed;
-        }
-
-        .btn-pending:hover {
-          background-color: #6c757d; /* Không thay đổi khi hover */
-        }
-
-        .animate-spin {
-          animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-          0% {
-            transform: rotate(0deg);
-          }
-          100% {
-            transform: rotate(360deg);
-          }
-        }
-      `}</style>
     </>
   );
 };
