@@ -4,6 +4,7 @@ import { ReactNode, useState } from "react";
 import { BotIcon, UserIcon, CopyIcon, LikeIcon } from "./icons";
 import { Markdown } from "./markdown";
 import { PreviewAttachment } from "./preview-attachment";
+
 const typingVariants = {
   hidden: { opacity: 0 },
   visible: { opacity: 1 },
