@@ -19,7 +19,7 @@ export const BotIcon = () => {
   );
 };
 
-export const UserIcon = () => {
+export const UserIcon = ({ className }: { className?: string }) => {
   return (
     <svg
       data-testid="geist-icon"
@@ -27,6 +27,7 @@ export const UserIcon = () => {
       strokeLinejoin="round"
       viewBox="0 0 16 16"
       width="16"
+      className={className}  // Thêm className vào đây
       style={{ color: "currentcolor" }}
     >
       <path
@@ -38,6 +39,7 @@ export const UserIcon = () => {
     </svg>
   );
 };
+
 
 export const AttachmentIcon = () => {
   return (
