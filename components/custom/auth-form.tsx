@@ -25,7 +25,7 @@ export function AuthForm({
           name="email"
           className="bg-muted text-md md:text-sm border-none"
           type="email"
-          placeholder="hoanghai@gmail.com"
+          placeholder="hai@mail.com"
           autoComplete="email"
           required
           defaultValue={defaultEmail}
