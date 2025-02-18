@@ -5,6 +5,7 @@ import { auth, signOut } from "@/app/(auth)/auth";
   
 import { History } from "./history";  
 import { SlashIcon } from "./icons";  
+import { UserIcon } from './icons';  // Đảm bảo đường dẫn đúng nơi chứa UserIcon
 import { ThemeToggle } from "./theme-toggle";  
 import { Button } from "../ui/button";  
 import {  
