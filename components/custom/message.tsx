@@ -1,37 +1,26 @@
-import { Attachment, ToolInvocation } from "ai";
 import { motion } from "framer-motion";
-import { ReactNode } from "react";
-
-import { BotIcon, UserIcon } from "./icons";
+import { ReactNode, useState } from "react";
 import { Markdown } from "./markdown";
-import { PreviewAttachment } from "./preview-attachment";
-import { Weather } from "./weather";
-import { AuthorizePayment } from "../flights/authorize-payment";
-import { DisplayBoardingPass } from "../flights/boarding-pass";
-import { CreateReservation } from "../flights/create-reservation";
-import { FlightStatus } from "../flights/flight-status";
-import { ListFlights } from "../flights/list-flights";
-import { SelectSeats } from "../flights/select-seats";
-import { VerifyPayment } from "../flights/verify-payment";
+import { Copy, ThumbsUp } from "lucide-react";
 
 const typingVariants = {
   hidden: { opacity: 0 },
   visible: { opacity: 1 },
 };
 
-export const Message = ({
-  chatId,
+export const TamaMessage = ({
   role,
   content,
-  toolInvocations,
-  attachments,
 }: {
-  chatId: string;
-  role: string;
+  role: "user" | "bot";
   content: string | ReactNode;
-  toolInvocations: Array<ToolInvocation> | undefined;
-  attachments?: Array<Attachment>;
 }) => {
+  const [liked, setLiked] = useState(false);
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(typeof content === "string" ? content : "");
+  };
+
   return (
     <motion.div
       className={`flex flex-row gap-4 px-4 w-full md:w-[500px] md:px-0 first-of-type:pt-20`}
@@ -47,8 +36,7 @@ export const Message = ({
                 : "text-zinc-800 dark:text-zinc-300"
             }`}
             style={{
-              backgroundColor: role === "user" ? "#acb7ff" : "transparent",
-
+              backgroundColor: role === "user" ? "#acb7ff" : "#f3f4f6",
               padding: "8px 12px",
               borderRadius: "16px",
               marginLeft: role === "user" ? "auto" : "0",
@@ -67,9 +55,9 @@ export const Message = ({
                 transition={{ duration: 0.05, staggerChildren: 0.05 }}
                 className="animate-pulse"
               >
-                {content.split("").map((char, index) => (
+                {content.split(" ").map((word, index) => (
                   <motion.span key={index} variants={typingVariants}>
-                    {char}
+                    {word + " "}
                   </motion.span>
                 ))}
               </motion.span>
@@ -78,6 +66,14 @@ export const Message = ({
             )}
           </div>
         )}
+        <div className="flex gap-2 mt-2">
+          <button onClick={handleCopy} className="text-gray-500 hover:text-gray-700">
+            <Copy size={16} />
+          </button>
+          <button onClick={() => setLiked(!liked)} className="text-gray-500 hover:text-gray-700">
+            <ThumbsUp size={16} fill={liked ? "#2563eb" : "none"} />
+          </button>
+        </div>
       </div>
     </motion.div>
   );
