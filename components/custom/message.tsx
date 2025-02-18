@@ -1,9 +1,14 @@
 import { Attachment, ToolInvocation } from "ai";
 import { motion } from "framer-motion";
 import { ReactNode, useState } from "react";
+
+// Icons
 import { BotIcon, UserIcon, CopyIcon, LikeIcon } from "./icons";
+
+// Components
 import { Markdown } from "./markdown";
 import { PreviewAttachment } from "./preview-attachment";
+
 
 const typingVariants = {
   hidden: { opacity: 0 },
