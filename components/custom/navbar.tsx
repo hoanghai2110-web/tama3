@@ -1,7 +1,9 @@
+"use client";  // Thêm dòng này ở đầu file
+
 import Image from "next/image";
 import Link from "next/link";
-
 import { auth, signOut } from "@/app/(auth)/auth";
+
 import { History } from "./history";
 import { SlashIcon } from "./icons";
 import { ThemeToggle } from "./theme-toggle";
@@ -28,6 +30,8 @@ export const Navbar = async () => {
               width={20}
               alt="gemini logo"
             />
+            <div className="text-zinc-500"></div>
+            <div className="text-sm dark:text-zinc-300 truncate w-28 md:w-fit"></div>
           </div>
         </div>
 
@@ -35,7 +39,8 @@ export const Navbar = async () => {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
-                className="py-1.5 px-2 h-fit font-normal btn-secondary"
+                className="py-1.5 px-2 h-fit font-normal"
+                variant="secondary"
                 aria-label={`Open user account menu for ${session.user?.email}`}
               >
                 {session.user?.email?.slice(0, 10)} {/* Cắt chuỗi chỉ lấy 10 ký tự đầu */}
@@ -58,7 +63,7 @@ export const Navbar = async () => {
                 >
                   <button
                     type="submit"
-                    className="w-full text-left px-1 py-0.5 text-white btn-sign-out"
+                    className="w-full text-left px-1 py-0.5 text-red-500"
                     aria-label="Sign out of account"
                   >
                     Sign out
@@ -69,7 +74,7 @@ export const Navbar = async () => {
           </DropdownMenu>
         ) : (
           <Button
-            className="py-1.5 px-2 h-fit font-normal text-white btn-login"
+            className="py-1.5 px-2 h-fit font-normal text-white"
             asChild
             aria-label="Login button"
           >
@@ -78,67 +83,45 @@ export const Navbar = async () => {
         )}
       </div>
 
+      {/* Style jsx sẽ chỉ hoạt động khi bạn đánh dấu là client */}
       <style jsx>{`
-        .btn-default {
-          background-color: #007bff; /* Xanh dương đậm */
-          color: #ffffff; /* Màu chữ trắng */
-          padding: 0.5rem 1rem;
+        .btn-submit {
+          background-color: #007bff; /* Màu xanh dương */
+          color: white;
+          padding: 0.75rem 1.25rem;
           font-weight: bold;
           border-radius: 4px;
           transition: background-color 0.3s ease;
         }
 
-        .btn-default:hover {
-          background-color: #0056b3; /* Xanh đậm hơn khi hover */
+        .btn-submit:hover {
+          background-color: #0056b3; /* Màu xanh đậm khi hover */
         }
 
-        .btn-secondary {
-          background-color: #6c757d; /* Màu xám */
-          color: #ffffff;
-          padding: 0.5rem 1rem;
+        .btn-pending {
+          background-color: #6c757d; /* Màu xám khi đang xử lý */
+          color: white;
+          padding: 0.75rem 1.25rem;
           font-weight: bold;
           border-radius: 4px;
-          transition: background-color 0.3s ease;
-        }
-
-        .btn-secondary:hover {
-          background-color: #5a6268; /* Xám đậm hơn khi hover */
-        }
-
-        .btn-sign-out {
-          background-color: #dc3545; /* Màu đỏ cho button đăng xuất */
-          color: #ffffff;
-          padding: 0.5rem 1rem;
-          font-weight: bold;
-          border-radius: 4px;
-          transition: background-color 0.3s ease;
-        }
-
-        .btn-sign-out:hover {
-          background-color: #c82333; /* Màu đỏ đậm hơn khi hover */
-        }
-
-        .btn-login {
-          background-color: #28a745; /* Xanh lá cho login */
-          color: #ffffff;
-          padding: 0.5rem 1rem;
-          font-weight: bold;
-          border-radius: 4px;
-          transition: background-color 0.3s ease;
-        }
-
-        .btn-login:hover {
-          background-color: #218838; /* Màu xanh lá đậm hơn khi hover */
-        }
-
-        .btn-disabled {
-          background-color: #6c757d; /* Màu xám cho trạng thái không thể nhấn */
-          color: #ffffff;
           cursor: not-allowed;
         }
 
-        .btn-disabled:hover {
-          background-color: #6c757d; /* Không thay đổi màu khi hover */
+        .btn-pending:hover {
+          background-color: #6c757d; /* Không thay đổi khi hover */
+        }
+
+        .animate-spin {
+          animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+          0% {
+            transform: rotate(0deg);
+          }
+          100% {
+            transform: rotate(360deg);
+          }
         }
       `}</style>
     </>
