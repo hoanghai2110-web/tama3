@@ -1,9 +1,7 @@
 "use client";
 
 import { useFormStatus } from "react-dom";
-
 import { LoaderIcon } from "@/components/custom/icons";
-
 import { Button } from "../ui/button";
 
 export function SubmitButton({ children }: { children: React.ReactNode }) {
@@ -13,7 +11,7 @@ export function SubmitButton({ children }: { children: React.ReactNode }) {
     <Button
       type={pending ? "button" : "submit"}
       aria-disabled={pending}
-      className="relative text-white"
+      className={`relative ${pending ? "btn-pending" : "btn-submit"}`}
     >
       {children}
       {pending && (
