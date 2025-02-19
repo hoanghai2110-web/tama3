@@ -41,10 +41,10 @@ export const Message = ({
       <div className="flex flex-col gap-3 w-full">
         {content && typeof content === "string" && (
           <div
-            className={`flex flex-col px-4 py-2 gap-2 rounded-2xl max-w-[85%] break-words text-left leading-relaxed ${
+            className={`flex flex-col px-4 py-2 gap-2 rounded-2xl max-w-[100%] break-words text-left leading-relaxed ${
               role === "user"
                 ? "text-white bg-[#1c1c1c] self-end" // Căn phải đúng
-                : "text-zinc-800 dark:text-zinc-300 bg-gray-200"
+                : "text-zinc-800 dark:text-zinc-300"
             } min-h-[42px]`}
           >
             <ReactMarkdown
