@@ -1,11 +1,10 @@
-import { Attachment, ToolInvocation } from "ai"; 
+import React, { ReactNode, ComponentProps } from "react";
+import { Attachment, ToolInvocation } from "ai";  
 import { motion } from "framer-motion";
-import { ReactNode } from "react";
-import ReactMarkdown from 'react-markdown';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import materialDark from 'react-syntax-highlighter/dist/esm/styles/prism/material-dark';
-import remarkGfm from 'remark-gfm';
-import { ComponentProps } from "react";
+import ReactMarkdown from "react-markdown";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import materialDark from "react-syntax-highlighter/dist/esm/styles/prism/material-dark";
+import remarkGfm from "remark-gfm";
 
 const typingVariants = {
   hidden: { opacity: 0 },
@@ -27,10 +26,9 @@ export const Message = ({
   chatId: string;
   role: string;
   content: string | ReactNode;
-  toolInvocations?: Array<ToolInvocation>;
-  attachments?: Array<Attachment>;
+  toolInvocations?: ToolInvocation[];
+  attachments?: Attachment[];
 }) => {
-
   // Fix lỗi TypeScript bằng cách khai báo rõ kiểu dữ liệu
   const renderCodeBlock = (code: string, language: string) => {
     return (
@@ -42,14 +40,16 @@ export const Message = ({
 
   return (
     <motion.div
-      className={`flex flex-row gap-4 px-4 w-full md:w-[500px] md:px-0 first-of-type:pt-20`}
+      className="flex flex-row gap-4 px-4 w-full md:w-[500px] md:px-0 first-of-type:pt-20"
       initial={{ y: 5, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
     >
       <div className="flex flex-col gap-2 w-full">
         {content && typeof content === "string" && (
           <div
-            className={`flex flex-col gap-4 ${role === "user" ? "text-white" : "text-zinc-800 dark:text-zinc-300"}`}
+            className={`flex flex-col gap-4 ${
+              role === "user" ? "text-white" : "text-zinc-800 dark:text-zinc-300"
+            }`}
             style={{
               backgroundColor: role === "user" ? "#1c1c1c" : "transparent",
               padding: "8px 12px",
@@ -79,14 +79,9 @@ export const Message = ({
                   <ReactMarkdown
                     remarkPlugins={[remarkGfm]}
                     components={{
-                      code({
-                        node,
-                        className,
-                        children,
-                        ...props
-                      }: ComponentProps<"code">) {
-                        const match = /language-(\w+)/.exec(className || '');
-                        const lang = match ? match[1] : '';
+                      code({ className, children, ...props }: ComponentProps<"code">) {
+                        const match = /language-(\w+)/.exec(className || "");
+                        const lang = match ? match[1] : "";
                         return lang ? (
                           renderCodeBlock(String(children), lang)
                         ) : (
@@ -105,14 +100,9 @@ export const Message = ({
               <ReactMarkdown
                 remarkPlugins={[remarkGfm]}
                 components={{
-                  code({
-                    node,
-                    className,
-                    children,
-                    ...props
-                  }: ComponentProps<"code">) {
-                    const match = /language-(\w+)/.exec(className || '');
-                    const lang = match ? match[1] : '';
+                  code({ className, children, ...props }: ComponentProps<"code">) {
+                    const match = /language-(\w+)/.exec(className || "");
+                    const lang = match ? match[1] : "";
                     return lang ? (
                       renderCodeBlock(String(children), lang)
                     ) : (
