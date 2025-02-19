@@ -12,13 +12,12 @@ const renderCodeBlock = (code: string, language: string) => {
     <SyntaxHighlighter 
       language={language} 
       style={okaidia} 
-      customStyle={{ fontSize: "12px" }} // 👈 Chỉnh size code
+      customStyle={{ fontSize: "12px", borderRadius: "8px", padding: "8px" }}
     >
       {code}
     </SyntaxHighlighter>
   );
 };
-
 
 export const Message = ({
   chatId,
@@ -35,20 +34,19 @@ export const Message = ({
 }) => {
   return (
     <motion.div
-      className="flex flex-row gap-4 px-4 w-full md:w-[500px] md:px-0 first-of-type:pt-20"
+      className="flex flex-row gap-3 px-4 w-full md:w-[500px] md:px-0 first-of-type:pt-20"
       initial={{ y: 5, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
     >
       <div className="flex flex-col gap-3 w-full">
         {content && typeof content === "string" && (
           <div
-  className={`flex flex-col px-4 py-2 gap-2 rounded-2xl max-w-[100%] break-words text-left leading-relaxed ${
-    role === "user"
-      ? "text-white self-end"
-      : "text-zinc-800 dark:text-zinc-300"
-  }`}
-
-
+            className={`flex flex-col px-4 py-2 gap-2 rounded-2xl max-w-[100%] break-words text-left leading-relaxed ${
+              role === "user"
+                ? "text-white bg-[#1c1c1c] self-end"
+                : "text-zinc-800 bg-gray-200 dark:text-zinc-300 dark:bg-[#2c2c2c]"
+            }`}
+          >
             <ReactMarkdown
               remarkPlugins={[remarkGfm]}
               components={{
@@ -61,7 +59,7 @@ export const Message = ({
                   return lang ? (
                     renderCodeBlock(String(children), lang)
                   ) : (
-                    <code className="px-1 py-1 rounded-md" {...props}>
+                    <code className="px-1 py-0.5 rounded-md bg-gray-300 dark:bg-gray-700" {...props}>
                       {children}
                     </code>
                   );
@@ -76,3 +74,4 @@ export const Message = ({
     </motion.div>
   );
 };
+                
