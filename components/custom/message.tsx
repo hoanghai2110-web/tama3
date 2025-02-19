@@ -59,7 +59,7 @@ export const Message = ({
                   return lang ? (
                     renderCodeBlock(String(children), lang)
                   ) : (
-                    <code className="py-0.5 rounded-md text-white" {...props}>
+                    <code className="py-0.5 px-1 rounded-md text-white" {...props}>
                       {children}
                     </code>
                   );
