@@ -35,7 +35,7 @@ export const Message = ({
       <div className="flex flex-col gap-3 w-full">
         {content && typeof content === "string" && (
           <div
-            className={`flex flex-col gap-4 p-3 rounded-2xl max-w-full word-wrap break-word text-left leading-relaxed ${
+            className={`flex flex-col gap-4 rounded-2xl max-w-full word-wrap break-word text-left leading-relaxed ${
               role === "user" ? "text-white bg-[#1c1c1c] self-end" : "text-zinc-800 dark:text-zinc-300"
             }`}
           >
