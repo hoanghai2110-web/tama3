@@ -6,11 +6,18 @@ import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { okaidia } from "react-syntax-highlighter/dist/esm/styles/prism";
 import remarkGfm from "remark-gfm";
 
-const renderCodeBlock = (code: string, language: string) => (
-  <SyntaxHighlighter language={language} style={okaidia}>
-    {code}
-  </SyntaxHighlighter>
-);
+const renderCodeBlock = (code: string, language: string) => {
+  return (
+    <SyntaxHighlighter 
+      language={language} 
+      style={okaidia} 
+      customStyle={{ fontSize: "12px" }} // 👈 Chỉnh size code
+    >
+      {code}
+    </SyntaxHighlighter>
+  );
+};
+
 
 export const Message = ({
   chatId,
