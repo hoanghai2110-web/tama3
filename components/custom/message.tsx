@@ -33,7 +33,7 @@ export const Message = ({
 }) => {
   const renderCodeBlock = (code: string, language: string) => {
     return (
-      <SyntaxHighlighter language={language} style={materialDark}>
+      <SyntaxHighlighter language={language} style={materialLight}>
         {code}
       </SyntaxHighlighter>
     );
@@ -49,10 +49,10 @@ export const Message = ({
         {content && typeof content === "string" && (
           <div
             className={`flex flex-col gap-4 ${
-              role === "user" ? "text-white" : "text-zinc-800 dark:text-zinc-300"
+              role === "user" ? "text-black" : "text-zinc-800 dark:text-zinc-300"
             }`}
             style={{
-              backgroundColor: role === "user" ? "#1c1c1c" : "transparent",
+              backgroundColor: role === "user" ? "#f5f5f5" : "transparent",
               padding: "8px 12px",
               borderRadius: "16px",
               marginLeft: role === "user" ? "auto" : "0",
@@ -123,4 +123,4 @@ export const Message = ({
     </motion.div>
   );
 };
-              
+            
