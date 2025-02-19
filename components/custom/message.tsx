@@ -9,10 +9,10 @@ import remarkGfm from "remark-gfm";
 
 const renderCodeBlock = (code: string, language: string) => {
   return (
-    <SyntaxHighlighter 
-      language={language} 
-      style={okaidia} 
-      customStyle={{ fontSize: "12px", borderRadius: "8px", padding: "8px" }}
+    <SyntaxHighlighter
+      language={language}
+      style={okaidia}
+      customStyle={{ fontSize: "12px", borderRadius: "8px", padding: "10px" }}
     >
       {code}
     </SyntaxHighlighter>
@@ -34,18 +34,18 @@ export const Message = ({
 }) => {
   return (
     <motion.div
-      className="flex flex-row gap-3 px-3 md:px-4 w-full md:w-[500px] first-of-type:pt-20"
+      className="flex flex-row gap-3 px-4 w-full md:w-[500px] md:px-0 first-of-type:pt-20"
       initial={{ y: 5, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
     >
       <div className="flex flex-col gap-3 w-full">
         {content && typeof content === "string" && (
           <div
-            className={`flex flex-col px-4 py-2 gap-2 rounded-2xl max-w-fit break-words text-left leading-normal items-center ${
+            className={`flex flex-col px-4 py-2 gap-2 rounded-2xl max-w-[85%] break-words text-left leading-relaxed ${
               role === "user"
-                ? "text-white bg-[#1c1c1c] self-end" // Căn phải cho user
-                : "text-zinc-800 dark:text-zinc-300 self-start" // Căn trái cho bot
-            } min-h-[44px]`} // Tăng chiều cao tối thiểu để tránh text bị lệch
+                ? "text-white bg-[#1c1c1c] self-end" // Căn phải đúng
+                : "text-zinc-800 dark:text-zinc-300 bg-gray-200"
+            } min-h-[42px]`}
           >
             <ReactMarkdown
               remarkPlugins={[remarkGfm]}
@@ -59,7 +59,7 @@ export const Message = ({
                   return lang ? (
                     renderCodeBlock(String(children), lang)
                   ) : (
-                    <code className="px-1 py-0.5 rounded-md text-white" {...props}>
+                    <code className="px-2 py-1 rounded-md bg-gray-100 text-black">
                       {children}
                     </code>
                   );
@@ -74,4 +74,4 @@ export const Message = ({
     </motion.div>
   );
 };
-                    
+                                           
