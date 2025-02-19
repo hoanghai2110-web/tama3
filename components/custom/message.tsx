@@ -1,10 +1,11 @@
-import React, { ReactNode, ComponentProps } from "react";
+import { motion } from "framer-motion";  
+import React, { ReactNode, ComponentProps } from "react";  
+import ReactMarkdown from "react-markdown";  
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";  
+import materialDark from "react-syntax-highlighter/dist/esm/styles/prism/material-dark";  
+import remarkGfm from "remark-gfm";  
 import { Attachment, ToolInvocation } from "ai";  
-import { motion } from "framer-motion";
-import ReactMarkdown from "react-markdown";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import materialDark from "react-syntax-highlighter/dist/esm/styles/prism/material-dark";
-import remarkGfm from "remark-gfm";
+
 
 const typingVariants = {
   hidden: { opacity: 0 },
