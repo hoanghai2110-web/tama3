@@ -41,7 +41,7 @@ export const Message = ({
       <div className="flex flex-col gap-3 w-full">
         {content && typeof content === "string" && (
           <div
-            className={`flex flex-col px-4 py-2 gap-2 rounded-2xl max-w-[100%] break-words text-left leading-relaxed ${
+            className={`flex flex-col px-2 py-2 gap-2 rounded-2xl max-w-[100%] break-words text-left leading-relaxed ${
               role === "user"
                 ? "text-white bg-[#1c1c1c] self-end" // Căn phải đúng
                 : "text-zinc-800 dark:text-zinc-300"
@@ -59,7 +59,7 @@ export const Message = ({
                   return lang ? (
                     renderCodeBlock(String(children), lang)
                   ) : (
-                    <code className="px-2 py-1 rounded-md bg-gray-100 text-black">
+                    <code className="py-1 rounded-md text-black">
                       {children}
                     </code>
                   );
