@@ -1,6 +1,6 @@
-import React, { ReactNode, ComponentProps } from "react";
-import { Attachment, ToolInvocation } from "ai";  
 import { motion } from "framer-motion";
+import React, { ReactNode, ComponentProps } from "react";
+import { Attachment, ToolInvocation } from "ai";
 import ReactMarkdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import materialDark from "react-syntax-highlighter/dist/esm/styles/prism/material-dark";
@@ -16,28 +16,23 @@ const lightEffectVariants = {
   visible: { opacity: 1, filter: "brightness(1.5)" },
 };
 
-export const Message = ({
-  chatId,
-  role,
-  content,
-  toolInvocations,
-  attachments,
-}: {
+interface MessageProps {
   chatId: string;
-  role: string;
+  role: "user" | "bot";
   content: string | ReactNode;
   toolInvocations?: ToolInvocation[];
   attachments?: Attachment[];
-}) => {
-  // Fix lỗi TypeScript bằng cách khai báo rõ kiểu dữ liệu
-  const renderCodeBlock = (code: string, language: string) => {
-    return (
-      <SyntaxHighlighter language={language} style={materialDark}>
-        {code}
-      </SyntaxHighlighter>
-    );
-  };
+}
 
+const renderCodeBlock = (code: string, language: string) => {
+  return (
+    <SyntaxHighlighter language={language} style={materialDark}>
+      {code}
+    </SyntaxHighlighter>
+  );
+};
+
+export const Message: React.FC<MessageProps> = ({ chatId, role, content }) => {
   return (
     <motion.div
       className="flex flex-row gap-4 px-4 w-full md:w-[500px] md:px-0 first-of-type:pt-20"
@@ -45,7 +40,7 @@ export const Message = ({
       animate={{ y: 0, opacity: 1 }}
     >
       <div className="flex flex-col gap-2 w-full">
-        {content && typeof content === "string" && (
+        {typeof content === "string" && (
           <div
             className={`flex flex-col gap-4 ${
               role === "user" ? "text-white" : "text-zinc-800 dark:text-zinc-300"
@@ -55,9 +50,7 @@ export const Message = ({
               padding: "8px 12px",
               borderRadius: "16px",
               marginLeft: role === "user" ? "auto" : "0",
-              marginRight: "0",
               textAlign: role === "user" ? "right" : "left",
-              maxWidth: "100%",
               wordWrap: "break-word",
               display: "inline-block",
             }}
@@ -122,3 +115,4 @@ export const Message = ({
     </motion.div>
   );
 };
+      
