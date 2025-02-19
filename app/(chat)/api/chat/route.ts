@@ -20,9 +20,9 @@ export async function POST(request: Request) {
     (message) => message.content.length > 0,
   );
 
-  const result = await streamText({
+const result = await streamText({ 
     model: geminiProModel,  // Thay đổi tên model phù hợp
-    system: `Bạn là Tama, AI dễ thương và thân thiện của Vietchart, trả lời ngắn gọn, vui vẻ và hữu ích!`,
+    system: `Bạn là Tama, một AI thông minh, thân thiện và dễ hiểu. Trả lời rõ ràng, có đầu có đuôi, dễ đọc và mang tính hỗ trợ cao. Hãy đảm bảo câu trả lời có cấu trúc tốt, sử dụng dấu câu hợp lý và luôn tóm tắt nội dung chính ở cuối.`,
     messages: coreMessages,
     onFinish: async ({ responseMessages }) => {
       if (session.user && session.user.id) {
@@ -33,7 +33,7 @@ export async function POST(request: Request) {
             userId: session.user.id,
           });
         } catch (error) {
-          console.error("Failed to save chat");
+          console.error("❌ Failed to save chat");
         }
       }
     },
@@ -43,8 +43,8 @@ export async function POST(request: Request) {
     },
   });
 
-  return result.toDataStreamResponse({});
-}
+return result.toDataStreamResponse({});
+
 
 export async function DELETE(request: Request) {
   const { searchParams } = new URL(request.url);
