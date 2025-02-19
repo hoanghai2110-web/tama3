@@ -6,9 +6,6 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import materialDark from 'react-syntax-highlighter/dist/esm/styles/prism/material-dark';
 import remarkGfm from 'remark-gfm';
 
-
-// ... other imports
-
 const typingVariants = {
   hidden: { opacity: 0 },
   visible: { opacity: 1 },
@@ -33,13 +30,12 @@ export const Message = ({
   attachments?: Array<Attachment>;
 }) => {
 
-
   const renderCodeBlock = (code, language) => {
-      return (
-        <SyntaxHighlighter language={language} style={dracula} >
-          {code}
-        </SyntaxHighlighter>
-      );
+    return (
+      <SyntaxHighlighter language={language} style={materialDark}>
+        {code}
+      </SyntaxHighlighter>
+    );
   };
 
   return (
@@ -78,7 +74,7 @@ export const Message = ({
                   transition={{ duration: 0.05, staggerChildren: 0.05 }}
                   className="animate-pulse"
                 >
-                   <ReactMarkdown
+                  <ReactMarkdown
                     remarkPlugins={[remarkGfm]}
                     components={{
                       code({ node, inline, className, children, ...props }) {
@@ -99,24 +95,24 @@ export const Message = ({
                 </motion.span>
               </motion.div>
             ) : (
-                <ReactMarkdown
-                    remarkPlugins={[remarkGfm]}
-                    components={{
-                      code({ node, inline, className, children, ...props }) {
-                        const match = /language-(\w+)/.exec(className || '');
-                        const lang = match ? match[1] : null;
-                        return !inline && lang ? (
-                          renderCodeBlock(String(children), lang)
-                        ) : (
-                          <code className={className} {...props}>
-                            {children}
-                          </code>
-                        );
-                      },
-                    }}
-                  >
-                    {content}
-                  </ReactMarkdown>
+              <ReactMarkdown
+                remarkPlugins={[remarkGfm]}
+                components={{
+                  code({ node, inline, className, children, ...props }) {
+                    const match = /language-(\w+)/.exec(className || '');
+                    const lang = match ? match[1] : null;
+                    return !inline && lang ? (
+                      renderCodeBlock(String(children), lang)
+                    ) : (
+                      <code className={className} {...props}>
+                        {children}
+                      </code>
+                    );
+                  },
+                }}
+              >
+                {content}
+              </ReactMarkdown>
             )}
           </div>
         )}
