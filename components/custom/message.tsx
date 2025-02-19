@@ -5,6 +5,7 @@ import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import materialDark from 'react-syntax-highlighter/dist/esm/styles/prism/material-dark';
 import remarkGfm from 'remark-gfm';
+import { ComponentProps } from "react";
 
 const typingVariants = {
   hidden: { opacity: 0 },
@@ -30,7 +31,7 @@ export const Message = ({
   attachments?: Array<Attachment>;
 }) => {
 
-  // Fix lỗi TypeScript: Xác định rõ kiểu dữ liệu của tham số
+  // Fix lỗi TypeScript bằng cách khai báo rõ kiểu dữ liệu
   const renderCodeBlock = (code: string, language: string) => {
     return (
       <SyntaxHighlighter language={language} style={materialDark}>
@@ -78,10 +79,15 @@ export const Message = ({
                   <ReactMarkdown
                     remarkPlugins={[remarkGfm]}
                     components={{
-                      code({ node, inline, className, children, ...props }) {
+                      code({
+                        node,
+                        className,
+                        children,
+                        ...props
+                      }: ComponentProps<"code">) {
                         const match = /language-(\w+)/.exec(className || '');
                         const lang = match ? match[1] : '';
-                        return !inline && lang ? (
+                        return lang ? (
                           renderCodeBlock(String(children), lang)
                         ) : (
                           <code className={className} {...props}>
@@ -99,10 +105,15 @@ export const Message = ({
               <ReactMarkdown
                 remarkPlugins={[remarkGfm]}
                 components={{
-                  code({ node, inline, className, children, ...props }) {
+                  code({
+                    node,
+                    className,
+                    children,
+                    ...props
+                  }: ComponentProps<"code">) {
                     const match = /language-(\w+)/.exec(className || '');
                     const lang = match ? match[1] : '';
-                    return !inline && lang ? (
+                    return lang ? (
                       renderCodeBlock(String(children), lang)
                     ) : (
                       <code className={className} {...props}>
