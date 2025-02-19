@@ -1,18 +1,12 @@
-import { Attachment, ToolInvocation } from "ai"; 
+import { Attachment, ToolInvocation } from "ai";
 import { motion } from "framer-motion";
 import { ReactNode } from "react";
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 import { BotIcon, UserIcon } from "./icons";
-import { Markdown } from "./markdown";
 import { PreviewAttachment } from "./preview-attachment";
-import { Weather } from "./weather";
-import { AuthorizePayment } from "../flights/authorize-payment";
-import { DisplayBoardingPass } from "../flights/boarding-pass";
-import { CreateReservation } from "../flights/create-reservation";
-import { FlightStatus } from "../flights/flight-status";
-import { ListFlights } from "../flights/list-flights";
-import { SelectSeats } from "../flights/select-seats";
-import { VerifyPayment } from "../flights/verify-payment";
+// ... other imports
 
 const typingVariants = {
   hidden: { opacity: 0 },
@@ -63,8 +57,8 @@ export const Message = ({
               <motion.div
                 initial="hidden"
                 animate="visible"
-                variants={lightEffectVariants}  // Lóe sáng hiệu ứng
-                transition={{ duration: 0.05, repeat: Infinity, repeatType: "reverse" }}  // Hiệu ứng sáng đảo ngược
+                variants={lightEffectVariants}
+                transition={{ duration: 0.05, repeat: Infinity, repeatType: "reverse" }}
               >
                 <motion.span
                   initial="hidden"
@@ -73,15 +67,15 @@ export const Message = ({
                   transition={{ duration: 0.05, staggerChildren: 0.05 }}
                   className="animate-pulse"
                 >
-                  {content.split("").map((char, index) => (
-                    <motion.span key={index} variants={typingVariants}>
-                      {char}
-                    </motion.span>
-                  ))}
+                  <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                    {content}
+                  </ReactMarkdown>
                 </motion.span>
               </motion.div>
             ) : (
-              <div>{content}</div>
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                {content}
+              </ReactMarkdown>
             )}
           </div>
         )}
