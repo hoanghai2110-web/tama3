@@ -5,7 +5,7 @@ import { Attachment, ToolInvocation } from "ai";
 import { motion } from "framer-motion";
 import ReactMarkdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import materialDark from "react-syntax-highlighter/dist/esm/styles/prism/src/styles/prism/duotone-light";
+import materialLight from "react-syntax-highlighter/dist/esm/styles/prism/material-light";
 import remarkGfm from "remark-gfm";
 
 const typingVariants = {
