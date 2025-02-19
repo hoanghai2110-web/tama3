@@ -3,9 +3,9 @@ import { motion } from "framer-motion";
 import { ReactNode } from "react";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { dracula } from 'react-syntax-highlighter/dist/esm/styles/prism'; // Hoặc theme khác bạn thích
 
-import { BotIcon, UserIcon } from "./icons";
-import { PreviewAttachment } from "./preview-attachment";
 // ... other imports
 
 const typingVariants = {
@@ -31,6 +31,16 @@ export const Message = ({
   toolInvocations: Array<ToolInvocation> | undefined;
   attachments?: Array<Attachment>;
 }) => {
+
+
+  const renderCodeBlock = (code, language) => {
+      return (
+        <SyntaxHighlighter language={language} style={dracula} >
+          {code}
+        </SyntaxHighlighter>
+      );
+  };
+
   return (
     <motion.div
       className={`flex flex-row gap-4 px-4 w-full md:w-[500px] md:px-0 first-of-type:pt-20`}
@@ -67,15 +77,45 @@ export const Message = ({
                   transition={{ duration: 0.05, staggerChildren: 0.05 }}
                   className="animate-pulse"
                 >
-                  <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                   <ReactMarkdown
+                    remarkPlugins={[remarkGfm]}
+                    components={{
+                      code({ node, inline, className, children, ...props }) {
+                        const match = /language-(\w+)/.exec(className || '');
+                        const lang = match ? match[1] : null;
+                        return !inline && lang ? (
+                          renderCodeBlock(String(children), lang)
+                        ) : (
+                          <code className={className} {...props}>
+                            {children}
+                          </code>
+                        );
+                      },
+                    }}
+                  >
                     {content}
                   </ReactMarkdown>
                 </motion.span>
               </motion.div>
             ) : (
-              <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                {content}
-              </ReactMarkdown>
+                <ReactMarkdown
+                    remarkPlugins={[remarkGfm]}
+                    components={{
+                      code({ node, inline, className, children, ...props }) {
+                        const match = /language-(\w+)/.exec(className || '');
+                        const lang = match ? match[1] : null;
+                        return !inline && lang ? (
+                          renderCodeBlock(String(children), lang)
+                        ) : (
+                          <code className={className} {...props}>
+                            {children}
+                          </code>
+                        );
+                      },
+                    }}
+                  >
+                    {content}
+                  </ReactMarkdown>
             )}
           </div>
         )}
