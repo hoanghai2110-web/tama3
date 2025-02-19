@@ -1,5 +1,4 @@
 /* eslint-disable import/order */
-
 import React, { ReactNode, ComponentProps } from "react";
 import { Attachment, ToolInvocation } from "ai";
 import { motion } from "framer-motion";
@@ -11,20 +10,6 @@ import remarkGfm from "remark-gfm";
 const typingVariants = {
   hidden: { opacity: 0 },
   visible: { opacity: 1 },
-};
-
-const lightEffectVariants = {
-  hidden: { opacity: 0, filter: "brightness(0)" },
-  visible: { opacity: 1, filter: "brightness(1.5)" },
-};
-
-// 👉 Set font size cho code block
-const renderCodeBlock = (code: string, language: string) => {
-  return (
-    <SyntaxHighlighter language={language} style={okaidia} customStyle={{ fontSize: "12px" }}>
-      {code}
-    </SyntaxHighlighter>
-  );
 };
 
 export const Message = ({
@@ -40,6 +25,18 @@ export const Message = ({
   toolInvocations?: ToolInvocation[];
   attachments?: Attachment[];
 }) => {
+  const renderCodeBlock = (code: string, language: string) => {
+    return (
+      <SyntaxHighlighter
+        language={language}
+        style={okaidia}
+        customStyle={{ fontSize: "12px", lineHeight: "1.5", borderRadius: "8px" }}
+      >
+        {code}
+      </SyntaxHighlighter>
+    );
+  };
+
   return (
     <motion.div
       className="flex flex-row gap-4 px-4 w-full md:w-[500px] md:px-0 first-of-type:pt-20"
@@ -53,9 +50,9 @@ export const Message = ({
               role === "user" ? "text-white" : "text-zinc-800 dark:text-zinc-300"
             }`}
             style={{
-              backgroundColor: role === "bot" ? "transparent" : "#1c1c1c", // ❌ Bỏ nền bot, ✅ Giữ nền user
-              padding: role === "bot" ? "8px 0px 8px 12px" : "0px",
-              borderRadius: role === "bot" ? "16px" : "0px", // ✅ Chỉ border-radius cho bot
+              padding: role === "bot" ? "8px 12px 8px 0px" : "0px", // Chỉ padding bên trái bot nhắn
+              borderRadius: "16px",
+              lineHeight: "1.5",
               marginLeft: role === "user" ? "auto" : "0",
               marginRight: "0",
               textAlign: role === "user" ? "right" : "left",
@@ -64,60 +61,24 @@ export const Message = ({
               display: "inline-block",
             }}
           >
-            {role === "bot" ? (
-              <motion.div
-                initial="hidden"
-                animate="visible"
-                variants={lightEffectVariants}
-                transition={{ duration: 0.05, repeat: Infinity, repeatType: "reverse" }}
-              >
-                <motion.span
-                  initial="hidden"
-                  animate="visible"
-                  variants={typingVariants}
-                  transition={{ duration: 0.05, staggerChildren: 0.05 }}
-                  className="animate-pulse"
-                >
-                  <ReactMarkdown
-                    remarkPlugins={[remarkGfm]}
-                    components={{
-                      code({ className, children, ...props }: ComponentProps<"code">) {
-                        const match = /language-(\w+)/.exec(className || "");
-                        const lang = match ? match[1] : "";
-                        return lang ? (
-                          renderCodeBlock(String(children), lang)
-                        ) : (
-                          <code className={className} {...props}>
-                            {children}
-                          </code>
-                        );
-                      },
-                    }}
-                  >
-                    {content}
-                  </ReactMarkdown>
-                </motion.span>
-              </motion.div>
-            ) : (
-              <ReactMarkdown
-                remarkPlugins={[remarkGfm]}
-                components={{
-                  code({ className, children, ...props }: ComponentProps<"code">) {
-                    const match = /language-(\w+)/.exec(className || "");
-                    const lang = match ? match[1] : "";
-                    return lang ? (
-                      renderCodeBlock(String(children), lang)
-                    ) : (
-                      <code className={className} {...props}>
-                        {children}
-                      </code>
-                    );
-                  },
-                }}
-              >
-                {content}
-              </ReactMarkdown>
-            )}
+            <ReactMarkdown
+              remarkPlugins={[remarkGfm]}
+              components={{
+                code({ className, children, ...props }: ComponentProps<"code">) {
+                  const match = /language-(\w+)/.exec(className || "");
+                  const lang = match ? match[1] : "";
+                  return lang ? (
+                    renderCodeBlock(String(children), lang)
+                  ) : (
+                    <code className={className} {...props}>
+                      {children}
+                    </code>
+                  );
+                },
+              }}
+            >
+              {content}
+            </ReactMarkdown>
           </div>
         )}
       </div>
