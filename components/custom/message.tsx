@@ -41,12 +41,13 @@ export const Message = ({
       <div className="flex flex-col gap-3 w-full">
         {content && typeof content === "string" && (
           <div
-            className={`flex flex-col px-4 py-2 gap-2 rounded-2xl max-w-[100%] break-words text-left leading-relaxed ${
-              role === "user"
-                ? "text-white bg-[#1c1c1c] self-end"
-                : "text-zinc-800 bg-gray-200 dark:text-zinc-300 dark:bg-[#2c2c2c]"
-            }`}
-          >
+  className={`flex flex-col px-4 py-2 gap-2 rounded-2xl max-w-[80%] break-words text-left leading-normal ${
+    role === "user"
+      ? "text-white bg-[#1c1c1c] ml-auto" // Căn phải tự nhiên hơn
+      : "text-zinc-800 bg-gray-200 dark:text-zinc-300 dark:bg-[#2c2c2c]"
+  } min-h-[40px]`}
+>
+
             <ReactMarkdown
               remarkPlugins={[remarkGfm]}
               components={{
@@ -59,7 +60,7 @@ export const Message = ({
                   return lang ? (
                     renderCodeBlock(String(children), lang)
                   ) : (
-                    <code className="px-1 py-0.5 rounded-md bg-gray-300 dark:bg-gray-700" {...props}>
+                    <code className="px-1 py-0.5 rounded-md" {...props}>
                       {children}
                     </code>
                   );
