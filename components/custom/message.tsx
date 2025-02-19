@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { ReactNode } from "react";
 import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { materialDark } from 'react-syntax-highlighter/dist/esm/styles/prism/material-dark';
+import materialDark from 'react-syntax-highlighter/dist/esm/styles/prism/material-dark';
 import remarkGfm from 'remark-gfm';
 
 
