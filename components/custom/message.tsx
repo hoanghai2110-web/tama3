@@ -1,4 +1,4 @@
-import { Attachment, ToolInvocation } from "ai";
+import { Attachment, ToolInvocation } from "ai"; 
 import { motion } from "framer-motion";
 import { ReactNode } from "react";
 import ReactMarkdown from 'react-markdown';
@@ -26,11 +26,12 @@ export const Message = ({
   chatId: string;
   role: string;
   content: string | ReactNode;
-  toolInvocations: Array<ToolInvocation> | undefined;
+  toolInvocations?: Array<ToolInvocation>;
   attachments?: Array<Attachment>;
 }) => {
 
-  const renderCodeBlock = (code, language) => {
+  // Fix lỗi TypeScript: Xác định rõ kiểu dữ liệu của tham số
+  const renderCodeBlock = (code: string, language: string) => {
     return (
       <SyntaxHighlighter language={language} style={materialDark}>
         {code}
@@ -79,7 +80,7 @@ export const Message = ({
                     components={{
                       code({ node, inline, className, children, ...props }) {
                         const match = /language-(\w+)/.exec(className || '');
-                        const lang = match ? match[1] : null;
+                        const lang = match ? match[1] : '';
                         return !inline && lang ? (
                           renderCodeBlock(String(children), lang)
                         ) : (
@@ -100,7 +101,7 @@ export const Message = ({
                 components={{
                   code({ node, inline, className, children, ...props }) {
                     const match = /language-(\w+)/.exec(className || '');
-                    const lang = match ? match[1] : null;
+                    const lang = match ? match[1] : '';
                     return !inline && lang ? (
                       renderCodeBlock(String(children), lang)
                     ) : (
