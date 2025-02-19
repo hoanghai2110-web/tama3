@@ -5,7 +5,7 @@ import { Attachment, ToolInvocation } from "ai";
 import { motion } from "framer-motion";
 import ReactMarkdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { prism-coy } from "react-syntax-highlighter/dist/esm/styles/prism";
+import { prismCoy } from "react-syntax-highlighter/dist/esm/styles/prism";
 import remarkGfm from "remark-gfm";
 
 const typingVariants = {
@@ -33,7 +33,7 @@ export const Message = ({
 }) => {
   const renderCodeBlock = (code: string, language: string) => {
     return (
-      <SyntaxHighlighter language={language} style={prism-coy}>
+      <SyntaxHighlighter language={language} style={prismCoy}>
         {code}
       </SyntaxHighlighter>
     );
