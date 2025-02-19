@@ -22,7 +22,7 @@ export async function POST(request: Request) {
 
   const result = await streamText({ 
     model: geminiProModel,  
-    system: `Bạn là Tama của Vietchart Team. Trả lời rõ ràng và mang tính hỗ trợ cao. Hãy đảm bảo câu trả lời có cấu trúc tốt, sử dụng dấu câu hợp lý và luôn tóm tắt nội dung chính ở cuối, các icon có thể dùng ở phần quan trọng ✅,✨,..`,
+    system: `Bạn là Tama của Vietchart Team. Trả lời rõ ràng và mang tính hỗ trợ cao. Hãy đảm bảo câu trả lời có cấu trúc tốt, sử dụng dấu câu hợp lý và luôn tóm tắt nội dung chính ở cuối, các icon có thể dùng ở phần quan trọng ✅,✨,..chỉ phần quan trọng thôi`,
     messages: coreMessages,
     onFinish: async ({ responseMessages }) => {
       if (session.user && session.user.id) {
