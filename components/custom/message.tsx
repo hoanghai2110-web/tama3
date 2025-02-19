@@ -34,20 +34,19 @@ export const Message = ({
 }) => {
   return (
     <motion.div
-      className="flex flex-row gap-3 px-4 w-full md:w-[500px] md:px-0 first-of-type:pt-20"
+      className="flex flex-row gap-3 px-3 md:px-4 w-full md:w-[500px] first-of-type:pt-20"
       initial={{ y: 5, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
     >
       <div className="flex flex-col gap-3 w-full">
         {content && typeof content === "string" && (
           <div
-  className={`flex flex-col px-4 py-1 gap-2 rounded-2xl max-w-[100%] break-words text-left leading-normal ${
-    role === "user"
-      ? "text-white bg-[#1c1c1c] ml-auto" // Căn phải tự nhiên hơn
-      : "text-zinc-800  dark:text-zinc-300"
-  } min-h-[40px]`}
->
-
+            className={`flex flex-col px-4 py-2 gap-2 rounded-2xl max-w-fit break-words text-left leading-normal items-center ${
+              role === "user"
+                ? "text-white bg-[#1c1c1c] self-end" // Căn phải cho user
+                : "text-zinc-800 dark:text-zinc-300 self-start" // Căn trái cho bot
+            } min-h-[44px]`} // Tăng chiều cao tối thiểu để tránh text bị lệch
+          >
             <ReactMarkdown
               remarkPlugins={[remarkGfm]}
               components={{
@@ -60,7 +59,7 @@ export const Message = ({
                   return lang ? (
                     renderCodeBlock(String(children), lang)
                   ) : (
-                    <code className="px-1 py-0.5 rounded-md" {...props}>
+                    <code className="py-0.5 rounded-md text-white" {...props}>
                       {children}
                     </code>
                   );
@@ -75,4 +74,4 @@ export const Message = ({
     </motion.div>
   );
 };
-                
+                    
