@@ -5,7 +5,7 @@ import { Attachment, ToolInvocation } from "ai";
 import { motion } from "framer-motion";
 import ReactMarkdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { monokai } from "react-syntax-highlighter/dist/esm/styles/prism";
+import { xonokai } from "react-syntax-highlighter/dist/esm/styles/prism";
 import remarkGfm from "remark-gfm";
 
 const typingVariants = {
@@ -33,7 +33,7 @@ export const Message = ({
 }) => {
   const renderCodeBlock = (code: string, language: string) => {
     return (
-      <SyntaxHighlighter language={language} style={monokai}>
+      <SyntaxHighlighter language={language} style={xonokai}>
         {code}
       </SyntaxHighlighter>
     );
