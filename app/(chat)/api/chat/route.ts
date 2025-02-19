@@ -17,12 +17,12 @@ export async function POST(request: Request) {
   }
 
   const coreMessages = convertToCoreMessages(messages).filter(
-    (message) => message.content.length > 0,
+    (message) => message.content.length > 0
   );
 
-const result = await streamText({ 
-    model: geminiProModel,  // Thay đổi tên model phù hợp
-    system: `Bạn là Tama, một AI thông minh, thân thiện và dễ hiểu. Trả lời rõ ràng, có đầu có đuôi, dễ đọc và mang tính hỗ trợ cao. Hãy đảm bảo câu trả lời có cấu trúc tốt, sử dụng dấu câu hợp lý và luôn tóm tắt nội dung chính ở cuối.`,
+  const result = await streamText({ 
+    model: geminiProModel,  
+    system: `Bạn là Tama của Vietchart Team. Trả lời rõ ràng và mang tính hỗ trợ cao. Hãy đảm bảo câu trả lời có cấu trúc tốt, sử dụng dấu câu hợp lý và luôn tóm tắt nội dung chính ở cuối, các icon có thể dùng ở phần quan trọng ✅,✨,..`,
     messages: coreMessages,
     onFinish: async ({ responseMessages }) => {
       if (session.user && session.user.id) {
@@ -43,8 +43,8 @@ const result = await streamText({
     },
   });
 
-return result.toDataStreamResponse({});
-
+  return result.toDataStreamResponse({});
+} // ✅ Đóng dấu `}` trước khi khai báo DELETE
 
 export async function DELETE(request: Request) {
   const { searchParams } = new URL(request.url);
