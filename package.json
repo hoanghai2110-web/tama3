@@ -42,6 +42,7 @@
     "react": "19.0.0-rc-7771d3a7-20240827",
     "react-dom": "19.0.0-rc-7771d3a7-20240827",
     "react-markdown": "^9.0.1",
+    "react-syntax-highlighter": "^15.6.1",
     "remark-gfm": "^4.0.0",
     "server-only": "^0.0.1",
     "sonner": "^1.5.0",
