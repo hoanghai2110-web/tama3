@@ -1,10 +1,11 @@
-import React, { ReactNode, ComponentProps } from "react";
-import { Attachment, ToolInvocation } from "ai";
-import { motion } from "framer-motion";
-import ReactMarkdown from "react-markdown";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { okaidia } from "react-syntax-highlighter/dist/esm/styles/prism";
-import remarkGfm from "remark-gfm";
+/* eslint-disable import/order */
+import React, { ReactNode, ComponentProps } from "react"; // React luôn đứng đầu  
+import { motion } from "framer-motion"; // Thư viện bên ngoài  
+import { Attachment, ToolInvocation } from "ai";  
+import ReactMarkdown from "react-markdown";  
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";  
+import { okaidia } from "react-syntax-highlighter/dist/esm/styles/prism";  
+import remarkGfm from "remark-gfm";  
 
 const renderCodeBlock = (code: string, language: string) => {
   return (
