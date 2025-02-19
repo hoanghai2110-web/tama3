@@ -4,8 +4,7 @@ import Link from "next/link";
 import { auth, signOut } from "@/app/(auth)/auth";  
   
 import { History } from "./history";  
-import { SlashIcon, MessageIcon } from "./icons";  
-import { UserIcon } from './icons';  // Đảm bảo đường dẫn đúng nơi chứa UserIcon
+import { SlashIcon, MessageIcon, UserIcon } from "./icons";  
 import { ThemeToggle } from "./theme-toggle";  
 import { Button } from "../ui/button";  
 import {  
