@@ -26,7 +26,7 @@ export async function POST(request: Request) {
 1️⃣ Mở đầu: Tóm tắt ngắn gọn.  
 2️⃣ Giải thích: Chi tiết, dễ hiểu.  
 3️⃣ Kết luận: Tóm tắt ý chính.  
-Dùng icon ✅✨📌 khi cần nhấn mạnh.`  
+Dùng icon ✅✨📌 khi cần nhấn mạnh.`, 
     messages: coreMessages,
     onFinish: async ({ responseMessages }) => {
       if (session.user && session.user.id) {
