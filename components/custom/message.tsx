@@ -37,10 +37,23 @@ export const Message = ({
       className={`flex flex-row gap-3 px-4 w-full md:w-[500px] md:px-0 first-of-type:pt-20 ${
         role === "user" ? "justify-end" : "justify-start"
       }`}
-      initial={{ y: 10, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.3, ease: "easeOut" }} // 🚀 Mượt hơn
-      style={{ willChange: "transform, opacity" }} // 🏎️ Tối ưu GPU
+      initial={{
+        y: 10, // Trượt nhẹ từ dưới lên
+        opacity: 0,
+        scale: 0.95, // Nhỏ lại khi xuất hiện
+        filter: "brightness(0.7)", // Ban đầu hơi tối
+      }}
+      animate={{
+        y: 0,
+        opacity: 1,
+        scale: 1,
+        filter: "brightness(1.2)", // Lóe sáng khi bot nhắn tin
+      }}
+      transition={{
+        duration: 0.4, // Mượt mà
+        ease: "easeOut",
+      }}
+      style={{ willChange: "transform, opacity, filter" }} // Tối ưu GPU
     >
       <div
         className={`flex flex-col gap-2 rounded-2xl max-w-[100%] break-words leading-[1.625] ${
@@ -55,7 +68,7 @@ export const Message = ({
                 paddingLeft: "1rem",
                 paddingRight: "1rem",
                 paddingBottom: "0.5rem",
-                willChange: "transform, opacity", // 🏎️ Cải thiện hiệu ứng
+                willChange: "transform, opacity",
               }
             : undefined
         }
@@ -99,7 +112,7 @@ export const Message = ({
                     backgroundColor: "hsl(var(--muted))",
                     paddingTop: "0.05rem",
                     paddingBottom: "0.05rem",
-                    willChange: "transform, opacity", // 🔥 Giúp hiển thị nhanh hơn
+                    willChange: "transform, opacity", 
                   }}
                 >
                   {children}
