@@ -36,16 +36,27 @@ export const Message = ({
     <motion.div
       className={`flex flex-row gap-3 px-4 w-full md:w-[500px] md:px-0 first-of-type:pt-20 ${
         role === "user" ? "justify-end" : "justify-start"
-      }`} // Thêm `justify-end` để căn phải tin nhắn user
+      }`}
       initial={{ y: 5, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
     >
       <div
-        className={`flex flex-col gap-2 rounded-2xl max-w-[80%] break-words text-left leading-[1.625] ${
+        className={`flex flex-col gap-2 rounded-2xl max-w-[100%] break-words leading-[1.625] ${
           role === "user"
-            ? "text-white bg-[#1c1c1c] self-end ml-auto" // Thêm `ml-auto` để đảm bảo tin nhắn sát phải
-            : "text-zinc-800 dark:text-zinc-300"
-        } min-h-[42px] p-3`}
+            ? "text-white bg-[#1c1c1c] self-end ml-auto p-3"
+            : "text-zinc-800 dark:text-zinc-300 p-3"
+        }`}
+        style={
+          role === "user"
+            ? {
+                paddingTop: ".5rem",
+                paddingLeft: ".5rem",
+                paddingRight: ".6rem",
+              }
+            : {
+                padding: ".75rem",
+              }
+        }
       >
         <ReactMarkdown
           remarkPlugins={[remarkGfm]}
