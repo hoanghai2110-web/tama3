@@ -58,7 +58,7 @@ export const Message = ({
               }
         }
       >
-        <ReactMarkdown
+<ReactMarkdown
   remarkPlugins={[remarkGfm]}
   components={{
     h1: ({ node, ...props }) => (
@@ -67,12 +67,21 @@ export const Message = ({
     h2: ({ node, ...props }) => (
       <h2 className="text-xl font-semibold pt-3 pb-3" {...props} />
     ),
-    p: ({ node, ...props }) => <p {...props} />,
-    strong: ({ node, ...props }) => (
-      <strong
-        className="text-[15px] font-bold block pt-3 pb-3"
-        {...props}
-      />
+    p: ({ node, ...props }) => (
+      <p {...props}>
+        {/* Kiểm tra nếu có <strong> bên trong */}
+        {React.Children.map(props.children, (child) =>
+          typeof child === "string" ? (
+            child
+          ) : React.isValidElement(child) && child.type === "strong" ? (
+            <strong className="text-[15px] font-bold block pt-3 pb-3">
+              {child.props.children}
+            </strong>
+          ) : (
+            child
+          )
+        )}
+      </p>
     ),
     code({ className, children, ...props }: ComponentProps<"code">) {
       const match = /language-(\w+)/.exec(className || "");
@@ -92,6 +101,7 @@ export const Message = ({
 >
   {typeof content === "string" ? content : ""}
 </ReactMarkdown>
+
 
       </div>
     </motion.div>
