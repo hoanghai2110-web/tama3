@@ -59,35 +59,40 @@ export const Message = ({
         }
       >
         <ReactMarkdown
-          remarkPlugins={[remarkGfm]}
-          components={{
-            h1: ({ node, ...props }) => (
-              <h1 className="text-xl font-bold mt-2" {...props} />
-            ),
-            h2: ({ node, ...props }) => (
-              <h2 className="text-lg font-semibold mt-2" {...props} />
-            ),
-            p: ({ node, ...props }) => <p {...props} />,
-            code({ className, children, ...props }: ComponentProps<"code">) {
-              const match = /language-(\w+)/.exec(className || "");
-              const lang = match ? match[1] : "";
-              return lang ? (
-                renderCodeBlock(String(children), lang)
-              ) : (
-             <code
-  className="py-1 px-2 bg-gray-200 dark:bg-gray-800 rounded-[3px]"
-  style={{ backgroundColor: "hsl(var(--muted))" }} 
->
-  {children}
-</code>
-
-
-              );
-            },
-          }}
+  remarkPlugins={[remarkGfm]}
+  components={{
+    h1: ({ node, ...props }) => (
+      <h1 className="text-2xl font-bold pt-4 pb-4" {...props} />
+    ),
+    h2: ({ node, ...props }) => (
+      <h2 className="text-xl font-semibold pt-3 pb-3" {...props} />
+    ),
+    p: ({ node, ...props }) => <p {...props} />,
+    strong: ({ node, ...props }) => (
+      <strong
+        className="text-[15px] font-bold block pt-3 pb-3"
+        {...props}
+      />
+    ),
+    code({ className, children, ...props }: ComponentProps<"code">) {
+      const match = /language-(\w+)/.exec(className || "");
+      const lang = match ? match[1] : "";
+      return lang ? (
+        renderCodeBlock(String(children), lang)
+      ) : (
+        <code
+          className="py-1 px-2 bg-gray-200 dark:bg-gray-800 rounded-[3px]"
+          style={{ backgroundColor: "hsl(var(--muted))" }}
         >
-          {typeof content === "string" ? content : ""}
-        </ReactMarkdown>
+          {children}
+        </code>
+      );
+    },
+  }}
+>
+  {typeof content === "string" ? content : ""}
+</ReactMarkdown>
+
       </div>
     </motion.div>
   );
