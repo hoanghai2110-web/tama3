@@ -1,8 +1,22 @@
 import { convertToCoreMessages, Message, streamText } from "ai";
-import { auth } from "@/app/(auth)/auth";
-import { saveChat, getChatById, deleteChatById } from "@/db/queries";
-import { generateUUID } from "@/lib/utils";
+import { z } from "zod";
+
 import { geminiProModel } from "@/ai";
+import {
+  generateReservationPrice,
+  generateSampleFlightSearchResults,
+  generateSampleFlightStatus,
+  generateSampleSeatSelection,
+} from "@/ai/actions";
+import { auth } from "@/app/(auth)/auth";
+import {
+  createReservation,
+  deleteChatById,
+  getChatById,
+  getReservationById,
+  saveChat,
+} from "@/db/queries";
+import { generateUUID } from "@/lib/utils";
 
 export async function POST(request: Request) {
   const { id, messages }: { id: string; messages: Array<Message> } =
