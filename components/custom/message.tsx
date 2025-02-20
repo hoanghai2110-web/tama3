@@ -37,82 +37,79 @@ export const Message = ({
       className={`flex flex-row gap-3 px-4 w-full md:w-[500px] md:px-0 first-of-type:pt-20 ${
         role === "user" ? "justify-end" : "justify-start"
       }`}
-      initial={{ y: 5, opacity: 0 }}
+      initial={{ y: 10, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.3, ease: "easeOut" }} // 🚀 Mượt hơn
+      style={{ willChange: "transform, opacity" }} // 🏎️ Tối ưu GPU
     >
       <div
         className={`flex flex-col gap-2 rounded-2xl max-w-[100%] break-words leading-[1.625] ${
           role === "user"
             ? "text-white bg-[#1c1c1c] self-end ml-auto p-3"
-            : "text-zinc-800 dark:text-zinc-300"
+            : "text-zinc-800 dark:text-zinc-300 p-1"
         }`}
         style={
-  role === "user"
-    ? {
-        paddingTop: "0.5rem",
-        paddingLeft: "1rem",
-        paddingRight: "1rem",
-        paddingBottom: "0.5rem", // ✅ Đúng cú pháp
-      }
-    : undefined
-}
-
+          role === "user"
+            ? {
+                paddingTop: "0.5rem",
+                paddingLeft: "1rem",
+                paddingRight: "1rem",
+                paddingBottom: "0.5rem",
+                willChange: "transform, opacity", // 🏎️ Cải thiện hiệu ứng
+              }
+            : undefined
+        }
       >
-<ReactMarkdown
-  remarkPlugins={[remarkGfm]}
-  components={{
-    h1: ({ node, ...props }) => (
-      <h1 className="text-2xl font-bold pt-4 pb-4" {...props} />
-    ),
-    h2: ({ node, ...props }) => (
-      <h2 className="text-xl font-semibold pt-3 pb-3" {...props} />
-    ),
-    p: ({ node, ...props }) => (
-      <p {...props}>
-        {React.Children.map(props.children, (child, index) =>
-          typeof child === "string" ? (
-            child
-          ) : React.isValidElement(child) && child.type === "strong" ? (
-            <strong
-  key={index}
-  className="text-[18px] font-bold italic inline pt-3 pb-3"
->
-  {child.props.children}
-</strong>
-
-          ) : (
-            child
-          )
-        )}
-      </p>
-    ),
-    code({ className, children, ...props }: ComponentProps<"code">) {
-      const match = /language-(\w+)/.exec(className || "");
-      const lang = match ? match[1] : "";
-      return lang ? (
-        renderCodeBlock(String(children), lang)
-      ) : (
-       <code
-  className="px-2 bg-gray-200 dark:bg-gray-800 rounded-[3px]"
-  style={{
-    backgroundColor: "hsl(var(--muted))",
-    paddingTop: "0.05rem",
-    paddingBottom: "0.05rem",
-  }}
->
-  {children}
-</code>
-
-      );
-    },
-  }}
->
-  {typeof content === "string" ? content : ""}
-</ReactMarkdown>
-
-
-
-
+        <ReactMarkdown
+          remarkPlugins={[remarkGfm]}
+          components={{
+            h1: ({ node, ...props }) => (
+              <h1 className="text-2xl font-bold pt-4 pb-4" {...props} />
+            ),
+            h2: ({ node, ...props }) => (
+              <h2 className="text-xl font-semibold pt-3 pb-3" {...props} />
+            ),
+            p: ({ node, ...props }) => (
+              <p {...props}>
+                {React.Children.map(props.children, (child, index) =>
+                  typeof child === "string" ? (
+                    child
+                  ) : React.isValidElement(child) && child.type === "strong" ? (
+                    <strong
+                      key={index}
+                      className="text-[18px] font-bold italic inline pt-3 pb-3"
+                    >
+                      {child.props.children}
+                    </strong>
+                  ) : (
+                    child
+                  )
+                )}
+              </p>
+            ),
+            code({ className, children, ...props }: ComponentProps<"code">) {
+              const match = /language-(\w+)/.exec(className || "");
+              const lang = match ? match[1] : "";
+              return lang ? (
+                renderCodeBlock(String(children), lang)
+              ) : (
+                <code
+                  className="px-2 bg-gray-200 dark:bg-gray-800 rounded-[3px]"
+                  style={{
+                    backgroundColor: "hsl(var(--muted))",
+                    paddingTop: "0.05rem",
+                    paddingBottom: "0.05rem",
+                    willChange: "transform, opacity", // 🔥 Giúp hiển thị nhanh hơn
+                  }}
+                >
+                  {children}
+                </code>
+              );
+            },
+          }}
+        >
+          {typeof content === "string" ? content : ""}
+        </ReactMarkdown>
       </div>
     </motion.div>
   );
