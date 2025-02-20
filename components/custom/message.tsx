@@ -69,12 +69,14 @@ export const Message = ({
     ),
     p: ({ node, ...props }) => (
       <p {...props}>
-        {/* Kiểm tra nếu có <strong> bên trong */}
-        {React.Children.map(props.children, (child) =>
+        {React.Children.map(props.children, (child, index) =>
           typeof child === "string" ? (
             child
           ) : React.isValidElement(child) && child.type === "strong" ? (
-            <strong className="text-[15px] font-bold block pt-3 pb-3">
+            <strong
+              key={index}
+              className="text-[15px] font-bold inline pt-3 pb-3"
+            >
               {child.props.children}
             </strong>
           ) : (
@@ -101,6 +103,8 @@ export const Message = ({
 >
   {typeof content === "string" ? content : ""}
 </ReactMarkdown>
+
+
 
 
       </div>
