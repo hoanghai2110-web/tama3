@@ -47,15 +47,16 @@ export const Message = ({
             : "text-zinc-800 dark:text-zinc-300 p-3"
         }`}
         style={
-          role === "user"
-            ?{
-  paddingTop: "0.5rem",
-  paddingLeft: "1rem",
-  paddingRight: "1rem",
-  paddingBottom: "0.5rem",
+  role === "user"
+    ? {
+        paddingTop: "0.5rem",
+        paddingLeft: "1rem",
+        paddingRight: "1rem",
+        paddingBottom: "0.5rem", // ✅ Đúng cú pháp
+      }
+    : undefined
 }
 
-        }
       >
 <ReactMarkdown
   remarkPlugins={[remarkGfm]}
