@@ -38,51 +38,45 @@ export const Message = ({
       initial={{ y: 5, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
     >
-   <div
-  className={`flex flex-col gap-2 rounded-2xl max-w-[100%] break-words text-left leading-[1.625] ${
-    role === "user"
-      ? "text-white bg-[#1c1c1c] self-end"
-      : "text-zinc-800 dark:text-zinc-300"
-  } min-h-[42px]`}
-  style={
-    role === "user"
-      ? {
-          paddingTop: ".6rem",
-          paddingBottom: "0rem",
-          paddingLeft: ".7rem",
-          paddingRight: ".8rem",
+      <div
+        className={`flex flex-col gap-2 rounded-2xl max-w-[100%] break-words text-left leading-[1.625] ${
+          role === "user"
+            ? "text-white bg-[#1c1c1c] self-end"
+            : "text-zinc-800 dark:text-zinc-300"
+        } min-h-[42px]`}
+        style={
+          role === "user"
+            ? {
+                paddingTop: ".6rem",
+                paddingBottom: "0rem",
+                paddingLeft: ".7rem",
+                paddingRight: ".8rem",
+              }
+            : {}
         }
-      : {}
-  }
->
-
-
-
-            <ReactMarkdown
-              remarkPlugins={[remarkGfm]}
-              components={{
-                h1: ({ node, ...props }) => <h1 className="text-xl font-bold mt-2" {...props} />,
-                h2: ({ node, ...props }) => <h2 className="text-lg font-semibold mt-2" {...props} />,
-                p: ({ node, ...props }) => <p {...props} />,
-                code({ className, children, ...props }: ComponentProps<"code">) {
-                  const match = /language-(\w+)/.exec(className || "");
-                  const lang = match ? match[1] : "";
-                  return lang ? (
-                    renderCodeBlock(String(children), lang)
-                  ) : (
-                    <code className="py-1 rounded-md text-black">
-                      {children}
-                    </code>
-                  );
-                },
-              }}
-            >
-              {content}
-            </ReactMarkdown>
-          </div>
-        )}
+      >
+        <ReactMarkdown
+          remarkPlugins={[remarkGfm]}
+          components={{
+            h1: ({ node, ...props }) => <h1 className="text-xl font-bold mt-2" {...props} />,
+            h2: ({ node, ...props }) => <h2 className="text-lg font-semibold mt-2" {...props} />,
+            p: ({ node, ...props }) => <p {...props} />,
+            code({ className, children, ...props }: ComponentProps<"code">) {
+              const match = /language-(\w+)/.exec(className || "");
+              const lang = match ? match[1] : "";
+              return lang ? (
+                renderCodeBlock(String(children), lang)
+              ) : (
+                <code className="py-1 rounded-md text-black">
+                  {children}
+                </code>
+              );
+            },
+          }}
+        >
+          {content}
+        </ReactMarkdown>
       </div>
     </motion.div>
   );
 };
-                                           
