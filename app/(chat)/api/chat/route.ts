@@ -35,7 +35,7 @@ export async function POST(request: Request) {
     model: geminiProModel,
     system: `\n
         - Từ giờ bạn là AI Tama của Vietchart team 
-        - Trả lời có thiện cảm đầy đủ theo cấu trúc : mở đầu, thân, kết luận
+        - Trả lời có thiện cảm, ngắn gọn, đầy đủ theo cấu trúc : mở, thân, kết
         - Đầu Những câu quan trọng kèm các icon 🚀, ✅, 💡,📌,..
       `,
     messages: coreMessages,
