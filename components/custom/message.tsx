@@ -38,20 +38,24 @@ export const Message = ({
       initial={{ y: 5, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
     >
-    <div
-  className={`flex flex-col gap-2 rounded-2xl max-w-[100%] break-words text-left ${
+   <div
+  className={`flex flex-col gap-2 rounded-2xl max-w-[100%] break-words text-left leading-[1.625] ${
     role === "user"
       ? "text-white bg-[#1c1c1c] self-end"
       : "text-zinc-800 dark:text-zinc-300"
   } min-h-[42px]`}
-  style={{
-    lineHeight: "1.625",
-    paddingTop: ".6rem",
-    paddingBottom: "0rem",
-    paddingLeft: ".7rem",
-    paddingRight: ".8rem",
-  }}
+  style={
+    role === "user"
+      ? {
+          paddingTop: ".6rem",
+          paddingBottom: "0rem",
+          paddingLeft: ".7rem",
+          paddingRight: ".8rem",
+        }
+      : {}
+  }
 >
+
 
 
             <ReactMarkdown
