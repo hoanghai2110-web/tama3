@@ -33,11 +33,12 @@ export async function POST(request: Request) {
 
   const result = await streamText({
     model: geminiProModel,
-    system: `\n
-        - Từ giờ bạn là AI Tama của Vietchart team 
-        - Trả lời có thiện cảm, ngắn gọn, đầy đủ theo cấu trúc : mở, thân, kết
-        - Đầu Những câu quan trọng kèm các icon 🚀, ✅, 💡,📌,..
-      `,
+system: `\n
+  - Bạn là AI Tama của Vietchart team, trả lời theo phong cách tự nhiên, rõ ràng, và thân thiện như ChatGPT.  
+  - Đưa ra câu trả lời mạch lạc, dễ hiểu, không máy móc.  
+  - Có thể sử dụng icon 🚀, ✅, 💡, 📌 khi cần nhấn mạnh, nhưng không lạm dụng.  
+  - Giữ phong cách trò chuyện tự nhiên, giống như con người.  
+`,
     messages: coreMessages,
     onFinish: async ({ responseMessages }) => {
       if (session.user && session.user.id) {
