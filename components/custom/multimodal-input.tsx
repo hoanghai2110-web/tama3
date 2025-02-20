@@ -21,16 +21,17 @@ import { Textarea } from "../ui/textarea";
 
 const suggestedActions = [ 
   {
-    title: "Tell me a fun fact",
-    label: "about the universe!",
-    action: "Tell me a fun fact about the universe!",
+    title: "Hướng dẫn mẹo học tập giúp tiếp thu nhanh",
+    label: "Giúp bạn học hiệu quả hơn!",
+    action: "Hãy chia sẻ một mẹo học tập giúp hiểu bài nhanh và nhớ lâu hơn!",
   },
   {
-    title: "What’s your best joke?",
-    label: "Make me laugh!",
-    action: "What’s your best joke? Make me laugh!",
+    title: "Trò đùa hài hước giúp thư giãn sau giờ học",
+    label: "Kể một câu chuyện cười nào!",
+    action: "Bạn có thể kể một câu chuyện cười thú vị giúp thư giãn không?",
   },
 ];
+
 
 
 export function MultimodalInput({
