@@ -49,12 +49,12 @@ export const Message = ({
         style={
           role === "user"
             ? {
-                paddingTop: ".5rem",
-                paddingLeft: ".5rem",
-                paddingRight: ".6rem",
+                paddingTop: ".6rem",
+                paddingLeft: "1rem",
+                paddingRight: "1rem",
               }
             : {
-                padding: ".75rem",
+                padding: "0rem",
               }
         }
       >
@@ -74,9 +74,14 @@ export const Message = ({
               return lang ? (
                 renderCodeBlock(String(children), lang)
               ) : (
-                <code className="py-1 px-2 bg-gray-200 dark:bg-gray-800 rounded-md">
-                  {children}
-                </code>
+             <code
+  className="py-1 px-2 bg-gray-200 dark:bg-gray-800 rounded-[3px]"
+  style={{ backgroundColor: "hsl(var(--muted))" }} 
+>
+  {children}
+</code>
+
+
               );
             },
           }}
