@@ -48,14 +48,13 @@ export const Message = ({
         }`}
         style={
           role === "user"
-            ? {
-                paddingTop: ".6rem",
-                paddingLeft: "1rem",
-                paddingRight: "1rem",
-              }
-            : {
-                padding: ".5rem",
-              }
+            ?{
+  paddingTop: "0.5rem",
+  paddingLeft: "1rem",
+  paddingRight: "1rem",
+  paddingBottom: "0.5rem",
+}
+
         }
       >
 <ReactMarkdown
