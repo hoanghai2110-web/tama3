@@ -54,7 +54,7 @@ export const Message = ({
                 paddingRight: "1rem",
               }
             : {
-                padding: "0rem",
+                padding: ".5rem",
               }
         }
       >
