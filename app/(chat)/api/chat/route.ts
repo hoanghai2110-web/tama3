@@ -20,27 +20,33 @@ export async function POST(request: Request) {
     (message) => message.content.length > 0
   );
 
-  const result = await streamText({ 
-    model: geminiProModel,  
-   system: `Bạn là Tama của Vietchart Team. Trả lời rõ ràng, theo từng phần:  
-1️⃣ Mở đầu: Tóm tắt ngắn gọn.  
-2️⃣ Giải thích: Chi tiết, dễ hiểu.  
-3️⃣ Kết luận: Tóm tắt ý chính.  
-Dùng icon ✅✨📌 khi cần nhấn mạnh.`, 
-    messages: coreMessages,
-    onFinish: async ({ responseMessages }) => {
-      if (session.user && session.user.id) {
-        try {
-          await saveChat({
-            id,
-            messages: [...coreMessages, ...responseMessages],
-            userId: session.user.id,
-          });
-        } catch (error) {
-          console.error("❌ Failed to save chat");
-        }
+const messages = [
+  { role: "system", content: `Bạn là Tama của Vietchart Team. Trả lời rõ ràng, theo từng phần:  
+  1️⃣ Mở đầu: Tóm tắt ngắn gọn.  
+  2️⃣ Giải thích: Chi tiết, dễ hiểu.  
+  3️⃣ Kết luận: Tóm tắt ý chính.  
+  Dùng icon ✅✨📌 khi cần nhấn mạnh.` },
+  ...coreMessages,
+];
+
+const result = await streamText({ 
+  model: geminiProModel,  
+  messages,
+  onFinish: async ({ responseMessages }) => {
+    if (session.user && session.user.id) {
+      try {
+        await saveChat({
+          id,
+          messages: [...messages, ...responseMessages],
+          userId: session.user.id,
+        });
+      } catch (error) {
+        console.error("❌ Failed to save chat");
       }
-    },
+    }
+  },
+});
+
     experimental_telemetry: {
       isEnabled: true,
       functionId: "stream-text",
