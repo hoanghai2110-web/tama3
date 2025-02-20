@@ -44,7 +44,7 @@ export const Message = ({
         className={`flex flex-col gap-2 rounded-2xl max-w-[100%] break-words leading-[1.625] ${
           role === "user"
             ? "text-white bg-[#1c1c1c] self-end ml-auto p-3"
-            : "text-zinc-800 dark:text-zinc-300 p-3"
+            : "text-zinc-800 dark:text-zinc-300"
         }`}
         style={
   role === "user"
