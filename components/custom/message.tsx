@@ -40,19 +40,21 @@ export const Message = ({
     >
       <div className="flex flex-col gap-3 w-full">
         {content && typeof content === "string" && (
-          <div
-            className={`flex flex-col px-2 py-2 gap-2 rounded-2xl max-w-[100%] break-words text-left leading-relaxed ${
-              role === "user"
-                ? "text-white bg-[#1c1c1c] self-end" // Căn phải đúng
-                : "text-zinc-800 dark:text-zinc-300"
-            } min-h-[42px]`}
-          >
+         <div
+  className={`flex flex-col px-2 py-2 gap-2 rounded-2xl max-w-[100%] break-words text-left ${
+    role === "user"
+      ? "text-white bg-[#1c1c1c] self-end"
+      : "text-zinc-800 dark:text-zinc-300"
+  } min-h-[42px]`}
+  style={{ lineHeight: "1.625" }}
+>
+
             <ReactMarkdown
               remarkPlugins={[remarkGfm]}
               components={{
                 h1: ({ node, ...props }) => <h1 className="text-xl font-bold mt-2" {...props} />,
                 h2: ({ node, ...props }) => <h2 className="text-lg font-semibold mt-2" {...props} />,
-                p: ({ node, ...props }) => <p className="mb-2" {...props} />,
+                p: ({ node, ...props }) => <p {...props} />,
                 code({ className, children, ...props }: ComponentProps<"code">) {
                   const match = /language-(\w+)/.exec(className || "");
                   const lang = match ? match[1] : "";
