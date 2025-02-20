@@ -1,7 +1,10 @@
-import { convertToCoreMessages, Message, streamText } from "ai"; 
+import { convertToCoreMessages, Message, streamText } from "ai";
+
 import { geminiProModel } from "@/ai";  
 import { auth } from "@/app/(auth)/auth";
+
 import { deleteChatById, getChatById, saveChat } from "@/db/queries";
+
 
 export async function POST(request: Request) {
   const { id, messages }: { id: string; messages: Array<Message> } = 
