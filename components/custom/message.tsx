@@ -74,11 +74,12 @@ export const Message = ({
             child
           ) : React.isValidElement(child) && child.type === "strong" ? (
             <strong
-              key={index}
-              className="text-[15px] font-bold inline pt-3 pb-3"
-            >
-              {child.props.children}
-            </strong>
+  key={index}
+  className="text-[18px] font-bold italic inline pt-3 pb-3"
+>
+  {child.props.children}
+</strong>
+
           ) : (
             child
           )
