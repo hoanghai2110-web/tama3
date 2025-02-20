@@ -12,7 +12,7 @@ const renderCodeBlock = (code: string, language: string) => {
     <SyntaxHighlighter
       language={language}
       style={okaidia}
-      customStyle={{ fontSize: "12px", borderRadius: "8px", padding: "10px" }}
+      customStyle={{ fontSize: "12px", borderRadius: "8px", padding: "12px" }}
     >
       {code}
     </SyntaxHighlighter>
@@ -92,12 +92,17 @@ export const Message = ({
       return lang ? (
         renderCodeBlock(String(children), lang)
       ) : (
-        <code
-          className="py-1 px-2 bg-gray-200 dark:bg-gray-800 rounded-[3px]"
-          style={{ backgroundColor: "hsl(var(--muted))" }}
-        >
-          {children}
-        </code>
+       <code
+  className="px-2 bg-gray-200 dark:bg-gray-800 rounded-[3px]"
+  style={{
+    backgroundColor: "hsl(var(--muted))",
+    paddingTop: "0.05rem",
+    paddingBottom: "0.05rem",
+  }}
+>
+  {children}
+</code>
+
       );
     },
   }}
