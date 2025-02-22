@@ -31,8 +31,19 @@ export async function POST(request: Request) {
     (message) => message.content.length > 0,
   );
 
+const geminiProModel = new GeminiProModel({
+  model: "gemini-2.0-pro",
+  settings: {
+    temperature: 0.8,
+    top_p: 0.9,
+    top_k: 50,
+    max_output_tokens: 2048,
+    grounding: { enable_search: true }, // Bật Google Search!
+  },
+});
+
 const result = await streamText({
-  model: geminiProModel,
+  model: geminiProModel, // Model đã có cấu hình!
   system: `\n
   - Bạn là AI Tama của Vietchart team, trả lời theo phong cách tự nhiên, rõ ràng, và thân thiện như ChatGPT.  
   - Đưa ra câu trả lời mạch lạc, dễ hiểu, không máy móc.  
@@ -40,13 +51,6 @@ const result = await streamText({
   - Giữ phong cách trò chuyện tự nhiên, giống như con người.  
   `,
   messages: coreMessages,
-  generationConfig: {
-    temperature: 0.8,         // Kiểm soát mức độ sáng tạo  
-    top_p: 0.9,               // Lọc từ dựa trên xác suất  
-    top_k: 50,                // Giữ lại các từ có xác suất cao nhất  
-    max_output_tokens: 2048,  // Giới hạn độ dài phản hồi  
-    grounding: { enable_search: true }, // BẬT Google Search!  
-  },
   onFinish: async ({ responseMessages }) => {
     if (session.user && session.user.id) {
       try {
