@@ -31,33 +31,41 @@ export async function POST(request: Request) {
     (message) => message.content.length > 0,
   );
 
-  const result = await streamText({
-    model: geminiProModel,
-system: `\n
+const result = await streamText({
+  model: geminiProModel,
+  system: `\n
   - Bạn là AI Tama của Vietchart team, trả lời theo phong cách tự nhiên, rõ ràng, và thân thiện như ChatGPT.  
   - Đưa ra câu trả lời mạch lạc, dễ hiểu, không máy móc.  
   - Có thể sử dụng icon 🚀, ✅, 💡, 📌 khi cần nhấn mạnh, nhưng không lạm dụng.  
   - Giữ phong cách trò chuyện tự nhiên, giống như con người.  
-`,
-    messages: coreMessages,
-    onFinish: async ({ responseMessages }) => {
-      if (session.user && session.user.id) {
-        try {
-          await saveChat({
-            id,
-            messages: [...coreMessages, ...responseMessages],
-            userId: session.user.id,
-          });
-        } catch (error) {
-          console.error("Failed to save chat");
-        }
+  `,
+  messages: coreMessages,
+  generationConfig: {
+    temperature: 0.8,         // Kiểm soát mức độ sáng tạo  
+    top_p: 0.9,               // Lọc từ dựa trên xác suất  
+    top_k: 50,                // Giữ lại các từ có xác suất cao nhất  
+    max_output_tokens: 2048,  // Giới hạn độ dài phản hồi  
+    grounding: { enable_search: true }, // BẬT Google Search!  
+  },
+  onFinish: async ({ responseMessages }) => {
+    if (session.user && session.user.id) {
+      try {
+        await saveChat({
+          id,
+          messages: [...coreMessages, ...responseMessages],
+          userId: session.user.id,
+        });
+      } catch (error) {
+        console.error("Failed to save chat");
       }
-    },
-    experimental_telemetry: {
-      isEnabled: true,
-      functionId: "stream-text",
-    },
-  });
+    }
+  },
+  experimental_telemetry: {
+    isEnabled: true,
+    functionId: "stream-text",
+  },
+});
+
 
   return result.toDataStreamResponse({});
 }
