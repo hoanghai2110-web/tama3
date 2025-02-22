@@ -40,9 +40,9 @@ export async function POST(request: Request) {
 `,
     messages: coreMessages,
     temperature: 0.8, // Điều chỉnh độ sáng tạo của AI
-    topP: 0.9, // Chỉ lấy các từ có xác suất cao nhất (sửa từ top_p thành topP)
-    topK: 50, // Số lượng từ được chọn lọc (sửa từ top_k thành topK)
-    max_output_tokens: 2048, // Giới hạn số token đầu ra
+    topP: 0.9, // Chỉ lấy các từ có xác suất cao nhất
+    topK: 50, // Số lượng từ được chọn lọc
+    // maxTokens: 2048, // Loại bỏ nếu không có hiệu lực
 
     onFinish: async ({ responseMessages }) => {
       if (session.user && session.user.id) {
