@@ -1,4 +1,4 @@
-import { motion } from "framer-motion"; 
+import { motion } from "framer-motion";
 import Link from "next/link";
 
 import { LogoGoogle, MessageIcon, VercelIcon } from "./icons";
@@ -22,18 +22,18 @@ export const Overview = () => (
         animate={{ opacity: 1, textShadow: "0 0 12px #fff" }}
         transition={{ duration: 0.8, repeat: Infinity, repeatType: "reverse" }}
       >
-        Meet Tama &ndash; your witty, confident, and all-knowing AI assistant! 🚀
+        Gặp Tama – trợ lý AI thông minh, đơn giản và dễ sử dụng! 🚀
       </motion.p>
       <p>
-        Want to know more? Check out the{" "}
+        Nếu bạn muốn mua Source code của Tama, hãy liên hệ qua{" "}
         <Link
           className="text-blue-500 dark:text-blue-400"
-          href="#"
+          href="t.me/anonymous_start"
           target="_blank"
         >
-          Docs
+          Telegram
         </Link>
-        . But trust Tama, you won&apos;t need it! 😉
+        . Sở hữu ngay Tama và bắt đầu sử dụng! 😉
       </p>
     </div>
   </motion.div>
