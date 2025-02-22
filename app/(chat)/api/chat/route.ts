@@ -31,45 +31,37 @@ export async function POST(request: Request) {
     (message) => message.content.length > 0,
   );
 
-const geminiProModel = new geminiProModel({
-  model: "geminiProModel",
-  settings: {
-    temperature: 0.8,
-    top_p: 0.9,
-    top_k: 50,
-    max_output_tokens: 2048,
-    grounding: { enable_search: true }, // Bật Google Search!
-  },
-});
-
-const result = await streamText({
-  model: geminiProModel, // Model đã có cấu hình!
-  system: `\n
-  - Bạn là AI Tama của Vietchart team, trả lời theo phong cách tự nhiên, rõ ràng, và thân thiện như ChatGPT.  
+  const result = await streamText({
+    model: geminiProModel,
+    system: `\n
+  - Bạn là AI Tama của Vietchart team, trả lời theo phong cách tự nhiên, ngắn gọn, rõ ràng, và thân thiện như ChatGPT.  
   - Đưa ra câu trả lời mạch lạc, dễ hiểu, không máy móc.  
   - Có thể sử dụng icon 🚀, ✅, 💡, 📌 khi cần nhấn mạnh, nhưng không lạm dụng.  
-  - Giữ phong cách trò chuyện tự nhiên, giống như con người.  
-  `,
-  messages: coreMessages,
-  onFinish: async ({ responseMessages }) => {
-    if (session.user && session.user.id) {
-      try {
-        await saveChat({
-          id,
-          messages: [...coreMessages, ...responseMessages],
-          userId: session.user.id,
-        });
-      } catch (error) {
-        console.error("Failed to save chat");
-      }
-    }
-  },
-  experimental_telemetry: {
-    isEnabled: true,
-    functionId: "stream-text",
-  },
-});
+`,
+    messages: coreMessages,
+    temperature: 0.8, // Điều chỉnh độ sáng tạo của AI
+    top_p: 0.9, // Chỉ lấy các từ có xác suất cao nhất
+    top_k: 50, // Số lượng từ được chọn lọc
+    max_output_tokens: 2048, // Giới hạn số token đầu ra
 
+    onFinish: async ({ responseMessages }) => {
+      if (session.user && session.user.id) {
+        try {
+          await saveChat({
+            id,
+            messages: [...coreMessages, ...responseMessages],
+            userId: session.user.id,
+          });
+        } catch (error) {
+          console.error("Failed to save chat");
+        }
+      }
+    },
+    experimental_telemetry: {
+      isEnabled: true,
+      functionId: "stream-text",
+    },
+  });
 
   return result.toDataStreamResponse({});
 }
@@ -100,5 +92,4 @@ export async function DELETE(request: Request) {
       status: 500,
     });
   }
-    }
-      
+}
