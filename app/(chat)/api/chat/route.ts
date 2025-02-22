@@ -40,7 +40,7 @@ export async function POST(request: Request) {
 `,
     messages: coreMessages,
     temperature: 0.8, // Điều chỉnh độ sáng tạo của AI
-    top_p: 0.9, // Chỉ lấy các từ có xác suất cao nhất
+    topP: 0.9, // Chỉ lấy các từ có xác suất cao nhất (sửa từ top_p thành topP)
     top_k: 50, // Số lượng từ được chọn lọc
     max_output_tokens: 2048, // Giới hạn số token đầu ra
 
