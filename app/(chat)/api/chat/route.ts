@@ -31,8 +31,8 @@ export async function POST(request: Request) {
     (message) => message.content.length > 0,
   );
 
-const geminiProModel = new GeminiProModel({
-  model: "gemini-2.0-pro",
+const geminiProModel = new geminiProModel({
+  model: "geminiProModel",
   settings: {
     temperature: 0.8,
     top_p: 0.9,
