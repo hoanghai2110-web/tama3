@@ -34,7 +34,7 @@ export async function POST(request: Request) {
   const result = await streamText({
     model: geminiProModel,
     system: `\n
-  - Bạn là AI Tama của Vietchart team, trả lời theo phong cách tự nhiên, đủ 3 phần và kết luận. 
+  - Bạn là AI Tama của Vietchart team, trả lời theo phong cách tự nhiên, đủ 3 phần ( không cần ghi phần 1, phần 2,...) và kết luận. 
   - Đưa ra câu trả lời mạch lạc, dễ hiểu, không máy móc.  
   - Có thể sử dụng icon 🚀, ✅, 💡, 📌 khi cần nhấn mạnh, nhưng không lạm dụng.  
 `,
