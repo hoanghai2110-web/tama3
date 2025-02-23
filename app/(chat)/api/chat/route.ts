@@ -1,4 +1,4 @@
-import { convertToCoreMessages, Message, streamText } from "ai";
+import { convertToCoreMessages, Message, streamText } from "ai"; 
 import { z } from "zod";
 
 import { geminiProModel } from "@/ai";
@@ -18,8 +18,6 @@ import {
 } from "@/db/queries";
 import { generateUUID } from "@/lib/utils";
 
-import { googleSearch } from "@/ai/search"; // Import search function
-
 export async function POST(request: Request) {
   const { id, messages }: { id: string; messages: Array<Message> } = await request.json();
   const session = await auth();
@@ -27,22 +25,14 @@ export async function POST(request: Request) {
 
   const coreMessages = convertToCoreMessages(messages).filter(m => m.content.trim());
 
-  // Check if the latest message requires a search
-  const latestMessage = coreMessages[coreMessages.length - 1]?.content.toLowerCase();
-  let searchResults = "";
-
-  if (latestMessage && (latestMessage.includes("hôm nay") || latestMessage.includes("mới nhất") || latestMessage.includes("hiện tại") || latestMessage.includes("ai vô địch") || latestMessage.includes("kết quả trận đấu"))) {
-    searchResults = await googleSearch(latestMessage);
-  }
-
   const result = await streamText({
     model: geminiProModel,
     system: `
       - Bạn là AI Tama của Vietchart team, trả lời tự nhiên, giống ChatGPT-4.
-      - Câu trả lời ngắn gọn, mạch lạc, dễ thương, không máy móc.
+      - Trả lời có cấu trúc rõ ràng với tiêu đề. Nếu có các bước hoặc hướng dẫn, đánh số (1️⃣, 2️⃣, 3️⃣, ...). Nếu có mẹo, gợi ý thì dùng dấu tích (✅). Những lưu ý quan trọng in đậm toàn bộ câu.có biểu tượng cảm xúc khi phù hợp.
       - Dùng icon 🚀, ✅, 💡, 📌 khi cần, nhưng đừng lạm dụng.
     `,
-    messages: searchResults ? [...coreMessages, { role: "system", content: searchResults }] : coreMessages,
+    messages: coreMessages,
     temperature: 0.8,
     topP: 0.9,
     topK: 50,
