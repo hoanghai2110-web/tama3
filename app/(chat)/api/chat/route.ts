@@ -68,7 +68,7 @@ export async function DELETE(request: Request) {
   if (!id) {
     return new Response("Not Found", { status: 404 });
   }
-  
+
   const session = await auth();
   if (!session || !session.user) {
     return new Response("Unauthorized", { status: 401 });
