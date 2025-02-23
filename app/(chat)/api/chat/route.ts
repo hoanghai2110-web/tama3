@@ -18,49 +18,44 @@ import {
 } from "@/db/queries";
 import { generateUUID } from "@/lib/utils";
 
+import { googleSearch } from "@/ai/search"; // Import search function
+
 export async function POST(request: Request) {
-  const { id, messages }: { id: string; messages: Array<Message> } =
-    await request.json();
-
+  const { id, messages }: { id: string; messages: Array<Message> } = await request.json();
   const session = await auth();
-  if (!session) {
-    return new Response("Unauthorized", { status: 401 });
-  }
+  if (!session) return new Response("Unauthorized", { status: 401 });
 
-  const coreMessages = convertToCoreMessages(messages).filter(
-    (message) => message.content.length > 0,
-  );
+  const coreMessages = convertToCoreMessages(messages).filter(m => m.content.trim());
+
+  // Check if the latest message requires a search
+  const latestMessage = coreMessages[coreMessages.length - 1]?.content.toLowerCase();
+  let searchResults = "";
+
+  if (latestMessage && (latestMessage.includes("hôm nay") || latestMessage.includes("mới nhất") || latestMessage.includes("hiện tại") || latestMessage.includes("ai vô địch") || latestMessage.includes("kết quả trận đấu"))) {
+    searchResults = await googleSearch(latestMessage);
+  }
 
   const result = await streamText({
     model: geminiProModel,
-    system: `\n
-  - Bạn là AI Tama của Vietchart team, trả lời theo phong cách tự nhiên, tựa theo chat GPT 4.
-  - Đưa ra câu trả lời mạch lạc, dễ thương, không máy móc.  
-  - Có thể sử dụng icon 🚀, ✅, 💡, 📌 khi cần nhấn mạnh, nhưng không lạm dụng.  
-`,
-    messages: coreMessages,
-    temperature: 0.8, // Điều chỉnh độ sáng tạo của AI
-    topP: 0.9, // Chỉ lấy các từ có xác suất cao nhất
-    topK: 50, // Số lượng từ được chọn lọc
-    // maxTokens: 2048, // Loại bỏ nếu không có hiệu lực
-
+    system: `
+      - Bạn là AI Tama của Vietchart team, trả lời tự nhiên, giống ChatGPT-4.
+      - Câu trả lời ngắn gọn, mạch lạc, dễ thương, không máy móc.
+      - Dùng icon 🚀, ✅, 💡, 📌 khi cần, nhưng đừng lạm dụng.
+    `,
+    messages: searchResults ? [...coreMessages, { role: "system", content: searchResults }] : coreMessages,
+    temperature: 0.8,
+    topP: 0.9,
+    topK: 50,
     onFinish: async ({ responseMessages }) => {
-      if (session.user && session.user.id) {
+      if (session?.user?.id) {
         try {
-          await saveChat({
-            id,
-            messages: [...coreMessages, ...responseMessages],
-            userId: session.user.id,
-          });
+          await saveChat({ id, messages: [...coreMessages, ...responseMessages], userId: session.user.id });
         } catch (error) {
-          console.error("Failed to save chat");
+          console.error("Failed to save chat", error);
         }
       }
     },
-    experimental_telemetry: {
-      isEnabled: true,
-      functionId: "stream-text",
-    },
+    experimental_telemetry: { isEnabled: true, functionId: "stream-text" },
   });
 
   return result.toDataStreamResponse({});
@@ -92,4 +87,4 @@ export async function DELETE(request: Request) {
       status: 500,
     });
   }
-      }
+}
