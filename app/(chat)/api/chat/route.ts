@@ -1,4 +1,4 @@
-import { convertToCoreMessages, Message, streamText } from "ai"; 
+import { convertToCoreMessages, Message, streamText } from "ai";
 import { z } from "zod";
 
 import { geminiProModel } from "@/ai";
@@ -23,13 +23,15 @@ export async function POST(request: Request) {
   const session = await auth();
   if (!session) return new Response("Unauthorized", { status: 401 });
 
-  const coreMessages = convertToCoreMessages(messages).filter(m => m.content.trim());
+  const coreMessages = convertToCoreMessages(messages).filter(
+    (m) => typeof m.content === "string" && m.content.trim()
+  );
 
   const result = await streamText({
     model: geminiProModel,
     system: `
       - Bạn là AI Tama của Vietchart team, trả lời tự nhiên, giống ChatGPT-4.
-      - Trả lời có cấu trúc rõ ràng với tiêu đề. Nếu có các bước hoặc hướng dẫn, đánh số (1️⃣, 2️⃣, 3️⃣, ...). Nếu có mẹo, gợi ý thì dùng dấu tích (✅). Những lưu ý quan trọng in đậm toàn bộ câu.có biểu tượng cảm xúc khi phù hợp.
+      - Trả lời có cấu trúc rõ ràng với tiêu đề. Nếu có các bước hoặc hướng dẫn, đánh số (1️⃣, 2️⃣, 3️⃣, ...). Nếu có mẹo, gợi ý thì dùng dấu tích (✅). Những lưu ý quan trọng in đậm toàn bộ câu. Có biểu tượng cảm xúc khi phù hợp.
       - Dùng icon 🚀, ✅, 💡, 📌 khi cần, nhưng đừng lạm dụng.
     `,
     messages: coreMessages,
@@ -39,7 +41,11 @@ export async function POST(request: Request) {
     onFinish: async ({ responseMessages }) => {
       if (session?.user?.id) {
         try {
-          await saveChat({ id, messages: [...coreMessages, ...responseMessages], userId: session.user.id });
+          await saveChat({
+            id,
+            messages: [...coreMessages, ...responseMessages],
+            userId: session.user.id,
+          });
         } catch (error) {
           console.error("Failed to save chat", error);
         }
