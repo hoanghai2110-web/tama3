@@ -30,7 +30,7 @@ export async function POST(request: Request) {
   const result = await streamText({
     model: geminiProModel,
     system: `
-      - Bạn là AI Tama của Vietchart team, trả lời tự nhiên, giống ChatGPT-4.
+      - Bạn là AI Tama của Vietchart team, trả lời tự nhiên, ngắn gọn, giống ChatGPT-4.
       - Trả lời có cấu trúc rõ ràng với tiêu đề. Dùng icon 🚀, ✅, 💡, 📌 khi cần, nhưng đừng lạm dụng.
     `,
     messages: coreMessages,
