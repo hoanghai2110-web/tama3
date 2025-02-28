@@ -1,13 +1,12 @@
 /* eslint-disable import/order */ 
-import React, { ReactNode, ComponentProps, useState } from "react";
+import React, { ReactNode, ComponentProps, useState, useEffect } from "react";
 import { Attachment, ToolInvocation } from "ai";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import ReactMarkdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { okaidia } from "react-syntax-highlighter/dist/esm/styles/prism";
 import remarkGfm from "remark-gfm";
 
-// Biến thể cho hiệu ứng chữ mượt mà
 const textVariants = {
   hidden: { opacity: 0 },
   visible: {
@@ -33,10 +32,14 @@ const charVariants = {
   },
 };
 
-// Thành phần hiển thị text với hiệu ứng đánh máy
-const AnimatedText = ({ text }: { text: string }) => {
+const AnimatedText = ({ text, onComplete }: { text: string; onComplete: () => void }) => {
   return (
-    <motion.span variants={textVariants} initial="hidden" animate="visible">
+    <motion.span
+      variants={textVariants}
+      initial="hidden"
+      animate="visible"
+      onAnimationComplete={onComplete} // Gọi khi animation hoàn tất
+    >
       {text.split("").map((char, index) => (
         <motion.span key={index} variants={charVariants}>
           {char}
@@ -73,6 +76,14 @@ export const Message = ({
 }) => {
   const [liked, setLiked] = useState(false);
   const [disliked, setDisliked] = useState(false);
+  const [isAnimationComplete, setIsAnimationComplete] = useState(false);
+  const [shouldAnimate, setShouldAnimate] = useState(true);
+
+  // Chỉ chạy animation 1 lần khi content thay đổi
+  useEffect(() => {
+    setShouldAnimate(true); // Kích hoạt animation khi có content mới
+    setIsAnimationComplete(false); // Reset trạng thái animation
+  }, [content]);
 
   const handleCopy = () => {
     if (typeof content === "string") {
@@ -83,12 +94,17 @@ export const Message = ({
 
   const handleLike = () => {
     setLiked(!liked);
-    if (disliked) setDisliked(false); // Không cho phép vừa like vừa dislike
+    if (disliked) setDisliked(false);
   };
 
   const handleDislike = () => {
     setDisliked(!disliked);
-    if (liked) setLiked(false); // Không cho phép vừa like vừa dislike
+    if (liked) setLiked(false);
+  };
+
+  const handleAnimationComplete = () => {
+    setIsAnimationComplete(true); // Đánh dấu animation hoàn tất
+    setShouldAnimate(false); // Ngăn animation chạy lại
   };
 
   return (
@@ -96,22 +112,9 @@ export const Message = ({
       className={`flex flex-row gap-3 px-4 w-full md:w-[500px] md:px-0 first-of-type:pt-20 ${
         role === "user" ? "justify-end" : "justify-start"
       }`}
-      initial={{
-        y: 10,
-        opacity: 0,
-        scale: 0.95,
-        filter: "brightness(0.7)",
-      }}
-      animate={{
-        y: 0,
-        opacity: 1,
-        scale: 1,
-        filter: "brightness(1.2)",
-      }}
-      transition={{
-        duration: 0.4,
-        ease: "easeOut",
-      }}
+      initial={{ y: 10, opacity: 0, scale: 0.95, filter: "brightness(0.7)" }}
+      animate={{ y: 0, opacity: 1, scale: 1, filter: "brightness(1.2)" }}
+      transition={{ duration: 0.4, ease: "easeOut" }}
       style={{ willChange: "transform, opacity, filter" }}
     >
       <div
@@ -144,8 +147,14 @@ export const Message = ({
             p: ({ node, ...props }) => (
               <p {...props}>
                 {React.Children.map(props.children, (child, index) =>
-                  typeof child === "string" ? (
-                    <AnimatedText key={index} text={child} />
+                  typeof child === "string" && shouldAnimate ? (
+                    <AnimatedText
+                      key={index}
+                      text={child}
+                      onComplete={handleAnimationComplete}
+                    />
+                  ) : typeof child === "string" ? (
+                    <span key={index}>{child}</span> // Không animate nếu đã chạy xong
                   ) : React.isValidElement(child) && child.type === "strong" ? (
                     <strong
                       key={index}
@@ -183,39 +192,47 @@ export const Message = ({
           {typeof content === "string" ? content : ""}
         </ReactMarkdown>
 
-        {/* Nút Copy, Like, Dislike */}
-        {role !== "user" && (
-          <div className="flex gap-2 mt-2 justify-end">
-            <motion.button
-              onClick={handleCopy}
-              className="p-1 text-sm text-gray-500 hover:text-gray-800 dark:hover:text-gray-200"
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
+        {/* Nút chỉ hiện khi animation hoàn tất */}
+        <AnimatePresence>
+          {role !== "user" && isAnimationComplete && (
+            <motion.div
+              className="flex gap-2 mt-2 justify-end"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 10 }}
+              transition={{ duration: 0.3, ease: "easeOut" }}
             >
-              📋 Copy
-            </motion.button>
-            <motion.button
-              onClick={handleLike}
-              className={`p-1 text-sm ${
-                liked ? "text-green-500" : "text-gray-500"
-              } hover:text-green-600`}
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              👍 {liked ? "Liked" : "Like"}
-            </motion.button>
-            <motion.button
-              onClick={handleDislike}
-              className={`p-1 text-sm ${
-                disliked ? "text-red-500" : "text-gray-500"
-              } hover:text-red-600`}
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              👎 {disliked ? "Disliked" : "Dislike"}
-            </motion.button>
-          </div>
-        )}
+              <motion.button
+                onClick={handleCopy}
+                className="p-1 text-sm text-gray-500 hover:text-gray-800 dark:hover:text-gray-200"
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                📋 Copy
+              </motion.button>
+              <motion.button
+                onClick={handleLike}
+                className={`p-1 text-sm ${
+                  liked ? "text-green-500" : "text-gray-500"
+                } hover:text-green-600`}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                👍 {liked ? "Liked" : "Like"}
+              </motion.button>
+              <motion.button
+                onClick={handleDislike}
+                className={`p-1 text-sm ${
+                  disliked ? "text-red-500" : "text-gray-500"
+                } hover:text-red-600`}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                👎 {disliked ? "Disliked" : "Dislike"}
+              </motion.button>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </motion.div>
   );
