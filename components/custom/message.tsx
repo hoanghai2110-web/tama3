@@ -1,5 +1,5 @@
 /* eslint-disable import/order */ 
-import React, { ReactNode, ComponentProps, useState, useEffect } from "react";
+import React, { ReactNode, ComponentProps, useState, useEffect, useRef } from "react";
 import { Attachment, ToolInvocation } from "ai";
 import { motion, AnimatePresence } from "framer-motion";
 import ReactMarkdown from "react-markdown";
@@ -32,16 +32,17 @@ const charVariants = {
   },
 };
 
-const AnimatedText = ({ text, onComplete }: { text: string; onComplete: () => void }) => {
+const AnimatedText = ({ text, onComplete, id }: { text: string; onComplete: () => void; id: string }) => {
   return (
     <motion.span
       variants={textVariants}
       initial="hidden"
       animate="visible"
-      onAnimationComplete={onComplete} // Gọi khi animation hoàn tất
+      onAnimationComplete={onComplete}
+      key={id} // Đảm bảo key ổn định
     >
       {text.split("").map((char, index) => (
-        <motion.span key={index} variants={charVariants}>
+        <motion.span key={`${id}-${index}`} variants={charVariants}>
           {char}
         </motion.span>
       ))}
@@ -77,12 +78,16 @@ export const Message = ({
   const [liked, setLiked] = useState(false);
   const [disliked, setDisliked] = useState(false);
   const [isAnimationComplete, setIsAnimationComplete] = useState(false);
-  const [shouldAnimate, setShouldAnimate] = useState(true);
+  const hasAnimated = useRef(false); // Theo dõi xem đã animate lần đầu chưa
+  const contentRef = useRef(content); // Lưu content để so sánh
 
-  // Chỉ chạy animation 1 lần khi content thay đổi
+  // Kiểm tra nếu content thay đổi (tin nhắn mới)
   useEffect(() => {
-    setShouldAnimate(true); // Kích hoạt animation khi có content mới
-    setIsAnimationComplete(false); // Reset trạng thái animation
+    if (content !== contentRef.current) {
+      hasAnimated.current = false; // Reset khi có nội dung mới
+      setIsAnimationComplete(false);
+      contentRef.current = content;
+    }
   }, [content]);
 
   const handleCopy = () => {
@@ -103,8 +108,8 @@ export const Message = ({
   };
 
   const handleAnimationComplete = () => {
-    setIsAnimationComplete(true); // Đánh dấu animation hoàn tất
-    setShouldAnimate(false); // Ngăn animation chạy lại
+    setIsAnimationComplete(true);
+    hasAnimated.current = true; // Đánh dấu đã animate
   };
 
   return (
@@ -147,14 +152,15 @@ export const Message = ({
             p: ({ node, ...props }) => (
               <p {...props}>
                 {React.Children.map(props.children, (child, index) =>
-                  typeof child === "string" && shouldAnimate ? (
+                  typeof child === "string" && !hasAnimated.current ? (
                     <AnimatedText
-                      key={index}
+                      key={`${chatId}-${index}`} // Key dựa trên chatId để ổn định
                       text={child}
                       onComplete={handleAnimationComplete}
+                      id={`${chatId}-${index}`}
                     />
                   ) : typeof child === "string" ? (
-                    <span key={index}>{child}</span> // Không animate nếu đã chạy xong
+                    <span key={`${chatId}-${index}`}>{child}</span>
                   ) : React.isValidElement(child) && child.type === "strong" ? (
                     <strong
                       key={index}
@@ -192,7 +198,6 @@ export const Message = ({
           {typeof content === "string" ? content : ""}
         </ReactMarkdown>
 
-        {/* Nút chỉ hiện khi animation hoàn tất */}
         <AnimatePresence>
           {role !== "user" && isAnimationComplete && (
             <motion.div
