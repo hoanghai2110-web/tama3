@@ -19,19 +19,23 @@ const renderCodeBlock = (code: string, language: string) => {
   );
 };
 
-// SVG Icons giống phong cách Grok (tối giản)
+// SVG cho Like (từ Lucide Icons)
 const LikeIcon = () => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <path d="M7 22V10m-5 4v8h4V10H2zm17-4s-1-6-6-6-5 5-5 5v9h5l2-8 2 8h2V12z" />
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="lucide lucide-thumbs-up">
+    <path d="M7 10v12"/>
+    <path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88Z"/>
   </svg>
 );
 
+// SVG cho Dislike (từ Lucide Icons)
 const DislikeIcon = () => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <path d="M7 2v12m-5-4V2h4v12H2zm17 4s-1 6-6 6-5-5-5-5V2h5l2 8 2-8h2v12z" />
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="lucide lucide-thumbs-down">
+    <path d="M17 14V2"/>
+    <path d="M9 18.12 10 14H4.17a2 2 0 0 1-1.92-2.56l2.33-8A2 2 0 0 1 6.5 2H20a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-2.76a2 2 0 0 0-1.79 1.11L12 22a3.13 3.13 0 0 1-3-3.88Z"/>
   </svg>
 );
 
+// SVG cho Copy
 const CopyIcon = () => (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
     <rect x="9" y="9" width="13" height="13" rx="2" />
@@ -39,6 +43,7 @@ const CopyIcon = () => (
   </svg>
 );
 
+// SVG cho Check (khi Copy thành công)
 const CheckIcon = () => (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
     <path d="M20 6L9 17l-5-5" />
