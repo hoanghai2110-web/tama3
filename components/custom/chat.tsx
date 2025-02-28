@@ -3,12 +3,16 @@
 import { Attachment, Message as AIMessage, ToolInvocation } from "ai";
 import { useChat } from "ai/react";
 import { useState } from "react";
-import { MessageList } from "@/components/custom/message"; // Import MessageList
+
+// Nhóm import nội bộ
+import { MessageList } from "@/components/custom/message";
 import { useScrollToBottom } from "@/components/custom/use-scroll-to-bottom";
+
+// Nhóm import local
 import { MultimodalInput } from "./multimodal-input";
 import { Overview } from "./overview";
 
-// Hàm gửi feedback đến bot (giả lập, có thể thay bằng API thật)
+// Hàm gửi feedback đến bot (giả lập)
 const sendFeedbackToBot = async (feedback: string) => {
   return new Promise<string>((resolve) => {
     setTimeout(() => {
@@ -44,7 +48,6 @@ export function Chat({
 
   const [attachments, setAttachments] = useState<Array<Attachment>>([]);
 
-  // Xử lý feedback từ Like/Dislike
   const handleFeedback = async (chatId: string, isLike: boolean) => {
     const feedback = isLike ? "Bạn đã thích tin nhắn này" : "Bạn không thích tin nhắn này";
     const botResponse = await sendFeedbackToBot(feedback);
@@ -64,16 +67,15 @@ export function Chat({
         >
           {messages.length === 0 && <Overview />}
 
-          {/* Dùng MessageList thay vì map trực tiếp */}
           <MessageList
             messages={messages.map((msg) => ({
-              chatId: msg.id, // Dùng msg.id thay vì chatId
+              chatId: msg.id,
               role: msg.role,
               content: msg.content,
               attachments: msg.experimental_attachments,
               toolInvocations: msg.toolInvocations,
             }))}
-            onFeedback={handleFeedback} // Truyền hàm xử lý feedback
+            onFeedback={handleFeedback}
           />
 
           <div
@@ -98,4 +100,4 @@ export function Chat({
       </div>
     </div>
   );
-      }
+}
