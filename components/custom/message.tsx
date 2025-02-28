@@ -1,4 +1,4 @@
-/* eslint-disable import/order */ 
+/* eslint-disable import/order */
 import React, { ReactNode, ComponentProps, useState, useEffect, useRef } from "react";
 import { Attachment, ToolInvocation } from "ai";
 import { motion, AnimatePresence } from "framer-motion";
@@ -9,7 +9,6 @@ import remarkGfm from "remark-gfm";
 
 // Giả sử bạn có hàm gửi tin nhắn đến bot
 const sendFeedbackToBot = async (feedback: string) => {
-  // Đây là giả lập, bạn cần thay bằng logic thực tế (API call hoặc hook như useChat)
   return new Promise<string>((resolve) => {
     setTimeout(() => {
       if (feedback.includes("thích")) {
@@ -80,9 +79,18 @@ const renderCodeBlock = (code: string, language: string) => {
 export const MessageList = ({
   messages,
 }: {
-  messages: { chatId: string; role: string; content: string; toolInvocations?: ToolInvocation[]; attachments?: Attachment[] }[];
+  messages: { chatId: string; role: string; content: string }[];
 }) => {
-  const [messageList, setMessageList] = useState(messages);
+  const [messageList, setMessageList] = useState<{ chatId: string; role: string; content: string }[]>(() => {
+    // Lấy tin nhắn từ localStorage nếu có
+    const savedMessages = localStorage.getItem("chatMessages");
+    return savedMessages ? JSON.parse(savedMessages) : messages;
+  });
+
+  useEffect(() => {
+    // Cập nhật localStorage mỗi khi messageList thay đổi
+    localStorage.setItem("chatMessages", JSON.stringify(messageList));
+  }, [messageList]);
 
   const handleFeedback = async (chatId: string, isLike: boolean) => {
     const feedback = isLike
@@ -112,8 +120,6 @@ export const MessageList = ({
             chatId={msg.chatId}
             role={msg.role}
             content={msg.content}
-            toolInvocations={msg.toolInvocations}
-            attachments={msg.attachments}
             onFeedback={handleFeedback} // Truyền hàm xử lý feedback
           />
         ) : null
@@ -126,34 +132,25 @@ export const Message = ({
   chatId,
   role,
   content,
-  toolInvocations,
-  attachments,
   onFeedback,
 }: {
   chatId: string;
   role: string;
   content: string | ReactNode;
-  toolInvocations?: ToolInvocation[];
-  attachments?: Attachment[];
-  onFeedback?: (chatId: string, isLike: boolean) => void; // Callback để gửi feedback
+  onFeedback?: (chatId: string, isLike: boolean) => void;
 }) => {
   const [liked, setLiked] = useState(false);
   const [disliked, setDisliked] = useState(false);
   const [isAnimationComplete, setIsAnimationComplete] = useState(false);
-  const animatedRef = useRef(new Set<string>());
+
+  const isNewMessage = useRef(!localStorage.getItem(`msg-${chatId}`));
 
   useEffect(() => {
-    if (!animatedRef.current.has(chatId)) {
-      setIsAnimationComplete(false);
+    if (!isNewMessage.current) {
+      setIsAnimationComplete(true);
     }
-  }, [chatId, content]);
-
-  const handleCopy = () => {
-    if (typeof content === "string") {
-      navigator.clipboard.writeText(content);
-      alert("Đã sao chép!");
-    }
-  };
+    localStorage.setItem(`msg-${chatId}`, "true");
+  }, [chatId]);
 
   const handleLike = () => {
     if (!liked) {
@@ -171,22 +168,15 @@ export const Message = ({
     }
   };
 
-  const handleAnimationComplete = () => {
-    setIsAnimationComplete(true);
-    animatedRef.current.add(chatId);
-  };
-
-  const shouldAnimate = !animatedRef.current.has(chatId);
-
   return (
     <motion.div
       className={`flex flex-row gap-3 px-4 w-full md:w-[500px] md:px-0 first-of-type:pt-20 ${
         role === "user" ? "justify-end" : "justify-start"
       }`}
-      initial={{ y: 10, opacity: 0, scale: 0.95, filter: "brightness(0.7)" }}
-      animate={{ y: 0, opacity: 1, scale: 1, filter: "brightness(1.2)" }}
-      transition={{ duration: 0.4, ease: "easeOut" }}
-      style={{ willChange: "transform, opacity, filter" }}
+      initial={isNewMessage.current ? { opacity: 0, y: 10 } : {}}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: isNewMessage.current ? 0.4 : 0 }}
+      onAnimationComplete={() => setIsAnimationComplete(true)}
     >
       <div
         className={`flex flex-col gap-2 rounded-2xl max-w-[100%] break-words leading-[1.625] ${
@@ -218,12 +208,12 @@ export const Message = ({
             p: ({ node, ...props }) => (
               <p {...props}>
                 {React.Children.map(props.children, (child, index) =>
-                  typeof child === "string" && shouldAnimate ? (
+                  typeof child === "string" && isNewMessage.current ? (
                     <AnimatedText
                       key={`${chatId}-${index}`}
                       text={child}
                       id={`${chatId}-${index}`}
-                      onComplete={handleAnimationComplete}
+                      onComplete={() => setIsAnimationComplete(true)}
                     />
                   ) : typeof child === "string" ? (
                     <span key={`${chatId}-${index}`}>{child}</span>
@@ -275,7 +265,7 @@ export const Message = ({
               transition={{ duration: 0.3, ease: "easeOut" }}
             >
               <motion.button
-                onClick={handleCopy}
+                onClick={() => navigator.clipboard.writeText(content as string)}
                 className="p-1 text-sm text-gray-500 hover:text-gray-800 dark:hover:text-gray-200"
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
@@ -289,7 +279,7 @@ export const Message = ({
                 } hover:text-green-600`}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
-                disabled={liked || disliked} // Disable nếu đã nhấn
+                disabled={liked || disliked}
               >
                 👍 {liked ? "Liked" : "Like"}
               </motion.button>
@@ -300,7 +290,7 @@ export const Message = ({
                 } hover:text-red-600`}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
-                disabled={liked || disliked} // Disable nếu đã nhấn
+                disabled={liked || disliked}
               >
                 👎 {disliked ? "Disliked" : "Dislike"}
               </motion.button>
