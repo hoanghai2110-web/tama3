@@ -7,19 +7,6 @@ import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { okaidia } from "react-syntax-highlighter/dist/esm/styles/prism";
 import remarkGfm from "remark-gfm";
 
-// Hàm gửi feedback đến bot (giả lập)
-const sendFeedbackToBot = async (feedback: string) => {
-  return new Promise<string>((resolve) => {
-    setTimeout(() => {
-      if (feedback.includes("thích")) {
-        resolve("Cảm ơn bạn đã khen mình, mình rất vui! 😊");
-      } else {
-        resolve("Mình sẽ cố gắng hơn, cảm ơn bạn đã góp ý! 😅");
-      }
-    }, 500);
-  });
-};
-
 // Hiệu ứng animation
 const textVariants = {
   hidden: { opacity: 0 },
@@ -64,7 +51,7 @@ const renderCodeBlock = (code: string, language: string) => {
   );
 };
 
-// Interface cho props của Message
+// Interface cho Message
 interface MessageProps {
   chatId: string;
   role: "function" | "system" | "user" | "assistant" | "data" | "tool";
@@ -75,13 +62,9 @@ interface MessageProps {
   isAnimated?: boolean;
 }
 
-// Component Message
 export const Message = ({
   chatId,
-  role,
   content,
-  attachments,
-  toolInvocations,
   onFeedback,
   isAnimated,
 }: MessageProps) => {
@@ -119,7 +102,7 @@ export const Message = ({
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.3, ease: "easeOut" }}
     >
-      <div className="flex flex-col gap-2 rounded-2xl max-w-[100%] break-words leading-[1.625] text-zinc-800 dark:text-zinc-300 p-3 bg-gray-100 dark:bg-gray-800">
+      <div className="flex flex-col gap-2 rounded-2xl max-w-full leading-relaxed text-zinc-800 dark:text-zinc-300 p-3 bg-gray-100 dark:bg-gray-800">
         <ReactMarkdown
           remarkPlugins={[remarkGfm]}
           components={{
@@ -188,7 +171,7 @@ export const Message = ({
   );
 };
 
-// Interface cho props của MessageList
+// Interface cho MessageList
 interface MessageListProps {
   messages: {
     chatId: string;
@@ -197,11 +180,10 @@ interface MessageListProps {
     attachments?: Attachment[];
     toolInvocations?: ToolInvocation[];
   }[];
+  onFeedback?: (chatId: string, isLike: boolean) => void;
 }
 
-// Component MessageList
-export const MessageList = ({ messages }: MessageListProps) => {
-  const [messageList, setMessageList] = useState(messages);
+export const MessageList = ({ messages, onFeedback }: MessageListProps) => {
   const animatedIds = useRef(new Set<string>());
 
   // Khởi tạo danh sách đã animate từ messages ban đầu
@@ -211,18 +193,9 @@ export const MessageList = ({ messages }: MessageListProps) => {
     initialized.current = true;
   }
 
-  const handleFeedback = async (chatId: string, isLike: boolean) => {
-    const feedback = isLike ? "Bạn đã thích tin nhắn này" : "Bạn không thích tin nhắn này";
-    const botResponse = await sendFeedbackToBot(feedback);
-    setMessageList((prev) => [
-      ...prev,
-      { chatId: `${chatId}-response-${Date.now()}`, role: "assistant", content: botResponse },
-    ]);
-  };
-
   return (
     <div className="flex flex-col gap-4">
-      {messageList
+      {messages
         .filter((msg) => msg.role === "assistant")
         .map((msg) => (
           <Message
@@ -232,7 +205,7 @@ export const MessageList = ({ messages }: MessageListProps) => {
             content={msg.content}
             attachments={msg.attachments}
             toolInvocations={msg.toolInvocations}
-            onFeedback={handleFeedback}
+            onFeedback={onFeedback}
             isAnimated={animatedIds.current.has(msg.chatId)}
           />
         ))}
