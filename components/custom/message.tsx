@@ -1,5 +1,5 @@
 /* eslint-disable import/order */
-import React, { ReactNode, ComponentProps } from "react";
+import React, { ReactNode, ComponentProps, useState, useEffect } from "react";
 import { Attachment, ToolInvocation } from "ai";
 import { motion } from "framer-motion";
 import ReactMarkdown from "react-markdown";
@@ -32,28 +32,53 @@ export const Message = ({
   toolInvocations?: ToolInvocation[];
   attachments?: Attachment[];
 }) => {
+  const [displayedContent, setDisplayedContent] = useState("");
+  const isAssistant = role === "assistant";
+  const fullContent = typeof content === "string" ? content : "";
+
+  // Typing effect cho assistant
+  useEffect(() => {
+    if (isAssistant && fullContent) {
+      let currentIndex = 0;
+      setDisplayedContent(""); // Reset nội dung hiển thị
+
+      const typeText = () => {
+        if (currentIndex < fullContent.length) {
+          setDisplayedContent(fullContent.slice(0, currentIndex + 1));
+          currentIndex++;
+          setTimeout(typeText, 15); // Tốc độ gõ: 15ms mỗi ký tự, có thể điều chỉnh
+        }
+      };
+
+      typeText();
+    } else {
+      // Nếu không phải assistant, hiển thị ngay toàn bộ nội dung
+      setDisplayedContent(fullContent);
+    }
+  }, [isAssistant, fullContent]);
+
   return (
     <motion.div
       className={`flex flex-row gap-3 px-4 w-full md:w-[500px] md:px-0 first-of-type:pt-20 ${
         role === "user" ? "justify-end" : "justify-start"
       }`}
       initial={{
-        y: 10, // Trượt nhẹ từ dưới lên
+        y: 10,
         opacity: 0,
-        scale: 0.95, // Nhỏ lại khi xuất hiện
-        filter: "brightness(0.7)", // Ban đầu hơi tối
+        scale: 0.95,
+        filter: "brightness(0.7)",
       }}
       animate={{
         y: 0,
         opacity: 1,
         scale: 1,
-        filter: "brightness(1.2)", // Lóe sáng khi bot nhắn tin
+        filter: isAssistant ? "brightness(1.2)" : "brightness(1)", // Tăng sáng cho bot
       }}
       transition={{
-        duration: 0.4, // Mượt mà
+        duration: 0.4,
         ease: "easeOut",
       }}
-      style={{ willChange: "transform, opacity, filter" }} // Tối ưu GPU
+      style={{ willChange: "transform, opacity, filter" }}
     >
       <div
         className={`flex flex-col gap-2 rounded-2xl max-w-[100%] break-words leading-[1.625] ${
@@ -112,7 +137,7 @@ export const Message = ({
                     backgroundColor: "hsl(var(--muted))",
                     paddingTop: "0.05rem",
                     paddingBottom: "0.05rem",
-                    willChange: "transform, opacity", 
+                    willChange: "transform, opacity",
                   }}
                 >
                   {children}
@@ -121,7 +146,7 @@ export const Message = ({
             },
           }}
         >
-          {typeof content === "string" ? content : ""}
+          {displayedContent}
         </ReactMarkdown>
       </div>
     </motion.div>
