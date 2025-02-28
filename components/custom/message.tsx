@@ -1,5 +1,5 @@
-/* eslint-disable import/order */ 
-import React, { ReactNode, ComponentProps } from "react";
+/* eslint-disable import/order */  
+import React, { ReactNode, ComponentProps, useState, useEffect } from "react";
 import { Attachment, ToolInvocation } from "ai";
 import { motion } from "framer-motion";
 import ReactMarkdown from "react-markdown";
@@ -32,28 +32,44 @@ export const Message = ({
   toolInvocations?: ToolInvocation[];
   attachments?: Attachment[];
 }) => {
+  const [displayText, setDisplayText] = useState("");
+
+  useEffect(() => {
+    if (typeof content === "string" && role !== "user") {
+      let i = 0;
+      const interval = setInterval(() => {
+        setDisplayText(content.slice(0, i));
+        i++;
+        if (i > content.length) clearInterval(interval);
+      }, 30); // Điều chỉnh tốc độ gõ
+      return () => clearInterval(interval);
+    } else {
+      setDisplayText(content as string);
+    }
+  }, [content, role]);
+
   return (
     <motion.div
       className={`flex flex-row gap-3 px-4 w-full md:w-[500px] md:px-0 first-of-type:pt-20 ${
         role === "user" ? "justify-end" : "justify-start"
       }`}
       initial={{
-        y: 10, // Trượt nhẹ từ dưới lên
+        y: 10,
         opacity: 0,
-        scale: 0.95, // Nhỏ lại khi xuất hiện
-        filter: "brightness(0.7)", // Ban đầu hơi tối
+        scale: 0.95,
+        filter: "brightness(0.7)",
       }}
       animate={{
         y: 0,
         opacity: 1,
         scale: 1,
-        filter: "brightness(1.2)", // Lóe sáng khi bot nhắn tin
+        filter: "brightness(1.2)",
       }}
       transition={{
-        duration: 0.4, // Mượt mà
+        duration: 0.4,
         ease: "easeOut",
       }}
-      style={{ willChange: "transform, opacity, filter" }} // Tối ưu GPU
+      style={{ willChange: "transform, opacity, filter" }}
     >
       <div
         className={`flex flex-col gap-2 rounded-2xl max-w-[100%] break-words leading-[1.625] ${
@@ -61,67 +77,24 @@ export const Message = ({
             ? "text-white bg-[#1c1c1c] self-end ml-auto p-3"
             : "text-zinc-800 dark:text-zinc-300 p-1"
         }`}
-        style={
-          role === "user"
-            ? {
-                paddingTop: "0.5rem",
-                paddingLeft: "1rem",
-                paddingRight: "1rem",
-                paddingBottom: "0.5rem",
-                willChange: "transform, opacity",
-              }
-            : undefined
-        }
       >
         <ReactMarkdown
           remarkPlugins={[remarkGfm]}
           components={{
-            h1: ({ node, ...props }) => (
-              <h1 className="text-2xl font-bold pt-4 pb-4" {...props} />
-            ),
-            h2: ({ node, ...props }) => (
-              <h2 className="text-xl font-semibold pt-3 pb-3" {...props} />
-            ),
-            p: ({ node, ...props }) => (
-              <p {...props}>
-                {React.Children.map(props.children, (child, index) =>
-                  typeof child === "string" ? (
-                    child
-                  ) : React.isValidElement(child) && child.type === "strong" ? (
-                    <strong
-                      key={index}
-                      className="text-[18px] font-bold italic inline pt-3 pb-3"
-                    >
-                      {child.props.children}
-                    </strong>
-                  ) : (
-                    child
-                  )
-                )}
-              </p>
-            ),
             code({ className, children, ...props }: ComponentProps<"code">) {
               const match = /language-(\w+)/.exec(className || "");
               const lang = match ? match[1] : "";
               return lang ? (
                 renderCodeBlock(String(children), lang)
               ) : (
-                <code
-                  className="px-2 bg-gray-200 dark:bg-gray-800 rounded-[3px]"
-                  style={{
-                    backgroundColor: "hsl(var(--muted))",
-                    paddingTop: "0.05rem",
-                    paddingBottom: "0.05rem",
-                    willChange: "transform, opacity", 
-                  }}
-                >
+                <code className="px-2 bg-gray-200 dark:bg-gray-800 rounded-[3px]">
                   {children}
                 </code>
               );
             },
           }}
         >
-          {typeof content === "string" ? content : ""}
+          {displayText}
         </ReactMarkdown>
       </div>
     </motion.div>
