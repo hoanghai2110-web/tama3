@@ -1,5 +1,6 @@
 /* eslint-disable import/order */ 
 import React, { useState, useRef } from "react";
+import { Attachment, ToolInvocation } from "ai";
 import { motion, AnimatePresence } from "framer-motion";
 import ReactMarkdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
@@ -63,49 +64,30 @@ const renderCodeBlock = (code: string, language: string) => {
   );
 };
 
-// Component MessageList
-export const MessageList = ({ messages }) => {
-  const [messageList, setMessageList] = useState(messages);
-  const animatedIds = useRef(new Set()); // Lưu trữ chatId đã animate
-
-  // Khởi tạo danh sách đã animate từ messages ban đầu
-  const initialized = useRef(false);
-  if (!initialized.current) {
-    messages.forEach((msg) => animatedIds.current.add(msg.chatId));
-    initialized.current = true;
-  }
-
-  const handleFeedback = async (chatId: string, isLike: boolean) => {
-    const feedback = isLike ? "Bạn đã thích tin nhắn này" : "Bạn không thích tin nhắn này";
-    const botResponse = await sendFeedbackToBot(feedback);
-    setMessageList((prev) => [
-      ...prev,
-      { chatId: `${chatId}-response-${Date.now()}`, role: "assistant", content: botResponse },
-    ]);
-  };
-
-  return (
-    <div className="flex flex-col gap-4">
-      {messageList
-        .filter((msg) => msg.role === "assistant") // Chỉ hiển thị tin nhắn bot
-        .map((msg) => (
-          <Message
-            key={msg.chatId}
-            chatId={msg.chatId}
-            content={msg.content}
-            onFeedback={handleFeedback}
-            isAnimated={animatedIds.current.has(msg.chatId)}
-          />
-        ))}
-    </div>
-  );
-};
+// Interface cho props của Message
+interface MessageProps {
+  chatId: string;
+  role: "function" | "system" | "user" | "assistant" | "data" | "tool";
+  content: string;
+  attachments?: Attachment[];
+  toolInvocations?: ToolInvocation[];
+  onFeedback?: (chatId: string, isLike: boolean) => void;
+  isAnimated?: boolean;
+}
 
 // Component Message
-export const Message = ({ chatId, content, onFeedback, isAnimated }) => {
+export const Message = ({
+  chatId,
+  role,
+  content,
+  attachments,
+  toolInvocations,
+  onFeedback,
+  isAnimated,
+}: MessageProps) => {
   const [liked, setLiked] = useState(false);
   const [disliked, setDisliked] = useState(false);
-  const [isAnimationComplete, setIsAnimationComplete] = useState(isAnimated);
+  const [isAnimationComplete, setIsAnimationComplete] = useState(isAnimated || false);
 
   const handleCopy = () => {
     navigator.clipboard.writeText(content);
@@ -115,14 +97,14 @@ export const Message = ({ chatId, content, onFeedback, isAnimated }) => {
   const handleLike = () => {
     if (!liked && !disliked) {
       setLiked(true);
-      onFeedback(chatId, true);
+      onFeedback?.(chatId, true);
     }
   };
 
   const handleDislike = () => {
     if (!liked && !disliked) {
       setDisliked(true);
-      onFeedback(chatId, false);
+      onFeedback?.(chatId, false);
     }
   };
 
@@ -203,5 +185,57 @@ export const Message = ({ chatId, content, onFeedback, isAnimated }) => {
         </AnimatePresence>
       </div>
     </motion.div>
+  );
+};
+
+// Interface cho props của MessageList
+interface MessageListProps {
+  messages: {
+    chatId: string;
+    role: "function" | "system" | "user" | "assistant" | "data" | "tool";
+    content: string;
+    attachments?: Attachment[];
+    toolInvocations?: ToolInvocation[];
+  }[];
+}
+
+// Component MessageList
+export const MessageList = ({ messages }: MessageListProps) => {
+  const [messageList, setMessageList] = useState(messages);
+  const animatedIds = useRef(new Set<string>());
+
+  // Khởi tạo danh sách đã animate từ messages ban đầu
+  const initialized = useRef(false);
+  if (!initialized.current) {
+    messages.forEach((msg) => animatedIds.current.add(msg.chatId));
+    initialized.current = true;
+  }
+
+  const handleFeedback = async (chatId: string, isLike: boolean) => {
+    const feedback = isLike ? "Bạn đã thích tin nhắn này" : "Bạn không thích tin nhắn này";
+    const botResponse = await sendFeedbackToBot(feedback);
+    setMessageList((prev) => [
+      ...prev,
+      { chatId: `${chatId}-response-${Date.now()}`, role: "assistant", content: botResponse },
+    ]);
+  };
+
+  return (
+    <div className="flex flex-col gap-4">
+      {messageList
+        .filter((msg) => msg.role === "assistant")
+        .map((msg) => (
+          <Message
+            key={msg.chatId}
+            chatId={msg.chatId}
+            role={msg.role}
+            content={msg.content}
+            attachments={msg.attachments}
+            toolInvocations={msg.toolInvocations}
+            onFeedback={handleFeedback}
+            isAnimated={animatedIds.current.has(msg.chatId)}
+          />
+        ))}
+    </div>
   );
 };
