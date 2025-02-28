@@ -19,17 +19,17 @@ const renderCodeBlock = (code: string, language: string) => {
   );
 };
 
-// SVG cho Like (từ Lucide Icons, sửa class thành className)
+// SVG cho Like (từ Lucide Icons)
 const LikeIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-thumbs-up">
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-thumbs-up">
     <path d="M7 10v12"/>
     <path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88Z"/>
   </svg>
 );
 
-// SVG cho Dislike (từ Lucide Icons, sửa class thành className)
+// SVG cho Dislike (từ Lucide Icons)
 const DislikeIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-thumbs-down">
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-thumbs-down">
     <path d="M17 14V2"/>
     <path d="M9 18.12 10 14H4.17a2 2 0 0 1-1.92-2.56l2.33-8A2 2 0 0 1 6.5 2H20a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-2.76a2 2 0 0 0-1.79 1.11L12 22a3.13 3.13 0 0 1-3-3.88Z"/>
   </svg>
@@ -37,7 +37,7 @@ const DislikeIcon = () => (
 
 // SVG cho Copy
 const CopyIcon = () => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
     <rect x="9" y="9" width="13" height="13" rx="2" />
     <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
   </svg>
@@ -45,7 +45,7 @@ const CopyIcon = () => (
 
 // SVG cho Check (khi Copy thành công)
 const CheckIcon = () => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
     <path d="M20 6L9 17l-5-5" />
   </svg>
 );
@@ -169,7 +169,7 @@ export const Message = ({
         {isAssistant && (
           <div className="flex gap-3 mt-2 justify-start">
             <motion.button
-              className="text-zinc-500 hover:text-green-500 dark:hover:text-green-300 transition-colors p-1"
+              className="text-zinc-500 hover:text-green-500 dark:hover:text-green-300 transition-colors p-1 border border-[#c7baba] rounded-[5px] cursor-pointer"
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
               title="Like"
@@ -177,7 +177,7 @@ export const Message = ({
               <LikeIcon />
             </motion.button>
             <motion.button
-              className="text-zinc-500 hover:text-red-500 dark:hover:text-red-300 transition-colors p-1"
+              className="text-zinc-500 hover:text-red-500 dark:hover:text-red-300 transition-colors p-1 border border-[#c7baba] rounded-[5px] cursor-pointer"
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
               title="Dislike"
@@ -185,7 +185,7 @@ export const Message = ({
               <DislikeIcon />
             </motion.button>
             <motion.button
-              className="text-zinc-500 hover:text-blue-500 dark:hover:text-blue-300 transition-colors p-1"
+              className="text-zinc-500 hover:text-blue-500 dark:hover:text-blue-300 transition-colors p-1 border border-[#c7baba] rounded-[5px] cursor-pointer"
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
               onClick={handleCopy}
