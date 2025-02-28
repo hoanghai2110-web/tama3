@@ -1,4 +1,3 @@
-/* eslint-disable import/order */
 import React, { ReactNode, ComponentProps, useState, useEffect, useRef } from "react";
 import { Attachment, ToolInvocation } from "ai";
 import { motion, AnimatePresence } from "framer-motion";
@@ -7,138 +6,24 @@ import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { okaidia } from "react-syntax-highlighter/dist/esm/styles/prism";
 import remarkGfm from "remark-gfm";
 
-// Giả sử bạn có hàm gửi tin nhắn đến bot
-const sendFeedbackToBot = async (feedback: string) => {
-  return new Promise<string>((resolve) => {
-    setTimeout(() => {
-      if (feedback.includes("thích")) {
-        resolve("Cảm ơn bạn đã khen mình, mình rất vui! 😊");
-      } else {
-        resolve("Mình sẽ cố gắng hơn, cảm ơn bạn đã góp ý! 😅");
-      }
-    }, 500);
-  });
-};
+// Định nghĩa type của Props component Message
+interface MessageProps {
+  chatId: string;
+  role: "function" | "system" | "user" | "assistant" | "data" | "tool";
+  content: ReactNode;
+  attachments?: Attachment[];
+  toolInvocations?: ToolInvocation[];
+  onFeedback?: (chatId: string, isLike: boolean) => void;
+}
 
-const textVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.02,
-      delayChildren: 0.1,
-    },
-  },
-};
-
-const charVariants = {
-  hidden: { opacity: 0, y: 5 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      type: "spring",
-      damping: 20,
-      stiffness: 300,
-      mass: 0.5,
-    },
-  },
-};
-
-const AnimatedText = ({ text, onComplete, id }: { text: string; onComplete: () => void; id: string }) => {
-  return (
-    <motion.span
-      key={id}
-      variants={textVariants}
-      initial="hidden"
-      animate="visible"
-      onAnimationComplete={onComplete}
-    >
-      {text.split("").map((char, index) => (
-        <motion.span key={`${id}-${index}`} variants={charVariants}>
-          {char}
-        </motion.span>
-      ))}
-    </motion.span>
-  );
-};
-
-const renderCodeBlock = (code: string, language: string) => {
-  return (
-    <SyntaxHighlighter
-      language={language}
-      style={okaidia}
-      customStyle={{ fontSize: "12px", borderRadius: "8px", padding: "12px" }}
-    >
-      {code}
-    </SyntaxHighlighter>
-  );
-};
-
-// Component cha để quản lý danh sách tin nhắn
-export const MessageList = ({
-  messages,
-}: {
-  messages: { chatId: string; role: string; content: string }[];
-}) => {
-  const [messageList, setMessageList] = useState<{ chatId: string; role: string; content: string }[]>(() => {
-    // Lấy tin nhắn từ localStorage nếu có
-    const savedMessages = localStorage.getItem("chatMessages");
-    return savedMessages ? JSON.parse(savedMessages) : messages;
-  });
-
-  useEffect(() => {
-    // Cập nhật localStorage mỗi khi messageList thay đổi
-    localStorage.setItem("chatMessages", JSON.stringify(messageList));
-  }, [messageList]);
-
-  const handleFeedback = async (chatId: string, isLike: boolean) => {
-    const feedback = isLike
-      ? "Bạn đã thích tin nhắn này"
-      : "Bạn không thích tin nhắn này";
-    
-    // Gửi feedback ẩn đến bot
-    const botResponse = await sendFeedbackToBot(feedback);
-    
-    // Thêm phản hồi của bot vào danh sách tin nhắn
-    setMessageList((prev) => [
-      ...prev,
-      {
-        chatId: `${chatId}-response-${Date.now()}`, // ID mới cho phản hồi
-        role: "assistant",
-        content: botResponse,
-      },
-    ]);
-  };
-
-  return (
-    <div>
-      {messageList.map((msg) =>
-        msg.role === "assistant" ? ( // Chỉ hiển thị tin nhắn từ bot
-          <Message
-            key={msg.chatId}
-            chatId={msg.chatId}
-            role={msg.role}
-            content={msg.content}
-            onFeedback={handleFeedback} // Truyền hàm xử lý feedback
-          />
-        ) : null
-      )}
-    </div>
-  );
-};
-
-export const Message = ({
+const Message = ({
   chatId,
   role,
   content,
+  attachments,
+  toolInvocations,
   onFeedback,
-}: {
-  chatId: string;
-  role: string;
-  content: string | ReactNode;
-  onFeedback?: (chatId: string, isLike: boolean) => void;
-}) => {
+}: MessageProps) => {
   const [liked, setLiked] = useState(false);
   const [disliked, setDisliked] = useState(false);
   const [isAnimationComplete, setIsAnimationComplete] = useState(false);
@@ -156,7 +41,7 @@ export const Message = ({
     if (!liked) {
       setLiked(true);
       setDisliked(false);
-      if (onFeedback) onFeedback(chatId, true); // Gửi feedback "Like"
+      if (onFeedback) onFeedback(chatId, true);
     }
   };
 
@@ -164,7 +49,7 @@ export const Message = ({
     if (!disliked) {
       setDisliked(true);
       setLiked(false);
-      if (onFeedback) onFeedback(chatId, false); // Gửi feedback "Dislike"
+      if (onFeedback) onFeedback(chatId, false);
     }
   };
 
@@ -254,7 +139,6 @@ export const Message = ({
           {typeof content === "string" ? content : ""}
         </ReactMarkdown>
 
-        {/* Nút chỉ hiện khi animation hoàn tất */}
         <AnimatePresence>
           {role !== "user" && isAnimationComplete && (
             <motion.div
