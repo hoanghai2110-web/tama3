@@ -1,5 +1,5 @@
 /* eslint-disable import/order */ 
-import React, { ReactNode, ComponentProps, useState } from "react";
+import React, { ReactNode, ComponentProps } from "react";
 import { Attachment, ToolInvocation } from "ai";
 import { motion } from "framer-motion";
 import ReactMarkdown from "react-markdown";
@@ -7,10 +7,6 @@ import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { okaidia } from "react-syntax-highlighter/dist/esm/styles/prism";
 import remarkGfm from "remark-gfm";
 import { CopyIcon, ThumbUpIcon, ThumbDownIcon } from "./icons";
-import { Button } from "./ui/button";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip";
-import { useCopyToClipboard } from "usehooks-ts";
-import { toast } from "sonner";
 
 const renderCodeBlock = (code: string, language: string) => {
   return (
