@@ -1,5 +1,5 @@
 /* eslint-disable import/order */ 
-import React, { ReactNode, ComponentProps } from "react";
+import React, { ReactNode, ComponentProps, useState } from "react";
 import { Attachment, ToolInvocation } from "ai";
 import { motion } from "framer-motion";
 import ReactMarkdown from "react-markdown";
@@ -13,25 +13,27 @@ const textVariants = {
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.03, // Tốc độ đánh máy từng ký tự
-      ease: "easeInOut",
+      staggerChildren: 0.02,
+      delayChildren: 0.1,
     },
   },
 };
 
 const charVariants = {
-  hidden: { opacity: 0, y: 10 },
+  hidden: { opacity: 0, y: 5 },
   visible: {
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.3,
-      ease: "easeOut",
+      type: "spring",
+      damping: 20,
+      stiffness: 300,
+      mass: 0.5,
     },
   },
 };
 
-// Thành phần để hiển thị text với hiệu ứng đánh máy
+// Thành phần hiển thị text với hiệu ứng đánh máy
 const AnimatedText = ({ text }: { text: string }) => {
   return (
     <motion.span variants={textVariants} initial="hidden" animate="visible">
@@ -69,6 +71,26 @@ export const Message = ({
   toolInvocations?: ToolInvocation[];
   attachments?: Attachment[];
 }) => {
+  const [liked, setLiked] = useState(false);
+  const [disliked, setDisliked] = useState(false);
+
+  const handleCopy = () => {
+    if (typeof content === "string") {
+      navigator.clipboard.writeText(content);
+      alert("Đã sao chép!");
+    }
+  };
+
+  const handleLike = () => {
+    setLiked(!liked);
+    if (disliked) setDisliked(false); // Không cho phép vừa like vừa dislike
+  };
+
+  const handleDislike = () => {
+    setDisliked(!disliked);
+    if (liked) setLiked(false); // Không cho phép vừa like vừa dislike
+  };
+
   return (
     <motion.div
       className={`flex flex-row gap-3 px-4 w-full md:w-[500px] md:px-0 first-of-type:pt-20 ${
@@ -160,6 +182,40 @@ export const Message = ({
         >
           {typeof content === "string" ? content : ""}
         </ReactMarkdown>
+
+        {/* Nút Copy, Like, Dislike */}
+        {role !== "user" && (
+          <div className="flex gap-2 mt-2 justify-end">
+            <motion.button
+              onClick={handleCopy}
+              className="p-1 text-sm text-gray-500 hover:text-gray-800 dark:hover:text-gray-200"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              📋 Copy
+            </motion.button>
+            <motion.button
+              onClick={handleLike}
+              className={`p-1 text-sm ${
+                liked ? "text-green-500" : "text-gray-500"
+              } hover:text-green-600`}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              👍 {liked ? "Liked" : "Like"}
+            </motion.button>
+            <motion.button
+              onClick={handleDislike}
+              className={`p-1 text-sm ${
+                disliked ? "text-red-500" : "text-gray-500"
+              } hover:text-red-600`}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              👎 {disliked ? "Disliked" : "Dislike"}
+            </motion.button>
+          </div>
+        )}
       </div>
     </motion.div>
   );
