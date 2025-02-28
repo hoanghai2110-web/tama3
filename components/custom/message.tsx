@@ -19,7 +19,7 @@ const renderCodeBlock = (code: string, language: string) => {
   );
 };
 
-// SVG cho Like (từ Lucide Icons)
+// SVG cho Like (từ Lucide Icons, kích thước 18x18)
 const LikeIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-thumbs-up">
     <path d="M7 10v12"/>
@@ -27,7 +27,7 @@ const LikeIcon = () => (
   </svg>
 );
 
-// SVG cho Dislike (từ Lucide Icons)
+// SVG cho Dislike (từ Lucide Icons, kích thước 18x18)
 const DislikeIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-thumbs-down">
     <path d="M17 14V2"/>
@@ -35,18 +35,26 @@ const DislikeIcon = () => (
   </svg>
 );
 
-// SVG cho Copy
+// SVG cho Copy (kích thước 18x18)
 const CopyIcon = () => (
-  <svg width="16" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
     <rect x="9" y="9" width="13" height="13" rx="2" />
     <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
   </svg>
 );
 
-// SVG cho Check (khi Copy thành công)
+// SVG cho Check (khi Copy thành công, kích thước 18x18)
 const CheckIcon = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
     <path d="M20 6L9 17l-5-5" />
+  </svg>
+);
+
+// SVG cho Icon số 4 (Link, chỉ để hiển thị chơi, kích thước 18x18)
+const LinkIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-link">
+    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+    <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
   </svg>
 );
 
@@ -65,7 +73,12 @@ export const Message = ({
 }) => {
   const fullContent = typeof content === "string" ? content : "";
   const isAssistant = role === "assistant";
+  const [isLiked, setIsLiked] = useState(false); // State để theo dõi nút Like đã được nhấn chưa
   const [isCopied, setIsCopied] = useState(false);
+
+  const handleLike = () => {
+    setIsLiked(true); // Khi nhấn Like, đổi màu thành đen
+  };
 
   const handleCopy = () => {
     navigator.clipboard.writeText(fullContent);
@@ -165,13 +178,16 @@ export const Message = ({
           {fullContent}
         </ReactMarkdown>
 
-        {/* Nút Like, Dislike, Copy - chỉ hiển thị cho assistant, nằm bên trái */}
+        {/* Nút Like, Dislike, Copy, và Link - chỉ hiển thị cho assistant, nằm bên trái */}
         {isAssistant && (
           <div className="flex gap-3 mt-2 justify-start">
             <motion.button
-              className="text-zinc-500 hover:text-green-500 dark:hover:text-green-300 transition-colors p-1 border border-[#c7baba] rounded-[5px] cursor-pointer"
+              className={`text-zinc-500 transition-colors p-1 border border-[#c7baba] rounded-[5px] cursor-pointer ${
+                isLiked ? "text-black dark:text-white" : "hover:text-green-500 dark:hover:text-green-300"
+              }`}
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
+              onClick={handleLike}
               title="Like"
             >
               <LikeIcon />
@@ -192,6 +208,14 @@ export const Message = ({
               title="Copy"
             >
               {isCopied ? <CheckIcon /> : <CopyIcon />}
+            </motion.button>
+            <motion.button
+              className="text-zinc-500 hover:text-purple-500 dark:hover:text-purple-300 transition-colors p-1 border border-[#c7baba] rounded-[5px] cursor-pointer"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+              title="Link (Chỉ để chơi)"
+            >
+              <LinkIcon />
             </motion.button>
           </div>
         )}
