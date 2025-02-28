@@ -21,26 +21,26 @@ const renderCodeBlock = (code: string, language: string) => {
 
 // SVG Icons giống phong cách Grok (tối giản)
 const LikeIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
     <path d="M7 22V10m-5 4v8h4V10H2zm17-4s-1-6-6-6-5 5-5 5v9h5l2-8 2 8h2V12z" />
   </svg>
 );
 
 const DislikeIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
     <path d="M7 2v12m-5-4V2h4v12H2zm17 4s-1 6-6 6-5-5-5-5V2h5l2 8 2-8h2v12z" />
   </svg>
 );
 
 const CopyIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
     <rect x="9" y="9" width="13" height="13" rx="2" />
     <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
   </svg>
 );
 
 const CheckIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
     <path d="M20 6L9 17l-5-5" />
   </svg>
 );
@@ -160,11 +160,11 @@ export const Message = ({
           {fullContent}
         </ReactMarkdown>
 
-        {/* Nút Like, Dislike, Copy - chỉ hiển thị cho assistant */}
+        {/* Nút Like, Dislike, Copy - chỉ hiển thị cho assistant, nằm bên trái */}
         {isAssistant && (
-          <div className="flex gap-3 mt-2 justify-end">
+          <div className="flex gap-3 mt-2 justify-start">
             <motion.button
-              className="text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200 transition-colors"
+              className="text-zinc-500 hover:text-green-500 dark:hover:text-green-300 transition-colors p-1"
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
               title="Like"
@@ -172,7 +172,7 @@ export const Message = ({
               <LikeIcon />
             </motion.button>
             <motion.button
-              className="text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200 transition-colors"
+              className="text-zinc-500 hover:text-red-500 dark:hover:text-red-300 transition-colors p-1"
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
               title="Dislike"
@@ -180,7 +180,7 @@ export const Message = ({
               <DislikeIcon />
             </motion.button>
             <motion.button
-              className="text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200 transition-colors"
+              className="text-zinc-500 hover:text-blue-500 dark:hover:text-blue-300 transition-colors p-1"
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
               onClick={handleCopy}
