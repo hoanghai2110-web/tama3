@@ -33,29 +33,40 @@ export const Message = ({
   attachments?: Attachment[];
 }) => {
   const [displayedContent, setDisplayedContent] = useState("");
+  const [isTypingComplete, setIsTypingComplete] = useState(false);
   const isAssistant = role === "assistant";
   const fullContent = typeof content === "string" ? content : "";
 
-  // Typing effect cho assistant
   useEffect(() => {
-    if (isAssistant && fullContent) {
+    // Nếu không phải assistant hoặc đã gõ xong, hiển thị ngay full content
+    if (!isAssistant || isTypingComplete) {
+      setDisplayedContent(fullContent);
+      return;
+    }
+
+    // Chỉ chạy typing effect nếu fullContent thay đổi và chưa gõ xong
+    if (fullContent && !isTypingComplete) {
       let currentIndex = 0;
-      setDisplayedContent(""); // Reset nội dung hiển thị
+      setDisplayedContent(""); // Reset nội dung ban đầu
 
       const typeText = () => {
         if (currentIndex < fullContent.length) {
           setDisplayedContent(fullContent.slice(0, currentIndex + 1));
           currentIndex++;
-          setTimeout(typeText, 15); // Tốc độ gõ: 15ms mỗi ký tự, có thể điều chỉnh
+          return setTimeout(typeText, 15); // Trả về timeoutID để cleanup
+        } else {
+          setIsTypingComplete(true); // Đánh dấu đã gõ xong
         }
       };
 
-      typeText();
-    } else {
-      // Nếu không phải assistant, hiển thị ngay toàn bộ nội dung
-      setDisplayedContent(fullContent);
+      const timeoutId = typeText();
+
+      // Cleanup: Hủy timeout khi component unmount hoặc trước khi chạy lại
+      return () => {
+        clearTimeout(timeoutId);
+      };
     }
-  }, [isAssistant, fullContent]);
+  }, [isAssistant, fullContent, isTypingComplete]);
 
   return (
     <motion.div
@@ -72,7 +83,7 @@ export const Message = ({
         y: 0,
         opacity: 1,
         scale: 1,
-        filter: isAssistant ? "brightness(1.2)" : "brightness(1)", // Tăng sáng cho bot
+        filter: isAssistant ? "brightness(1.2)" : "brightness(1)",
       }}
       transition={{
         duration: 0.4,
