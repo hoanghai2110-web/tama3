@@ -1,5 +1,5 @@
-/* eslint-disable import/order */ 
-import React, { ReactNode, ComponentProps } from "react";
+/* eslint-disable import/order */  
+import React, { ReactNode, ComponentProps, useState } from "react";
 import { Attachment, ToolInvocation } from "ai";
 import { motion } from "framer-motion";
 import ReactMarkdown from "react-markdown";
@@ -8,6 +8,8 @@ import { okaidia } from "react-syntax-highlighter/dist/esm/styles/prism";
 import remarkGfm from "remark-gfm";
 import { Button } from '@/components/ui/button';
 import { CopyIcon, ThumbUpIcon, ThumbDownIcon } from "./icons";
+import { useCopyToClipboard } from "react-use";
+import { toast } from "react-hot-toast";
 
 const renderCodeBlock = (code: string, language: string) => {
   return (
@@ -53,7 +55,7 @@ export const Message = ({
       style={{ willChange: "transform, opacity, filter" }}
     >
       <div
-        className={`flex flex-col gap-2 rounded-2xl max-w-[100%] break-words leading-[1.625] ${
+        className={`flex flex-col gap-2 rounded-2xl max-w-full break-words leading-relaxed ${
           role === "user"
             ? "text-white bg-[#1c1c1c] self-end ml-auto p-3"
             : "text-zinc-800 dark:text-zinc-300 p-1"
@@ -80,49 +82,32 @@ export const Message = ({
         
         {/* Nút hành động */}
         {role !== "user" && (
-          <TooltipProvider delayDuration={0}>
-            <div className="flex flex-row gap-2 pt-2">
-              {/* Copy Button */}
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button className="py-1 px-2 h-fit" variant="outline" onClick={handleCopy}>
-                    <CopyIcon />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>Copy</TooltipContent>
-              </Tooltip>
+          <div className="flex flex-row gap-2 pt-2">
+            {/* Copy Button */}
+            <Button className="py-1 px-2 h-fit" variant="outline" onClick={handleCopy}>
+              <CopyIcon />
+            </Button>
 
-              {/* Upvote Button */}
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    className="py-1 px-2 h-fit"
-                    variant="outline"
-                    disabled={vote === "up"}
-                    onClick={() => setVote("up")}
-                  >
-                    <ThumbUpIcon />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>Upvote</TooltipContent>
-              </Tooltip>
+            {/* Upvote Button */}
+            <Button
+              className="py-1 px-2 h-fit"
+              variant="outline"
+              disabled={vote === "up"}
+              onClick={() => setVote("up")}
+            >
+              <ThumbUpIcon />
+            </Button>
 
-              {/* Downvote Button */}
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    className="py-1 px-2 h-fit"
-                    variant="outline"
-                    disabled={vote === "down"}
-                    onClick={() => setVote("down")}
-                  >
-                    <ThumbDownIcon />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>Downvote</TooltipContent>
-              </Tooltip>
-            </div>
-          </TooltipProvider>
+            {/* Downvote Button */}
+            <Button
+              className="py-1 px-2 h-fit"
+              variant="outline"
+              disabled={vote === "down"}
+              onClick={() => setVote("down")}
+            >
+              <ThumbDownIcon />
+            </Button>
+          </div>
         )}
       </div>
     </motion.div>
