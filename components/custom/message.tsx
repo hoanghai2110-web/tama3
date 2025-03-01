@@ -88,7 +88,7 @@ export const Message = ({
 
   return (
     <motion.div
-      className={`flex flex-row gap-3 px-4 w-full md:w-[500px] md:px-0 first-of-type:pt-24 ${
+      className={`flex flex-row gap-3 px-4 w-full md:w-[500px] md:px-0 first-of-type:pt-28 ${
         role === "user" ? "justify-end" : "justify-start"
       }`}
       variants={messageVariants}
