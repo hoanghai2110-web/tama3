@@ -50,9 +50,9 @@ const sheetVariants = {
   visible: {
     x: 0,
     opacity: 1,
-    transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] }, // Loại bỏ type: "spring" và damping
+    transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] },
   },
-  exit: { x: "-100%", opacity: 0, transition: { duration: 0.3, ease: "easeInOut" } },
+  exit: { x: "-100%", opacity: 0, transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1] } },
 };
 
 const itemVariants = {
@@ -106,7 +106,7 @@ export const History = ({ user }: { user: User | undefined }) => {
       <motion.div
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
-        transition={{ duration: 0.3, ease: "easeOut" }} // Sửa transition, loại bỏ spring và damping
+        transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }} // Sửa ease thành mảng
       >
         <Button
           variant="outline"
@@ -151,7 +151,7 @@ export const History = ({ user }: { user: User | undefined }) => {
               {user && (
                 <motion.div
                   whileHover={{ scale: 1.02 }}
-                  transition={{ duration: 0.3, ease: "easeOut" }} // Sửa transition, loại bỏ spring và damping
+                  transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }} // Sửa ease thành mảng
                 >
                   <Button
                     className="font-normal text-sm flex flex-row justify-between text-white bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 rounded-xl py-2 shadow-md"
@@ -210,7 +210,7 @@ export const History = ({ user }: { user: User | undefined }) => {
                       initial="hidden"
                       animate="visible"
                       whileHover={{ scale: 1.01 }}
-                      transition={{ duration: 0.3, ease: "easeOut" }} // Sửa transition, loại bỏ spring và damping
+                      transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }} // Sửa ease thành mảng
                       className={cx(
                         "flex flex-row items-center gap-6 hover:bg-zinc-200/80 dark:hover:bg-zinc-700/80 rounded-xl pr-2",
                         { "bg-zinc-200/80 dark:bg-zinc-700/80": chat.id === id },
@@ -234,7 +234,7 @@ export const History = ({ user }: { user: User | undefined }) => {
                           <motion.div
                             whileHover={{ scale: 1.1 }}
                             whileTap={{ scale: 0.9 }}
-                            transition={{ duration: 0.3, ease: "easeOut" }} // Sửa transition, loại bỏ spring và damping
+                            transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }} // Sửa ease thành mảng
                           >
                             <Button
                               className="p-0 h-fit font-normal text-zinc-500 rounded-full"
