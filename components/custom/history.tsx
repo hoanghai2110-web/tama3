@@ -105,7 +105,7 @@ export const History = ({ user }: { user: User | undefined }) => {
       >
         <SheetContent 
           side="left" 
-          className="p-3 w-80 bg-white/80 backdrop-blur-xl border-r border-gray-200/50 transition-all duration-300 ease-in-out"
+          className="p-3 w-80 bg-white/30 backdrop-blur-2xl border-r border-white/20 transition-all duration-300 ease-in-out"
         >
           <SheetHeader>
             <VisuallyHidden.Root>
@@ -170,14 +170,14 @@ export const History = ({ user }: { user: User | undefined }) => {
                   <div
                     key={chat.id}
                     className={cx(
-                      "flex flex-row items-center gap-6 hover:bg-gray-100/50 rounded-md pr-2 transition-colors duration-200",
-                      { "bg-gray-100/70": chat.id === id },
+                      "flex flex-row items-center gap-6 hover:bg-white/20 rounded-md pr-2 transition-colors duration-200",
+                      { "bg-white/30": chat.id === id },
                     )}
                   >
                     <Button
                       variant="ghost"
                       className={cx(
-                        "hover:bg-gray-100/50 justify-between p-0 text-sm font-normal flex flex-row items-center gap-2 pr-2 w-full transition-colors duration-200",
+                        "hover:bg-white/20 justify-between p-0 text-sm font-normal flex flex-row items-center gap-2 pr-2 w-full transition-colors duration-200",
                       )}
                       asChild
                     >
@@ -192,7 +192,7 @@ export const History = ({ user }: { user: User | undefined }) => {
                     <DropdownMenu modal={true}>
                       <DropdownMenuTrigger asChild>
                         <Button
-                          className="p-0 h-fit font-normal text-gray-500 transition-colors duration-200 hover:bg-gray-100/50"
+                          className="p-0 h-fit font-normal text-gray-500 transition-colors duration-200 hover:bg-white/20"
                           variant="ghost"
                         >
                           <MoreHorizontalIcon />
@@ -200,11 +200,11 @@ export const History = ({ user }: { user: User | undefined }) => {
                       </DropdownMenuTrigger>
                       <DropdownMenuContent 
                         side="left" 
-                        className="z-[60] bg-white/95 backdrop-blur-md"
+                        className="z-[60] bg-white/40 backdrop-blur-xl"
                       >
                         <DropdownMenuItem asChild>
                           <Button
-                            className="flex flex-row gap-2 items-center justify-start w-full h-fit font-normal p-1.5 rounded-sm text-gray-800 hover:bg-gray-100"
+                            className="flex flex-row gap-2 items-center justify-start w-full h-fit font-normal p-1.5 rounded-sm text-gray-800 hover:bg-white/20"
                             variant="ghost"
                             onClick={() => {
                               setDeleteId(chat.id);
@@ -225,7 +225,7 @@ export const History = ({ user }: { user: User | undefined }) => {
       </Sheet>
 
       <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
-        <AlertDialogContent className="bg-white/95 backdrop-blur-xl">
+        <AlertDialogContent className="bg-white/40 backdrop-blur-xl">
           <AlertDialogHeader>
             <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
             <AlertDialogDescription className="text-gray-600">
@@ -234,7 +234,7 @@ export const History = ({ user }: { user: User | undefined }) => {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel className="hover:bg-gray-100 transition-colors duration-200">
+            <AlertDialogCancel className="hover:bg-white/20 transition-colors duration-200">
               Cancel
             </AlertDialogCancel>
             <AlertDialogAction 
