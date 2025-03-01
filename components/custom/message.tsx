@@ -137,7 +137,7 @@ export const Message = ({
       animate="visible"
     >
       <motion.div
-        className={`flex flex-col gap-2 rounded-xl max-w-[80%] break-words leading-snug shadow-sm ${
+        className={`flex flex-col gap-2 rounded-xl max-w-[100%] break-words leading-snug shadow-sm ${
           role === "user"
             ? "text-white bg-gray-800/95 p-2.5"
             : "text-gray-900 dark:text-gray-100 bg-gray-100/95 dark:bg-gray-700/95 p-3"
