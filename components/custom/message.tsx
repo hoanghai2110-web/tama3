@@ -1,5 +1,5 @@
 /* eslint-disable import/order */
-import React, { ReactNode, ComponentProps, useState, useEffect, useRef } from "react";
+import React, { ReactNode, ComponentProps, useState, useEffect } from "react";
 import { Attachment, ToolInvocation } from "ai";
 import { motion } from "framer-motion";
 import ReactMarkdown from "react-markdown";
@@ -15,8 +15,8 @@ const renderCodeBlock = (code: string, language: string) => {
       style={okaidia}
       customStyle={{
         fontSize: "12px",
-        borderRadius: "6px",
-        padding: "10px",
+        borderRadius: "8px",
+        padding: "12px",
         background: "rgba(0, 0, 0, 0.9)",
       }}
     >
@@ -171,13 +171,15 @@ export const Message = ({
   }, []);
 
   const messageVariants = {
-    hidden: { opacity: 0, y: 10 },
+    hidden: { opacity: 0, y: 10, scale: 0.95, filter: "brightness(0.7)" },
     visible: {
       opacity: 1,
       y: 0,
+      scale: 1,
+      filter: "brightness(1.2)",
       transition: {
-        duration: 0.25,
-        ease: [0.25, 0.1, 0.25, 1],
+        duration: 0.4,
+        ease: "easeOut",
       },
     },
   };
@@ -189,31 +191,53 @@ export const Message = ({
 
   return (
     <motion.div
-      className={`flex flex-row gap-2 px-3 w-full md:w-[550px] md:px-0 ${
+      className={`flex flex-row gap-3 px-4 w-full md:w-[500px] md:px-0 ${
         role === "user" ? "justify-end" : "justify-start"
-      }`}
+      } ${index === 0 ? "pt-20" : ""}`} // Giữ pt-20 cho tin nhắn đầu
       variants={messageVariants}
       initial="hidden"
       animate="visible"
+      style={{ willChange: "transform, opacity, filter" }}
     >
       <motion.div
-        className={`flex flex-col gap-2 rounded-xl max-w-[100%] break-words leading-snug ${
-          role === "user" ? "text-white bg-gray-800/95 p-2.5" : "text-gray-900 dark:text-gray-100 p-3"
+        className={`flex flex-col gap-2 rounded-2xl max-w-[100%] break-words leading-[1.625] ${
+          role === "user"
+            ? "text-white bg-[#1c1c1c] self-end ml-auto p-3"
+            : "text-zinc-800 dark:text-zinc-300 p-1"
         }`}
-        whileHover={{ scale: 1.005, transition: { duration: 0.15, ease: "easeOut" } }}
+        style={
+          role === "user"
+            ? {
+                paddingTop: "0.5rem",
+                paddingLeft: "1rem",
+                paddingRight: "1rem",
+                paddingBottom: "0.5rem",
+                willChange: "transform, opacity",
+              }
+            : undefined
+        }
       >
         <ReactMarkdown
           remarkPlugins={[remarkGfm]}
           components={{
-            h1: ({ node, ...props }) => <h1 className="text-lg font-semibold pt-2 pb-1" {...props} />,
-            h2: ({ node, ...props }) => <h2 className="text-base font-medium pt-1.5 pb-1" {...props} />,
+            h1: ({ node, ...props }) => (
+              <h1 className="text-2xl font-bold pt-4 pb-4" {...props} />
+            ),
+            h2: ({ node, ...props }) => (
+              <h2 className="text-xl font-semibold pt-3 pb-3" {...props} />
+            ),
             p: ({ node, ...props }) => (
-              <p className="text-sm" {...props}>
+              <p {...props}>
                 {React.Children.map(props.children, (child, index) =>
                   typeof child === "string" ? (
                     child
                   ) : React.isValidElement(child) && child.type === "strong" ? (
-                    <strong key={index} className="font-semibold">{child.props.children}</strong>
+                    <strong
+                      key={index}
+                      className="text-[18px] font-bold italic inline pt-3 pb-3"
+                    >
+                      {child.props.children}
+                    </strong>
                   ) : (
                     child
                   )
@@ -226,14 +250,17 @@ export const Message = ({
               return lang ? (
                 renderCodeBlock(String(children), lang)
               ) : (
-                <motion.code
-                  className="px-1.5 py-0.5 bg-gray-200/90 dark:bg-gray-600/90 rounded text-xs"
-                  initial={{ opacity: 0.8 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.2 }}
+                <code
+                  className="px-2 bg-gray-200 dark:bg-gray-800 rounded-[3px]"
+                  style={{
+                    backgroundColor: "hsl(var(--muted))",
+                    paddingTop: "0.05rem",
+                    paddingBottom: "0.05rem",
+                    willChange: "transform, opacity",
+                  }}
                 >
                   {children}
-                </motion.code>
+                </code>
               );
             },
           }}
@@ -343,8 +370,8 @@ const App = () => {
       <div className="fixed top-0 w-full h-16 bg-blue-500 text-white flex items-center justify-center z-10">
         Menu
       </div>
-      {/* Wrapper với padding-top và nền mờ */}
-      <div className="pt-32 bg-white/70 dark:bg-gray-800/70 backdrop-blur-lg min-h-screen px-3">
+      {/* Wrapper với nền mờ */}
+      <div className="pt-20 bg-white/70 dark:bg-gray-800/70 backdrop-blur-lg min-h-screen px-4">
         {messages.map((msg, index) => (
           <Message key={index} {...msg} />
         ))}
