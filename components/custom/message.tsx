@@ -18,7 +18,6 @@ const renderCodeBlock = (code: string, language: string) => {
         borderRadius: "6px",
         padding: "10px",
         background: "rgba(0, 0, 0, 0.9)",
-        backdropFilter: "blur(4px)",
       }}
     >
       {code}
@@ -26,7 +25,7 @@ const renderCodeBlock = (code: string, language: string) => {
   );
 };
 
-// SVG Icons (giữ nguyên)
+// SVG Icons
 const LikeIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <path d="M7 10v12" />
@@ -69,6 +68,7 @@ const SpeakerIcon = () => (
   </svg>
 );
 
+// Component Message
 export const Message = ({
   chatId,
   role,
@@ -108,7 +108,6 @@ export const Message = ({
     }
   };
 
-  // Animation mượt như iOS
   const messageVariants = {
     hidden: { opacity: 0, y: 10 },
     visible: {
@@ -116,12 +115,11 @@ export const Message = ({
       y: 0,
       transition: {
         duration: 0.25,
-        ease: [0.25, 0.1, 0.25, 1], // Easing giống iOS
+        ease: [0.25, 0.1, 0.25, 1],
       },
     },
   };
 
-  // Button animation nhẹ nhàng
   const buttonVariants = {
     hover: { scale: 1.05 },
     tap: { scale: 0.95 },
@@ -129,7 +127,7 @@ export const Message = ({
 
   return (
     <motion.div
-      className={`flex flex-row gap-2 px-3 w-full md:w-[550px] md:px-0 first-of-type:pt-16 ${
+      className={`flex flex-row gap-2 px-3 w-full md:w-[550px] md:px-0 ${
         role === "user" ? "justify-end" : "justify-start"
       }`}
       variants={messageVariants}
@@ -137,10 +135,8 @@ export const Message = ({
       animate="visible"
     >
       <motion.div
-        className={`flex flex-col gap-2 rounded-xl max-w-[100%] break-words leading-snug shadow-sm ${
-          role === "user"
-            ? "text-white bg-gray-800/95 p-2.5"
-            : "text-gray-900 dark:text-gray-100 bg-gray-100/95 dark:bg-gray-700/95 p-3"
+        className={`flex flex-col gap-2 rounded-xl max-w-[80%] break-words leading-snug shadow-sm ${
+          role === "user" ? "text-white bg-gray-800/95 p-2.5" : "text-gray-900 dark:text-gray-100 p-3"
         }`}
         whileHover={{ scale: 1.005, transition: { duration: 0.15, ease: "easeOut" } }}
       >
@@ -183,7 +179,6 @@ export const Message = ({
           {fullContent}
         </ReactMarkdown>
 
-        {/* Buttons for Assistant */}
         {isAssistant && (
           <motion.div
             className="flex gap-2 mt-1 justify-start"
@@ -251,6 +246,24 @@ export const Message = ({
           </motion.div>
         )}
       </motion.div>
+    </motion.div>
+  );
+};
+
+// Component MessageList với hiệu ứng đàn hồi
+export const MessageList = ({ messages }: { messages: any[] }) => {
+  return (
+    <motion.div
+      className="w-full h-[80vh] overflow-y-auto px-3"
+      style={{ WebkitOverflowScrolling: "touch" }} // Mượt trên iOS
+      drag="y"
+      dragConstraints={{ top: -100, bottom: 50 }} // Giới hạn kéo lên/xuống
+      dragElastic={0.2} // Độ đàn hồi nhẹ
+      transition={{ type: "spring", stiffness: 300, damping: 30 }} // Bật lại mượt
+    >
+      {messages.map((msg, index) => (
+        <Message key={index} {...msg} />
+      ))}
     </motion.div>
   );
 };
