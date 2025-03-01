@@ -1,5 +1,5 @@
 /* eslint-disable import/order */
-import React, { ReactNode, ComponentProps, useState, useEffect } from "react";
+import React, { ReactNode, ComponentProps, useState, useEffect, useRef } from "react";
 import { Attachment, ToolInvocation } from "ai";
 import { motion } from "framer-motion";
 import ReactMarkdown from "react-markdown";
@@ -197,7 +197,7 @@ export const Message = ({
       animate="visible"
     >
       <motion.div
-        className={`flex flex-col gap-2 rounded-xl max-w-[80%] break-words leading-snug ${
+        className={`flex flex-col gap-2 rounded-xl max-w-[100%] break-words leading-snug ${
           role === "user" ? "text-white bg-gray-800/95 p-2.5" : "text-gray-900 dark:text-gray-100 p-3"
         }`}
         whileHover={{ scale: 1.005, transition: { duration: 0.15, ease: "easeOut" } }}
@@ -229,7 +229,7 @@ export const Message = ({
                 <motion.code
                   className="px-1.5 py-0.5 bg-gray-200/90 dark:bg-gray-600/90 rounded text-xs"
                   initial={{ opacity: 0.8 }}
-                  animate={{ opacity: 1}}
+                  animate={{ opacity: 1 }}
                   transition={{ duration: 0.2 }}
                 >
                   {children}
@@ -344,7 +344,7 @@ const App = () => {
         Menu
       </div>
       {/* Wrapper với padding-top và nền mờ */}
-      <div className="pt-28 bg-white/70 dark:bg-gray-800/70 backdrop-blur-lg min-h-screen px-3">
+      <div className="pt-32 bg-white/70 dark:bg-gray-800/70 backdrop-blur-lg min-h-screen px-3">
         {messages.map((msg, index) => (
           <Message key={index} {...msg} />
         ))}
