@@ -253,7 +253,7 @@ export const Message = ({
               whileHover="hover"
               whileTap="tap"
               transition={{ type: "spring", stiffness: 300, damping: 15 }}
-              title="Link (Chỉ để chơi)"
+              title="Link (Chỉ để choi)"
             >
               <LinkIcon />
             </motion.button>
