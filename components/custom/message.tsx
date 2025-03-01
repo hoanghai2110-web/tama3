@@ -1,6 +1,6 @@
-import React, { ReactNode, ComponentProps, useState, Children, isValidElement } from "react";
+import { motion } from "framer-motion"; // framer-motion trước
+import React, { ReactNode, ComponentProps, useState, Children, isValidElement } from "react"; // react sau
 import { Attachment, ToolInvocation } from "ai";
-import { motion } from "framer-motion";
 import ReactMarkdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { okaidia } from "react-syntax-highlighter/dist/esm/styles/prism";
@@ -139,10 +139,9 @@ export const Message = ({
   };
 
   return (
-    // Container bao quanh với nền mờ giống iOS
     <div className="fixed inset-0 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md overflow-y-auto">
       <motion.div
-        className={`flex flex-row gap-3 px-4 w-full md:w-[500px] md:px-0 mx-auto pt-16 ${ // pt-16 để tránh navbar
+        className={`flex flex-row gap-3 px-4 w-full md:w-[500px] md:px-0 mx-auto pt-16 ${
           role === "user" ? "justify-end" : "justify-start"
         }`}
         variants={messageVariants}
@@ -154,7 +153,7 @@ export const Message = ({
           className={`flex flex-col gap-2 rounded-2xl max-w-full break-words leading-relaxed shadow-[0_4px_20px_rgba(0,0,0,0.05)] dark:shadow-[0_4px_20px_rgba(255,255,255,0.05)] ${
             role === "user"
               ? "text-white bg-[#1c1c1c]/90 p-3"
-              : "text-zinc-800 dark:text-zinc-300 bg-white/90 dark:bg-gray-800/90 py-4 px-4"
+              : "text-zinc-800 dark:text-zinc-300 bg-white/90 dark:bg-gray-800/90 p-4" // Thay py-4 px-4 bằng p-4
           }`}
           whileHover={{ scale: 1.02, transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1] } }}
         >
