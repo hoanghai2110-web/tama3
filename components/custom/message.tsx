@@ -193,7 +193,7 @@ export const Message = ({
     <motion.div
       className={`flex flex-row gap-3 px-4 w-full md:w-[500px] md:px-0 ${
         role === "user" ? "justify-end" : "justify-start"
-      } ${index === 0 ? "pt-20" : ""}`} // Giữ pt-20 cho tin nhắn đầu
+      }`}
       variants={messageVariants}
       initial="hidden"
       animate="visible"
