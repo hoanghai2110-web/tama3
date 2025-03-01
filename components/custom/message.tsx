@@ -20,6 +20,104 @@ const renderCodeBlock = (code: string, language: string) => {
   );
 };
 
+// SVG Icons
+const LikeIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="15"
+    height="15"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M7 10v12" />
+    <path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88Z" />
+  </svg>
+);
+
+const DislikeIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="15"
+    height="15"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M17 14V2" />
+    <path d="M9 18.12 10 14H4.17a2 2 0 0 1-1.92-2.56l2.33-8A2 2 0 0 1 6.5 2H20a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-2.76a2 2 0 0 0-1.79 1.11L12 22a3.13 3.13 0 0 1-3-3.88Z" />
+  </svg>
+);
+
+const CopyIcon = () => (
+  <svg
+    width="15"
+    height="15"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+  >
+    <rect x="9" y="9" width="13" height="13" rx="2" />
+    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+  </svg>
+);
+
+const CheckIcon = () => (
+  <svg
+    width="15"
+    height="15"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+  >
+    <path d="M20 6L9 17l-5-5" />
+  </svg>
+);
+
+const LinkIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="15"
+    height="15"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+    <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+  </svg>
+);
+
+const SpeakerIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="15"
+    height="15"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+    <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+    <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
+  </svg>
+);
+
+// Component Message
 export const Message = ({
   chatId,
   role,
@@ -97,7 +195,7 @@ export const Message = ({
       style={{ willChange: "transform, opacity, filter" }}
     >
       <motion.div
-        className={`flex flex-col gap-2 rounded-2xl max-w-[100%] break-words leading-[1.625] ${
+        className={`flex flex-col gap-2 rounded-2xl max-w-full break-words leading-relaxed ${
           role === "user"
             ? "text-white bg-[#1c1c1c] self-end ml-auto p-3"
             : "text-zinc-800 dark:text-zinc-300 p-1"
@@ -118,10 +216,10 @@ export const Message = ({
           remarkPlugins={[remarkGfm]}
           components={{
             h1: ({ node, ...props }) => (
-              <h1 className="text-2xl font-bold pt-4 pb-4" {...props} />
+              <h1 className="text-2xl font-bold py-4" {...props} />
             ),
             h2: ({ node, ...props }) => (
-              <h2 className="text-xl font-semibold pt-3 pb-3" {...props} />
+              <h2 className="text-xl font-semibold py-3" {...props} />
             ),
             p: ({ node, ...props }) => (
               <p {...props}>
@@ -131,7 +229,7 @@ export const Message = ({
                   ) : React.isValidElement(child) && child.type === "strong" ? (
                     <strong
                       key={index}
-                      className="text-[18px] font-bold italic inline pt-3 pb-3"
+                      className="text-[18px] font-bold italic inline py-3"
                     >
                       {child.props.children}
                     </strong>
