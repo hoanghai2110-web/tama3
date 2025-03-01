@@ -22,13 +22,21 @@ export const Navbar = async () => {
       <div className="bg-background absolute top-0 left-0 w-dvw py-2 px-3 justify-between flex flex-row items-center z-30">
         <div className="flex flex-row gap-3 items-center">
           <History user={session?.user} />
+          <Button
+            asChild
+            className="py-1.5 px-2 h-fit font-normal text-white bg-[#007AFF] hover:bg-[#0056b3] transition-colors duration-200 rounded-md"
+          >
+            <Link href="/get-app" target="_blank">
+              Get App
+            </Link>
+          </Button>
         </div>
 
         {session ? (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button className="py-1.5 px-2 h-fit font-normal" variant="secondary">
-                <UserIcon />
+              <Button className="py-1.5 px-2 h-fit font-normal">
+                <UserIcon size={28} />
               </Button>
             </DropdownMenuTrigger>
 
