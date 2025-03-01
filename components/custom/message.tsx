@@ -271,7 +271,7 @@ export const Message = ({
             transition={{ delay: 0.1, duration: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
           >
             <motion.button
-              className={`p-1.5 rounded-md border border-gray-200/50 dark:border-gray-600/50 transition-all ${
+              className={`p-1.5 rounded-md border border-gray-400/50 dark:border-gray-600/50 transition-all ${
                 isLiked ? "bg-green-100 dark:bg-green-800/50 text-green-600 dark:text-green-400" : "text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-600/30 hover:text-green-500 dark:hover:text-green-400"
               }`}
               variants={buttonVariants}
@@ -287,7 +287,7 @@ export const Message = ({
               <LikeIcon />
             </motion.button>
             <motion.button
-              className={`p-1.5 rounded-md border border-gray-200/50 dark:border-gray-600/50 transition-all ${
+              className={`p-1.5 rounded-md border border-gray-400/50 dark:border-gray-600/50 transition-all ${
                 isDisliked ? "bg-red-100 dark:bg-red-800/50 text-red-600 dark:text-red-400" : "text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-600/30 hover:text-red-500 dark:hover:text-red-400"
               }`}
               variants={buttonVariants}
@@ -303,7 +303,7 @@ export const Message = ({
               <DislikeIcon />
             </motion.button>
             <motion.button
-              className="p-1.5 rounded-md border border-gray-200/50 dark:border-gray-600/50 text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-600/30 hover:text-blue-500 dark:hover:text-blue-400 transition-all"
+              className="p-1.5 rounded-md border border-gray-400/50 dark:border-gray-600/50 text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-600/30 hover:text-blue-500 dark:hover:text-blue-400 transition-all"
               variants={buttonVariants}
               whileHover="hover"
               whileTap="tap"
@@ -317,7 +317,7 @@ export const Message = ({
               {isCopied ? <CheckIcon /> : <CopyIcon />}
             </motion.button>
             <motion.button
-              className={`p-1.5 rounded-md border border-gray-200/50 dark:border-gray-600/50 transition-all ${
+              className={`p-1.5 rounded-md border border-gray-400/50 dark:border-gray-600/50 transition-all ${
                 isSpeaking ? "bg-yellow-100 dark:bg-yellow-800/50 text-yellow-600 dark:text-yellow-400" : "text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-600/30 hover:text-yellow-500 dark:hover:text-yellow-400"
               }`}
               variants={buttonVariants}
@@ -333,7 +333,7 @@ export const Message = ({
               <SpeakerIcon />
             </motion.button>
             <motion.button
-              className="p-1.5 rounded-md border border-gray-200/50 dark:border-gray-600/50 text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-600/30 hover:text-purple-500 dark:hover:text-purple-400 transition-all"
+              className="p-1.5 rounded-md border border-gray-400/50 dark:border-gray-600/50 text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-600/30 hover:text-purple-500 dark:hover:text-purple-400 transition-all"
               variants={buttonVariants}
               whileHover="hover"
               whileTap="tap"
