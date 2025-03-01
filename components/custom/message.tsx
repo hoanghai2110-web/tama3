@@ -27,41 +27,95 @@ const renderCodeBlock = (code: string, language: string) => {
 
 // SVG Icons (width, height = 15)
 const LikeIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="15"
+    height="15"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
     <path d="M7 10v12" />
     <path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88Z" />
   </svg>
 );
 
 const DislikeIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="15"
+    height="15"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
     <path d="M17 14V2" />
     <path d="M9 18.12 10 14H4.17a2 2 0 0 1-1.92-2.56l2.33-8A2 2 0 0 1 6.5 2H20a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-2.76a2 2 0 0 0-1.79 1.11L12 22a3.13 3.13 0 0 1-3-3.88Z" />
   </svg>
 );
 
 const CopyIcon = () => (
-  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+  <svg
+    width="15"
+    height="15"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+  >
     <rect x="9" y="9" width="13" height="13" rx="2" />
     <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
   </svg>
 );
 
 const CheckIcon = () => (
-  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+  <svg
+    width="15"
+    height="15"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+  >
     <path d="M20 6L9 17l-5-5" />
   </svg>
 );
 
 const LinkIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="15"
+    height="15"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
     <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
     <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
   </svg>
 );
 
 const SpeakerIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="15"
+    height="15"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
     <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
     <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
     <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
@@ -274,20 +328,29 @@ export const Message = ({
   );
 };
 
-// Component MessageList với nền mờ đục và padding-top
-export const MessageList = ({ messages }: { messages: any[] }) => {
+// Sử dụng trực tiếp trong App
+const App = () => {
+  const messages = [
+    { chatId: "1", role: "user", content: "Ê thằng này, có cái đó không? Lâu rồi không thấy mày đâu, Đạo này làm ăn không ra gì? Khổ thân tao nhờ mày mà" },
+    { chatId: "2", role: "assistant", content: "Chào bạn! Mình ổn, cảm ơn. Bạn khỏe không?" },
+    { chatId: "3", role: "user", content: "Bạn khỏe không?" },
+    { chatId: "4", role: "assistant", content: "Khỏe, cảm ơn!" },
+  ];
+
   return (
-    <motion.div
-      className="w-full h-[80vh] overflow-y-auto px-3 pt-20 bg-white/70 dark:bg-gray-800/70 backdrop-blur-lg" // Tăng blur và điều chỉnh opacity
-      style={{ WebkitOverflowScrolling: "touch" }}
-      drag="y"
-      dragConstraints={{ top: -100, bottom: 50 }}
-      dragElastic={0.2}
-      dragTransition={{ bounceStiffness: 300, bounceDamping: 30 }}
-    >
-      {messages.map((msg, index) => (
-        <Message key={index} {...msg} />
-      ))}
-    </motion.div>
+    <div className="w-full min-h-screen bg-gray-50 dark:bg-gray-900 relative">
+      {/* Giả lập menu cố định */}
+      <div className="fixed top-0 w-full h-16 bg-blue-500 text-white flex items-center justify-center z-10">
+        Menu
+      </div>
+      {/* Wrapper với padding-top và nền mờ */}
+      <div className="pt-24 bg-white/70 dark:bg-gray-800/70 backdrop-blur-lg min-h-screen">
+        {messages.map((msg, index) => (
+          <Message key={index} {...msg} />
+        ))}
+      </div>
+    </div>
   );
 };
+
+export default App;
