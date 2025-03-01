@@ -1,5 +1,5 @@
 /* eslint-disable import/order */
-import React, { ReactNode, ComponentProps, useState } from "react";
+import React, { ReactNode, ComponentProps, useState, useEffect } from "react";
 import { Attachment, ToolInvocation } from "ai";
 import { motion } from "framer-motion";
 import ReactMarkdown from "react-markdown";
@@ -25,7 +25,7 @@ const renderCodeBlock = (code: string, language: string) => {
   );
 };
 
-// SVG Icons (width, height giảm về 15)
+// SVG Icons (width, height = 15)
 const LikeIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <path d="M7 10v12" />
@@ -85,10 +85,12 @@ export const Message = ({
   const fullContent = typeof content === "string" ? content : "";
   const isAssistant = role === "assistant";
   const [isLiked, setIsLiked] = useState(false);
+  const [isDisliked, setIsDisliked] = useState(false); // Trạng thái Dislike
   const [isCopied, setIsCopied] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
 
-  const handleLike = () => setIsLiked(true);
+  const handleLike = () => setIsLiked(!isLiked); // Toggle Like
+  const handleDislike = () => setIsDisliked(!isDisliked); // Toggle Dislike
   const handleCopy = () => {
     navigator.clipboard.writeText(fullContent);
     setIsCopied(true);
@@ -107,6 +109,17 @@ export const Message = ({
       setIsSpeaking(true);
     }
   };
+
+  // Reset Dislike khi click ngoài
+  useEffect(() => {
+    const handleClickOutside = () => {
+      setIsDisliked(false);
+    };
+    document.addEventListener("click", handleClickOutside);
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
 
   const messageVariants = {
     hidden: { opacity: 0, y: 10 },
@@ -135,7 +148,7 @@ export const Message = ({
       animate="visible"
     >
       <motion.div
-        className={`flex flex-col gap-2 rounded-xl max-w-[100%] break-words leading-snug ${
+        className={`flex flex-col gap-2 rounded-xl max-w-[80%] break-words leading-snug ${
           role === "user" ? "text-white bg-gray-800/95 p-2.5" : "text-gray-900 dark:text-gray-100 p-3"
         }`}
         whileHover={{ scale: 1.005, transition: { duration: 0.15, ease: "easeOut" } }}
@@ -187,58 +200,74 @@ export const Message = ({
             transition={{ delay: 0.1, duration: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
           >
             <motion.button
-              className={`p-1.5 rounded-full border border-gray-200/50 dark:border-gray-600/50 transition-all ${
+              className={`p-1.5 rounded-md border border-gray-200/50 dark:border-gray-600/50 transition-all ${
                 isLiked ? "bg-green-100 dark:bg-green-800/50 text-green-600 dark:text-green-400" : "text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-600/30 hover:text-green-500 dark:hover:text-green-400"
               }`}
               variants={buttonVariants}
               whileHover="hover"
               whileTap="tap"
               transition={{ type: "spring", stiffness: 500, damping: 20 }}
-              onClick={handleLike}
+              onClick={(e) => {
+                e.stopPropagation(); // Ngăn reset Dislike
+                handleLike();
+              }}
               title="Like"
             >
               <LikeIcon />
             </motion.button>
             <motion.button
-              className="p-1.5 rounded-full border border-gray-200/50 dark:border-gray-600/50 text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-600/30 hover:text-red-500 dark:hover:text-red-400 transition-all"
+              className={`p-1.5 rounded-md border border-gray-200/50 dark:border-gray-600/50 transition-all ${
+                isDisliked ? "bg-red-100 dark:bg-red-800/50 text-red-600 dark:text-red-400" : "text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-600/30 hover:text-red-500 dark:hover:text-red-400"
+              }`}
               variants={buttonVariants}
               whileHover="hover"
               whileTap="tap"
               transition={{ type: "spring", stiffness: 500, damping: 20 }}
+              onClick={(e) => {
+                e.stopPropagation(); // Ngăn reset Dislike ngay lập tức
+                handleDislike();
+              }}
               title="Dislike"
             >
               <DislikeIcon />
             </motion.button>
             <motion.button
-              className="p-1.5 rounded-full border border-gray-200/50 dark:border-gray-600/50 text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-600/30 hover:text-blue-500 dark:hover:text-blue-400 transition-all"
+              className="p-1.5 rounded-md border border-gray-200/50 dark:border-gray-600/50 text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-600/30 hover:text-blue-500 dark:hover:text-blue-400 transition-all"
               variants={buttonVariants}
               whileHover="hover"
               whileTap="tap"
               transition={{ type: "spring", stiffness: 500, damping: 20 }}
-              onClick={handleCopy}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleCopy();
+              }}
               title="Copy"
             >
               {isCopied ? <CheckIcon /> : <CopyIcon />}
             </motion.button>
             <motion.button
-              className={`p-1.5 rounded-full border border-gray-200/50 dark:border-gray-600/50 transition-all ${
+              className={`p-1.5 rounded-md border border-gray-200/50 dark:border-gray-600/50 transition-all ${
                 isSpeaking ? "bg-yellow-100 dark:bg-yellow-800/50 text-yellow-600 dark:text-yellow-400" : "text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-600/30 hover:text-yellow-500 dark:hover:text-yellow-400"
               }`}
               variants={buttonVariants}
               whileHover="hover"
               whileTap="tap"
               transition={{ type: "spring", stiffness: 500, damping: 20 }}
-              onClick={handleSpeak}
-              title={isSpeaking ? "Dừng đọc" : "Đọc noi dung"}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleSpeak();
+              }}
+              title={isSpeaking ? "Dừng đọc" : "Đọc nội dung"}
             >
               <SpeakerIcon />
             </motion.button>
             <motion.button
-              className="p-1.5 rounded-full border border-gray-200/50 dark:border-gray-600/50 text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-600/30 hover:text-purple-500 dark:hover:text-purple-400 transition-all"
+              className="p-1.5 rounded-md border border-gray-200/50 dark:border-gray-600/50 text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-600/30 hover:text-purple-500 dark:hover:text-purple-400 transition-all"
               variants={buttonVariants}
               whileHover="hover"
               whileTap="tap"
               transition={{ type: "spring", stiffness: 500, damping: 20 }}
+              onClick={(e) => e.stopPropagation()}
               title="Link"
             >
               <LinkIcon />
@@ -255,11 +284,11 @@ export const MessageList = ({ messages }: { messages: any[] }) => {
   return (
     <motion.div
       className="w-full h-[80vh] overflow-y-auto px-3"
-      style={{ WebkitOverflowScrolling: "touch" }} // Mượt trên iOS
-      drag="y" // Cho phép kéo dọc
-      dragConstraints={{ top: -100, bottom: 50 }} // Giới hạn kéo
-      dragElastic={0.2} // Độ đàn hồi
-      dragTransition={{ bounceStiffness: 300, bounceDamping: 30 }} // Spring bật lại
+      style={{ WebkitOverflowScrolling: "touch" }}
+      drag="y"
+      dragConstraints={{ top: -100, bottom: 50 }}
+      dragElastic={0.2}
+      dragTransition={{ bounceStiffness: 300, bounceDamping: 30 }}
     >
       {messages.map((msg, index) => (
         <Message key={index} {...msg} />
