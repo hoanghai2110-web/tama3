@@ -229,7 +229,7 @@ export const Message = ({
               whileTap="tap"
               transition={{ type: "spring", stiffness: 500, damping: 20 }}
               onClick={handleSpeak}
-              title={isSpeaking ? "Dừng đọc" : "Đọc nội dung"}
+              title={isSpeaking ? "Dừng đọc" : "Đọc noi dung"}
             >
               <SpeakerIcon />
             </motion.button>
