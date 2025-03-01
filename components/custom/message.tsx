@@ -26,7 +26,7 @@ const renderCodeBlock = (code: string, language: string) => {
   );
 };
 
-// SVG Icons (giữ nguyên từ code của bạn)
+// SVG Icons
 const LikeIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -91,6 +91,24 @@ const LinkIcon = () => (
   </svg>
 );
 
+const SpeakerIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="16"
+    height="16"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+    <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+    <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
+  </svg>
+);
+
 export const Message = ({
   chatId,
   role,
@@ -108,12 +126,26 @@ export const Message = ({
   const isAssistant = role === "assistant";
   const [isLiked, setIsLiked] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
+  const [isSpeaking, setIsSpeaking] = useState(false);
 
   const handleLike = () => setIsLiked(true);
   const handleCopy = () => {
     navigator.clipboard.writeText(fullContent);
     setIsCopied(true);
     setTimeout(() => setIsCopied(false), 1000);
+  };
+
+  const handleSpeak = () => {
+    if (isSpeaking) {
+      window.speechSynthesis.cancel();
+      setIsSpeaking(false);
+    } else {
+      const utterance = new SpeechSynthesisUtterance(fullContent);
+      utterance.lang = "vi-VN"; // Ngôn ngữ tiếng Việt
+      utterance.onend = () => setIsSpeaking(false);
+      window.speechSynthesis.speak(utterance);
+      setIsSpeaking(true);
+    }
   };
 
   // Variants cho animation của message
@@ -125,7 +157,7 @@ export const Message = ({
       scale: 1,
       transition: {
         duration: 0.5,
-        ease: [0.16, 1, 0.3, 1], // Spring easing giống iOS
+        ease: [0.16, 1, 0.3, 1],
         type: "spring",
         stiffness: 200,
         damping: 20,
@@ -246,6 +278,19 @@ export const Message = ({
               title="Copy"
             >
               {isCopied ? <CheckIcon /> : <CopyIcon />}
+            </motion.button>
+            <motion.button
+              className={`p-1.5 rounded-full border border-gray-300/50 dark:border-gray-600/50 transition-colors ${
+                isSpeaking ? "text-yellow-500 dark:text-yellow-400" : "text-zinc-500 hover:text-yellow-500 dark:hover:text-yellow-400"
+              }`}
+              variants={buttonVariants}
+              whileHover="hover"
+              whileTap="tap"
+              transition={{ type: "spring", stiffness: 300, damping: 15 }}
+              onClick={handleSpeak}
+              title={isSpeaking ? "Dừng đọc" : "Đọc nội dung"}
+            >
+              <SpeakerIcon />
             </motion.button>
             <motion.button
               className="p-1.5 rounded-full border border-gray-300/50 dark:border-gray-600/50 text-zinc-500 hover:text-purple-500 dark:hover:text-purple-400 transition-colors"
