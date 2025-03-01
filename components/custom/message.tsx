@@ -20,7 +20,7 @@ const renderCodeBlock = (code: string, language: string) => {
   );
 };
 
-// SVG Icons
+// SVG Icons (width, height = 15)
 const LikeIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -186,7 +186,7 @@ export const Message = ({
 
   return (
     <motion.div
-      className={`flex flex-row gap-3 px-4 w-full md:w-[500px] md:px-0 first-of-type:pt-28 ${
+      className={`flex flex-row gap-3 px-4 w-full md:w-[500px] md:px-0 first-of-type:pt-16 ${
         role === "user" ? "justify-end" : "justify-start"
       }`}
       variants={messageVariants}
@@ -366,7 +366,7 @@ const App = () => {
         Menu
       </div>
       {/* Wrapper với nền mờ */}
-      <div className="pt-24 bg-white/70 dark:bg-gray-800/70 backdrop-blur-lg min-h-screen px-4">
+      <div className="pt-16 bg-white/70 dark:bg-gray-800/70 backdrop-blur-lg min-h-screen px-4">
         {messages.map((msg) => (
           <Message key={msg.chatId} {...msg} />
         ))}
