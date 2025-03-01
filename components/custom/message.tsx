@@ -274,11 +274,11 @@ export const Message = ({
   );
 };
 
-// Component MessageList với nền trắng mờ đục và padding-top
+// Component MessageList với nền mờ đục và padding-top
 export const MessageList = ({ messages }: { messages: any[] }) => {
   return (
     <motion.div
-      className="w-full h-[80vh] overflow-y-auto px-3 pt-16 bg-white/80 dark:bg-gray-800/80 backdrop-blur-md"
+      className="w-full h-[80vh] overflow-y-auto px-3 pt-20 bg-white/70 dark:bg-gray-800/70 backdrop-blur-lg" // Tăng blur và điều chỉnh opacity
       style={{ WebkitOverflowScrolling: "touch" }}
       drag="y"
       dragConstraints={{ top: -100, bottom: 50 }}
