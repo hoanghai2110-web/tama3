@@ -22,7 +22,7 @@ export const Navbar = async () => {
           <History user={session?.user} />
           <Button
             asChild
-            className="py-1.5 px-2 h-fit font-normal text-white bg-[#007AFF] hover:bg-[#0056b3] transition-colors duration-200 rounded-md"
+            className="py-1.5 px-2 h-fit font-normal text-white bg-[#007AFF] hover:bg-[#0056b3] transition-colors duration-200 rounded-full"
           >
             <Link href="/get-app" target="_blank">
               <svg
@@ -73,7 +73,10 @@ export const Navbar = async () => {
               </Button>
             </DropdownMenuTrigger>
 
-            <DropdownMenuContent align="end" className="border-none bg-white/40 backdrop-blur-xl">
+            <DropdownMenuContent
+              align="end"
+              className="border-none bg-white/40 backdrop-blur-xl rounded-lg shadow-lg"
+            >
               <DropdownMenuItem>
                 <ThemeToggle />
               </DropdownMenuItem>
