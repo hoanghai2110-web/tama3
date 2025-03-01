@@ -1,21 +1,11 @@
-/* eslint-disable import/order */ // Giữ nguyên nếu bạn không muốn sửa import ngay, nhưng tôi sẽ sắp xếp lại bên dưới
-import React, { ReactNode, ComponentProps, useState, Children, isValidElement } from "react";
+/* eslint-disable import/order */
+import React, { ReactNode, ComponentProps, useState } from "react";
 import { Attachment, ToolInvocation } from "ai";
 import { motion } from "framer-motion";
 import ReactMarkdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { okaidia } from "react-syntax-highlighter/dist/esm/styles/prism";
 import remarkGfm from "remark-gfm";
-
-// Nhóm import đã được sắp xếp lại (nếu bỏ disable import/order)
-import React, { ReactNode, ComponentProps, useState, Children, isValidElement } from "react";
-import { Attachment, ToolInvocation } from "ai";
-import { motion } from "framer-motion";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
-
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { okaidia } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 // Render Code Block
 const renderCodeBlock = (code: string, language: string) => {
@@ -36,7 +26,7 @@ const renderCodeBlock = (code: string, language: string) => {
   );
 };
 
-// SVG Icons
+// SVG Icons (giữ nguyên từ code của bạn)
 const LikeIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -135,7 +125,7 @@ export const Message = ({
       scale: 1,
       transition: {
         duration: 0.5,
-        ease: [0.16, 1, 0.3, 1],
+        ease: [0.16, 1, 0.3, 1], // Spring easing giống iOS
         type: "spring",
         stiffness: 200,
         damping: 20,
@@ -160,25 +150,32 @@ export const Message = ({
       style={{ willChange: "transform, opacity" }}
     >
       <motion.div
-        className={`flex flex-col gap-2 rounded-2xl max-w-full break-words leading-relaxed backdrop-blur-md shadow-[0_4px_20px_rgba(0,0,0,0.05)] dark:shadow-[0_4px_20px_rgba(255,255,255,0.05)] ${
+        className={`flex flex-col gap-2 rounded-2xl max-w-[85%] break-words leading-[1.625] backdrop-blur-md shadow-[0_4px_20px_rgba(0,0,0,0.05)] dark:shadow-[0_4px_20px_rgba(255,255,255,0.05)] ${
           role === "user"
             ? "text-white bg-[#1c1c1c]/90 p-3"
-            : "text-zinc-800 dark:text-zinc-300 bg-white/90 dark:bg-gray-800/90 py-4 px-4"
+            : "text-zinc-800 dark:text-zinc-300 bg-white/90 dark:bg-gray-800/90 p-4"
         }`}
         whileHover={{ scale: 1.02, transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1] } }}
       >
         <ReactMarkdown
           remarkPlugins={[remarkGfm]}
           components={{
-            h1: ({ node, ...props }) => <h1 className="text-2xl font-bold py-4" {...props} />,
-            h2: ({ node, ...props }) => <h2 className="text-xl font-semibold py-3" {...props} />,
+            h1: ({ node, ...props }) => (
+              <h1 className="text-2xl font-bold pt-4 pb-4" {...props} />
+            ),
+            h2: ({ node, ...props }) => (
+              <h2 className="text-xl font-semibold pt-3 pb-3" {...props} />
+            ),
             p: ({ node, ...props }) => (
               <p className="text-sm" {...props}>
-                {Children.map(props.children, (child, index) =>
+                {React.Children.map(props.children, (child, index) =>
                   typeof child === "string" ? (
                     child
-                  ) : isValidElement(child) && child.type === "strong" ? (
-                    <strong key={index} className="font-bold italic">
+                  ) : React.isValidElement(child) && child.type === "strong" ? (
+                    <strong
+                      key={index}
+                      className="font-bold italic"
+                    >
                       {child.props.children}
                     </strong>
                   ) : (
@@ -256,7 +253,7 @@ export const Message = ({
               whileHover="hover"
               whileTap="tap"
               transition={{ type: "spring", stiffness: 300, damping: 15 }}
-              title="Link (Chỉ để choi)"
+              title="Link (Chỉ để chơi)"
             >
               <LinkIcon />
             </motion.button>
