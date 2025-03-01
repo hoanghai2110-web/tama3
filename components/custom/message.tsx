@@ -148,7 +148,7 @@ export const Message = ({
       animate="visible"
     >
       <motion.div
-        className={`flex flex-col gap-2 rounded-xl max-w-[80%] break-words leading-snug ${
+        className={`flex flex-col gap-2 rounded-xl max-w-[100%] break-words leading-snug ${
           role === "user" ? "text-white bg-gray-800/95 p-2.5" : "text-gray-900 dark:text-gray-100 p-3"
         }`}
         whileHover={{ scale: 1.005, transition: { duration: 0.15, ease: "easeOut" } }}
