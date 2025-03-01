@@ -14,11 +14,11 @@ const renderCodeBlock = (code: string, language: string) => {
       language={language}
       style={okaidia}
       customStyle={{
-        fontSize: "14px", // Tăng nhẹ font cho dễ đọc
-        borderRadius: "8px",
-        padding: "12px",
-        background: "rgba(0, 0, 0, 0.85)",
-        backdropFilter: "blur(6px)", // Tăng blur cho đẹp
+        fontSize: "12px",
+        borderRadius: "6px",
+        padding: "10px",
+        background: "rgba(0, 0, 0, 0.9)",
+        backdropFilter: "blur(4px)",
       }}
     >
       {code}
@@ -108,55 +108,54 @@ export const Message = ({
     }
   };
 
-  // Animation mượt hơn, loại bỏ scale
+  // Animation mượt như iOS
   const messageVariants = {
-    hidden: { opacity: 0, y: 15 },
+    hidden: { opacity: 0, y: 10 },
     visible: {
       opacity: 1,
       y: 0,
       transition: {
-        duration: 0.3,
-        ease: "easeOut", // Trượt mượt mà hơn
+        duration: 0.25,
+        ease: [0.25, 0.1, 0.25, 1], // Easing giống iOS
       },
     },
   };
 
-  // Button animation nhẹ nhàng hơn
+  // Button animation nhẹ nhàng
   const buttonVariants = {
-    hover: { scale: 1.05 }, // Giảm scale để không bị giật
+    hover: { scale: 1.05 },
     tap: { scale: 0.95 },
   };
 
   return (
     <motion.div
-      className={`flex flex-row gap-3 px-4 w-full md:w-[600px] md:px-0 first-of-type:pt-20 ${
+      className={`flex flex-row gap-2 px-3 w-full md:w-[550px] md:px-0 first-of-type:pt-16 ${
         role === "user" ? "justify-end" : "justify-start"
       }`}
       variants={messageVariants}
       initial="hidden"
       animate="visible"
-      style={{ willChange: "transform, opacity" }}
     >
       <motion.div
-        className={`flex flex-col gap-3 rounded-lg max-w-[85%] break-words leading-relaxed backdrop-blur-lg shadow-lg ${
+        className={`flex flex-col gap-2 rounded-xl max-w-[80%] break-words leading-snug shadow-sm ${
           role === "user"
-            ? "text-white bg-gradient-to-br from-[#1c1c1c] to-[#2a2a2a] p-3"
-            : "text-zinc-800 dark:text-zinc-200 bg-gradient-to-br from-white to-gray-100 dark:from-gray-800 dark:to-gray-900 p-4"
+            ? "text-white bg-gray-800/95 p-2.5"
+            : "text-gray-900 dark:text-gray-100 bg-gray-100/95 dark:bg-gray-700/95 p-3"
         }`}
-        whileHover={{ scale: 1.01, transition: { duration: 0.2, ease: "easeOut" } }}
+        whileHover={{ scale: 1.005, transition: { duration: 0.15, ease: "easeOut" } }}
       >
         <ReactMarkdown
           remarkPlugins={[remarkGfm]}
           components={{
-            h1: ({ node, ...props }) => <h1 className="text-xl font-bold pt-3 pb-2" {...props} />,
-            h2: ({ node, ...props }) => <h2 className="text-lg font-semibold pt-2 pb-1" {...props} />,
+            h1: ({ node, ...props }) => <h1 className="text-lg font-semibold pt-2 pb-1" {...props} />,
+            h2: ({ node, ...props }) => <h2 className="text-base font-medium pt-1.5 pb-1" {...props} />,
             p: ({ node, ...props }) => (
-              <p className="text-[15px]" {...props}> {/* Tăng font cho dễ đọc */}
+              <p className="text-sm" {...props}>
                 {React.Children.map(props.children, (child, index) =>
                   typeof child === "string" ? (
                     child
                   ) : React.isValidElement(child) && child.type === "strong" ? (
-                    <strong key={index} className="font-bold">{child.props.children}</strong>
+                    <strong key={index} className="font-semibold">{child.props.children}</strong>
                   ) : (
                     child
                   )
@@ -170,7 +169,7 @@ export const Message = ({
                 renderCodeBlock(String(children), lang)
               ) : (
                 <motion.code
-                  className="px-2 py-1 bg-gray-200/90 dark:bg-gray-700/90 rounded-md text-[14px]"
+                  className="px-1.5 py-0.5 bg-gray-200/90 dark:bg-gray-600/90 rounded text-xs"
                   initial={{ opacity: 0.8 }}
                   animate={{ opacity: 1 }}
                   transition={{ duration: 0.2 }}
@@ -187,64 +186,64 @@ export const Message = ({
         {/* Buttons for Assistant */}
         {isAssistant && (
           <motion.div
-            className="flex gap-3 mt-2 justify-start"
-            initial={{ opacity: 0, y: 5 }}
+            className="flex gap-2 mt-1 justify-start"
+            initial={{ opacity: 0, y: 4 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1, duration: 0.3, ease: "easeOut" }}
+            transition={{ delay: 0.1, duration: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
           >
             <motion.button
-              className={`p-2 rounded-full border border-gray-300/40 dark:border-gray-600/40 transition-all ${
-                isLiked ? "bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-400" : "text-zinc-500 hover:bg-green-50 dark:hover:bg-green-900/50 hover:text-green-500 dark:hover:text-green-400"
+              className={`p-1.5 rounded-full border border-gray-200/50 dark:border-gray-600/50 transition-all ${
+                isLiked ? "bg-green-100 dark:bg-green-800/50 text-green-600 dark:text-green-400" : "text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-600/30 hover:text-green-500 dark:hover:text-green-400"
               }`}
               variants={buttonVariants}
               whileHover="hover"
               whileTap="tap"
-              transition={{ type: "spring", stiffness: 400, damping: 17 }}
+              transition={{ type: "spring", stiffness: 500, damping: 20 }}
               onClick={handleLike}
               title="Like"
             >
               <LikeIcon />
             </motion.button>
             <motion.button
-              className="p-2 rounded-full border border-gray-300/40 dark:border-gray-600/40 text-zinc-500 hover:bg-red-50 dark:hover:bg-red-900/50 hover:text-red-500 dark:hover:text-red-400 transition-all"
+              className="p-1.5 rounded-full border border-gray-200/50 dark:border-gray-600/50 text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-600/30 hover:text-red-500 dark:hover:text-red-400 transition-all"
               variants={buttonVariants}
               whileHover="hover"
               whileTap="tap"
-              transition={{ type: "spring", stiffness: 400, damping: 17 }}
+              transition={{ type: "spring", stiffness: 500, damping: 20 }}
               title="Dislike"
             >
               <DislikeIcon />
             </motion.button>
             <motion.button
-              className="p-2 rounded-full border border-gray-300/40 dark:border-gray-600/40 text-zinc-500 hover:bg-blue-50 dark:hover:bg-blue-900/50 hover:text-blue-500 dark:hover:text-blue-400 transition-all"
+              className="p-1.5 rounded-full border border-gray-200/50 dark:border-gray-600/50 text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-600/30 hover:text-blue-500 dark:hover:text-blue-400 transition-all"
               variants={buttonVariants}
               whileHover="hover"
               whileTap="tap"
-              transition={{ type: "spring", stiffness: 400, damping: 17 }}
+              transition={{ type: "spring", stiffness: 500, damping: 20 }}
               onClick={handleCopy}
               title="Copy"
             >
               {isCopied ? <CheckIcon /> : <CopyIcon />}
             </motion.button>
             <motion.button
-              className={`p-2 rounded-full border border-gray-300/40 dark:border-gray-600/40 transition-all ${
-                isSpeaking ? "bg-yellow-100 dark:bg-yellow-900 text-yellow-600 dark:text-yellow-400" : "text-zinc-500 hover:bg-yellow-50 dark:hover:bg-yellow-900/50 hover:text-yellow-500 dark:hover:text-yellow-400"
+              className={`p-1.5 rounded-full border border-gray-200/50 dark:border-gray-600/50 transition-all ${
+                isSpeaking ? "bg-yellow-100 dark:bg-yellow-800/50 text-yellow-600 dark:text-yellow-400" : "text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-600/30 hover:text-yellow-500 dark:hover:text-yellow-400"
               }`}
               variants={buttonVariants}
               whileHover="hover"
               whileTap="tap"
-              transition={{ type: "spring", stiffness: 400, damping: 17 }}
+              transition={{ type: "spring", stiffness: 500, damping: 20 }}
               onClick={handleSpeak}
               title={isSpeaking ? "Dừng đọc" : "Đọc nội dung"}
             >
               <SpeakerIcon />
             </motion.button>
             <motion.button
-              className="p-2 rounded-full border border-gray-300/40 dark:border-gray-600/40 text-zinc-500 hover:bg-purple-50 dark:hover:bg-purple-900/50 hover:text-purple-500 dark:hover:text-purple-400 transition-all"
+              className="p-1.5 rounded-full border border-gray-200/50 dark:border-gray-600/50 text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-600/30 hover:text-purple-500 dark:hover:text-purple-400 transition-all"
               variants={buttonVariants}
               whileHover="hover"
               whileTap="tap"
-              transition={{ type: "spring", stiffness: 400, damping: 17 }}
+              transition={{ type: "spring", stiffness: 500, damping: 20 }}
               title="Link"
             >
               <LinkIcon />
