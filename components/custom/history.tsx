@@ -14,6 +14,7 @@ import { fetcher, getTitleFromChat } from "@/lib/utils";
 
 import {
   InfoIcon,
+  MenuIcon,
   MoreHorizontalIcon,
   PencilEditIcon,
   TrashIcon,
@@ -93,36 +94,7 @@ export const History = ({ user }: { user: User | undefined }) => {
           setIsHistoryVisible(true);
         }}
       >
-        <svg
-          width="28"
-          height="28"
-          viewBox="0 0 24 24"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          className="text-gray-800"
-        >
-          <path
-            d="M3 6H21"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-          <path
-            d="M3 12H21"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-          <path
-            d="M3 18H21"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
+        <MenuIcon />
       </Button>
 
       <Sheet
@@ -131,10 +103,7 @@ export const History = ({ user }: { user: User | undefined }) => {
           setIsHistoryVisible(state);
         }}
       >
-        <SheetContent
-          side="left"
-          className="p-3 w-[360px] bg-white/30 backdrop-blur-2xl border-r border-white/20 transition-all duration-300 ease-in-out"
-        >
+        <SheetContent side="left" className="p-3 w-80 bg-muted">
           <SheetHeader>
             <VisuallyHidden.Root>
               <SheetTitle className="text-left">History</SheetTitle>
@@ -146,8 +115,9 @@ export const History = ({ user }: { user: User | undefined }) => {
 
           <div className="text-sm flex flex-row items-center justify-between">
             <div className="flex flex-row gap-2">
-              <div className="text-gray-800">History</div>
-              <div className="text-gray-500">
+              <div className="dark:text-zinc-300">History</div>
+
+              <div className="dark:text-zinc-400 text-zinc-500">
                 {history === undefined ? "loading" : history.length} chats
               </div>
             </div>
@@ -156,7 +126,7 @@ export const History = ({ user }: { user: User | undefined }) => {
           <div className="mt-10 flex flex-col">
             {user && (
               <Button
-                className="font-normal text-sm flex flex-row justify-between text-white bg-gray-900 hover:bg-gray-800 transition-colors duration-200"
+                className="font-normal text-sm flex flex-row justify-between text-white"
                 asChild
               >
                 <Link href="/">
@@ -166,16 +136,16 @@ export const History = ({ user }: { user: User | undefined }) => {
               </Button>
             )}
 
-            <div className="flex flex-col overflow-y-scroll p-1 h-[calc(100dvh-124px)] scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent">
+            <div className="flex flex-col overflow-y-scroll p-1 h-[calc(100dvh-124px)]">
               {!user ? (
-                <div className="text-gray-500 h-dvh w-full flex flex-row justify-center items-center text-sm gap-2">
+                <div className="text-zinc-500 h-dvh w-full flex flex-row justify-center items-center text-sm gap-2">
                   <InfoIcon />
                   <div>Login to save and revisit previous chats!</div>
                 </div>
               ) : null}
 
               {!isLoading && history?.length === 0 && user ? (
-                <div className="text-gray-500 h-dvh w-full flex flex-row justify-center items-center text-sm gap-2">
+                <div className="text-zinc-500 h-dvh w-full flex flex-row justify-center items-center text-sm gap-2">
                   <InfoIcon />
                   <div>No chats found</div>
                 </div>
@@ -186,7 +156,7 @@ export const History = ({ user }: { user: User | undefined }) => {
                   {[44, 32, 28, 52].map((item) => (
                     <div key={item} className="p-2 my-[2px]">
                       <div
-                        className={`w-${item} h-[20px] rounded-md bg-gray-200 animate-pulse`}
+                        className={`w-${item} h-[20px] rounded-md bg-zinc-200 dark:bg-zinc-600 animate-pulse`}
                       />
                     </div>
                   ))}
@@ -198,20 +168,20 @@ export const History = ({ user }: { user: User | undefined }) => {
                   <div
                     key={chat.id}
                     className={cx(
-                      "flex flex-row items-center gap-6 hover:bg-white/20 rounded-md pr-2 transition-colors duration-200",
-                      { "bg-white/30": chat.id === id },
+                      "flex flex-row items-center gap-6 hover:bg-zinc-200 dark:hover:bg-zinc-700 rounded-md pr-2",
+                      { "bg-zinc-200 dark:bg-zinc-700": chat.id === id },
                     )}
                   >
                     <Button
                       variant="ghost"
                       className={cx(
-                        "hover:bg-white/20 justify-between p-0 text-sm font-normal flex flex-row items-center gap-2 pr-2 w-full transition-colors duration-200",
+                        "hover:bg-zinc-200 dark:hover:bg-zinc-700 justify-between p-0 text-sm font-normal flex flex-row items-center gap-2 pr-2 w-full transition-none",
                       )}
                       asChild
                     >
                       <Link
                         href={`/chat/${chat.id}`}
-                        className="text-ellipsis overflow-hidden text-left py-2 pl-2 rounded-lg text-gray-800"
+                        className="text-ellipsis overflow-hidden text-left py-2 pl-2 rounded-lg outline-zinc-900"
                       >
                         {getTitleFromChat(chat)}
                       </Link>
@@ -220,19 +190,16 @@ export const History = ({ user }: { user: User | undefined }) => {
                     <DropdownMenu modal={true}>
                       <DropdownMenuTrigger asChild>
                         <Button
-                          className="p-0 h-fit font-normal text-gray-500 transition-colors duration-200 hover:bg-white/20"
+                          className="p-0 h-fit font-normal text-zinc-500 transition-none hover:bg-zinc-200 dark:hover:bg-zinc-700"
                           variant="ghost"
                         >
                           <MoreHorizontalIcon />
                         </Button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent
-                        side="left"
-                        className="z-[60] bg-white/40 backdrop-blur-xl"
-                      >
+                      <DropdownMenuContent side="left" className="z-[60]">
                         <DropdownMenuItem asChild>
                           <Button
-                            className="flex flex-row gap-2 items-center justify-start w-full h-fit font-normal p-1.5 rounded-sm text-gray-800 hover:bg-white/20"
+                            className="flex flex-row gap-2 items-center justify-start w-full h-fit font-normal p-1.5 rounded-sm"
                             variant="ghost"
                             onClick={() => {
                               setDeleteId(chat.id);
@@ -253,24 +220,20 @@ export const History = ({ user }: { user: User | undefined }) => {
       </Sheet>
 
       <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
-        <AlertDialogContent className="bg-white/40 backdrop-blur-xl">
+        <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-            <AlertDialogDescription className="text-gray-600">
+            <AlertDialogDescription>
               This action cannot be undone. This will permanently delete your
               chat and remove it from our servers.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel className="hover:bg-white/20 transition-colors duration-200">
-              Cancel
-            </AlertDialogCancel>
-            <AlertDialogAction
-              onClick={handleDelete}
-              className="bg-gray-900 hover:bg-gray-800 text-white transition-colors duration-200"
-            >
-              Continue
-            </AlertDialogAction>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDelete} className="text-white">
+  Continue
+</AlertDialogAction>
+
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
