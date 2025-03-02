@@ -74,12 +74,11 @@ export const UserIcon = ({ className }: { className?: string }) => {
   return (
     <svg
       data-testid="geist-icon"
-      height="18"
+      height="20"
       strokeLinejoin="round"
       viewBox="0 0 16 16"
       width="18"
       className={className}  // Thêm className vào đây
-      style={{ color: "currentcolor" }}
     >
       <path
         fillRule="evenodd"
@@ -434,7 +433,7 @@ export const UploadIcon = ({ size = 16 }: { size?: number }) => {
   );
 };
 
-export const MenuIcon = ({ size = 18 }: { size?: number }) => {
+export const MenuIcon = ({ size = 20 }: { size?: number }) => {
   return (
     <svg
       height={size}
