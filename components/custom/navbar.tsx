@@ -23,7 +23,7 @@ const PhoneIcon = () => (
     viewBox="0 0 24 24"
     fill="none"
     stroke="currentColor"
-    strokeWidth="1.5"
+    strokeWidth="0" // Đặt strokeWidth về 0 để bỏ viền
   >
     <rect
       x="0.5"
@@ -31,9 +31,8 @@ const PhoneIcon = () => (
       width="23"
       height="23"
       rx="4"
-      stroke="black"
-      strokeWidth="1"
       fill="none"
+      stroke="none" // Xóa luôn border của rect
     />
     <path
       strokeLinecap="round"
@@ -43,6 +42,7 @@ const PhoneIcon = () => (
   </svg>
 );
 
+
 export const Navbar = async () => {
   let session = await auth();
 
@@ -51,29 +51,27 @@ export const Navbar = async () => {
       <div className="bg-background absolute top-0 left-0 w-dvw py-2 px-3 justify-between flex flex-row items-center z-30">
         <div className="flex flex-row gap-3 items-center">
           <History user={session?.user} />
-       <Button
+<Button
   variant="outline"
-  className="py-1.5 px-4 h-fit font-normal bg-transparent hover:bg-gray-100 flex items-center justify-center gap-2 !important border-none outline-none shadow-none"
+  className="py-1 px-4 h-fit font-normal bg-transparent hover:bg-gray-100 flex items-center justify-center gap-2 border-none outline-none shadow-none focus:ring-0"
   style={{
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
     gap: "8px",
-    padding: "3px 16px",
-    border: "none", // Loại bỏ border
-    outline: "none", // Loại bỏ outline khi focus
-    boxShadow: "none", // Loại bỏ bất kỳ hiệu ứng đổ bóng nào
+    padding: "4px 16px", // Chỉnh lại để cân đối hơn
+    border: "none",
+    outline: "none",
+    boxShadow: "none",
     backgroundColor: "transparent",
   }}
 >
   <PhoneIcon />
-  <span
-    className="text-sm font-medium text-gray-700 dark:text-gray-300"
-    style={{ display: "flex", alignItems: "center" }}
-  >
+  <span className="text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center">
     GetApp
   </span>
 </Button>
+
 
 
 
