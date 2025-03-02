@@ -217,25 +217,23 @@ export function MultimodalInput({
       )}
 
       <Textarea
-        ref={textareaRef}
-        placeholder="Send a message..."
-        value={input}
-        onChange={handleInput}
-        className="min-h-[24px] overflow-hidden resize-none rounded-lg text-base bg-muted border-none"
-        rows={3}
-        onKeyDown={(event) => {
-          if (event.key === "Enter" && !event.shiftKey) {
-            event.preventDefault();
-
-            if (isLoading) {
-              toast.error("Please wait for the model to finish its response!");
-            } else {
-              submitForm();
-            }
-          }
-        }}
-      />
-
+  ref={textareaRef}
+  placeholder="What do you want to know?"
+  value={input}
+  onChange={handleInput}
+  className="min-h-[24px] h-[110px] overflow-hidden resize-none rounded-lg text-base bg-muted border border-gray-200"  // Thay đổi ở đây
+  rows={5}  // Tăng từ 3 lên 5
+  onKeyDown={(event) => {
+    if (event.key === "Enter" && !event.shiftKey) {
+      event.preventDefault();
+      if (isLoading) {
+        toast.error("Please wait for the model to finish its response!");
+      } else {
+        submitForm();
+      }
+    }
+  }}
+/>
       {isLoading ? (
         <Button
           className="rounded-full p-1.5 h-fit absolute bottom-2 right-2 m-0.5 text-white"
