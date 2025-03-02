@@ -48,7 +48,7 @@ export const Navbar = async () => {
 
   return (
     <>
-      <div className="bg-background absolute top-0 left-0 w-dvw py-2 px-3 justify-between flex flex-row items-center z-30">
+     <div className="bg-background absolute top-0 left-0 w-dvw pt-4 pb-3 px-3 justify-between flex flex-row items-center z-30">
         <div className="flex flex-row gap-3 items-center">
           <History user={session?.user} />
 <Button
