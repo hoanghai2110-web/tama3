@@ -205,25 +205,25 @@ export function MultimodalInput({
         </div>
       )}
 
-      <div className="relative">
-        <Textarea
-          ref={textareaRef}
-          placeholder="What do you want to know?"
-          value={input}
-          onChange={handleInput}
-          className="min-h-[24px] h-[110px] w-full resize-none rounded-2xl text-base bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 shadow-sm transition-all duration-200 ease-out hover:border-gray-400 dark:hover:border-gray-600 placeholder:text-gray-500 dark:placeholder:text-gray-400 py-4 px-4" // Chỉnh py-2 thành py-4 (padding-top: 1rem)
-          rows={5}
-          onKeyDown={(event) => {
-            if (event.key === "Enter" && !event.shiftKey) {
-              event.preventDefault();
-              if (isLoading) {
-                toast.error("Please wait for the model to finish its response!");
-              } else {
-                submitForm();
-              }
-            }
-          }}
-        />
+     <div className="relative">
+  <Textarea
+    ref={textareaRef}
+    placeholder="What do you want to know?"
+    value={input}
+    onChange={handleInput}
+    className="min-h-[24px] h-[110px] w-full resize-none rounded-2xl text-base bg-white dark:bg-[hsl(var(--muted)/.5)] border border-gray-300 dark:border-gray-700 shadow-sm transition-all duration-200 ease-out hover:border-gray-400 dark:hover:border-gray-600 placeholder:text-gray-500 dark:placeholder:text-gray-400 py-4 px-4"
+    rows={5}
+    onKeyDown={(event) => {
+      if (event.key === "Enter" && !event.shiftKey) {
+        event.preventDefault();
+        if (isLoading) {
+          toast.error("Please wait for the model to finish its response!");
+        } else {
+          submitForm();
+        }
+      }
+    }}
+  />
 
         {isLoading ? (
           <Button
