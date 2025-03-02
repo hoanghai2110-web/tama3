@@ -51,17 +51,28 @@ export const Navbar = async () => {
       <div className="bg-background absolute top-0 left-0 w-dvw py-2 px-3 justify-between flex flex-row items-center z-30">
         <div className="flex flex-row gap-3 items-center">
           <History user={session?.user} />
-         <Button
+        <Button
   variant="outline"
-  className="py-1.5 px-4 h-fit font-normal border-black bg-transparent hover:bg-gray-100 flex items-center justify-center gap-2"
+  className="py-1.5 px-4 h-fit font-normal border-black bg-transparent hover:bg-gray-100 flex items-center justify-center gap-2 !important"
+  style={{
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: "8px", // khoảng cách giữa icon và chữ
+    padding: "6px 16px",
+    border: "1px solid black",
+    backgroundColor: "transparent",
+  }}
 >
-  <span className="flex items-center gap-2">
-    <PhoneIcon />
-    <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-      GetApp
-    </span>
+  <PhoneIcon />
+  <span
+    className="text-sm font-medium text-gray-700 dark:text-gray-300"
+    style={{ display: "flex", alignItems: "center" }}
+  >
+    GetApp
   </span>
 </Button>
+
 
         </div>
 
