@@ -3,7 +3,8 @@ import Link from "next/link";
 
 import { auth, signOut } from "@/app/(auth)/auth";
 
-import { History } from "./history";
+// Comment hoặc xóa dòng import History
+// import { History } from "./history";
 import { SlashIcon, MessageIcon, UserIcon } from "./icons";
 import { ThemeToggle } from "./theme-toggle";
 import { Button } from "../ui/button";
@@ -14,12 +15,12 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 
-// SVG component cho icon điện thoại với kích thước nhỏ hơn
+// SVG component cho icon điện thoại
 const PhoneIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="18" // Giảm từ 24 xuống 18
-    height="18" // Giảm từ 24 xuống 18
+    width="18"
+    height="18"
     viewBox="0 0 24 24"
     fill="none"
     stroke="currentColor"
@@ -50,14 +51,17 @@ export const Navbar = async () => {
     <>
       <div className="bg-background absolute top-0 left-0 w-dvw py-2 px-3 justify-between flex flex-row items-center z-30">
         <div className="flex flex-row gap-3 items-center">
-          <History user={session?.user} />
+          {/* Comment hoặc xóa dòng này nếu không có History component */}
+          {/* <History user={session?.user} /> */}
           <Button
             variant="outline"
-            className="py-1.5 px-4 h-fit font-normal border-black bg-transparent hover:bg-gray-100 flex items-center gap-2" // Tăng px-3 thành px-4, gap-1 thành gap-2
+            className="py-1.5 px-1 h-fit font-normal border-black bg-transparent hover:bg-gray-100"
           >
             <PhoneIcon />
-            <span>GetApp</span>
           </Button>
+          <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+            GetApp
+          </span>
         </div>
 
         <div className="flex items-center gap-3">
