@@ -51,15 +51,18 @@ export const Navbar = async () => {
       <div className="bg-background absolute top-0 left-0 w-dvw py-2 px-3 justify-between flex flex-row items-center z-30">
         <div className="flex flex-row gap-3 items-center">
           <History user={session?.user} />
-          <Button
-            variant="outline"
-            className="py-1.5 px-4 h-fit font-normal border-black bg-transparent hover:bg-gray-100 flex items-center gap-2"
-          >
-            <PhoneIcon />
-            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-              GetApp
-            </span>
-          </Button>
+         <Button
+  variant="outline"
+  className="py-1.5 px-4 h-fit font-normal border-black bg-transparent hover:bg-gray-100 flex items-center justify-center gap-2"
+>
+  <span className="flex items-center gap-2">
+    <PhoneIcon />
+    <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+      GetApp
+    </span>
+  </span>
+</Button>
+
         </div>
 
         <div className="flex items-center gap-3">
