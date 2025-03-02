@@ -51,16 +51,18 @@ export const Navbar = async () => {
       <div className="bg-background absolute top-0 left-0 w-dvw py-2 px-3 justify-between flex flex-row items-center z-30">
         <div className="flex flex-row gap-3 items-center">
           <History user={session?.user} />
-        <Button
+       <Button
   variant="outline"
-  className="py-1.5 px-4 h-fit font-normal border-black bg-transparent hover:bg-gray-100 flex items-center justify-center gap-2 !important"
+  className="py-1.5 px-4 h-fit font-normal bg-transparent hover:bg-gray-100 flex items-center justify-center gap-2 !important border-none outline-none shadow-none"
   style={{
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    gap: "8px", // khoảng cách giữa icon và chữ
-    padding: "6px 16px",
-    border: "1px solid black",
+    gap: "8px",
+    padding: "3px 16px",
+    border: "none", // Loại bỏ border
+    outline: "none", // Loại bỏ outline khi focus
+    boxShadow: "none", // Loại bỏ bất kỳ hiệu ứng đổ bóng nào
     backgroundColor: "transparent",
   }}
 >
@@ -72,6 +74,7 @@ export const Navbar = async () => {
     GetApp
   </span>
 </Button>
+
 
 
         </div>
