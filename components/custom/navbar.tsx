@@ -14,11 +14,33 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 
-// SVG component cho icon điện thoại
+// SVG component cho icon điện thoại với border
 const PhoneIcon = () => (
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
-    <line x1="12" y1="18" x2="12" y2="18"></line>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.5"
+    className="size-6"
+  >
+    <rect
+      x="0.5"
+      y="0.5"
+      width="23"
+      height="23"
+      rx="4"
+      stroke="black"
+      strokeWidth="1"
+      fill="none"
+    />
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M10.5 1.5H8.25A2.25 2.25 0 0 0 6 3.75v16.5a2.25 2.25 0 0 0 2.25 2.25h7.5A2.25 2.25 0 0 0 18 20.25V3.75a2.25 2.25 0 0 0-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3"
+    />
   </svg>
 );
 
@@ -30,21 +52,24 @@ export const Navbar = async () => {
       <div className="bg-background absolute top-0 left-0 w-dvw py-2 px-3 justify-between flex flex-row items-center z-30">
         <div className="flex flex-row gap-3 items-center">
           <History user={session?.user} />
+          {/* Đặt nút GetApp với icon ở đây (bên trái) */}
+          <Button
+            variant="outline"
+            className="py-1.5 px-3 h-fit font-normal border-black bg-transparent hover:bg-gray-100 flex items-center gap-1"
+          >
+            <PhoneIcon />
+            <span>GetApp</span>
+          </Button>
         </div>
 
         <div className="flex items-center gap-3">
-          <Button
-            variant="outline"
-            className="py-1.5 px-2 h-fit font-normal border-black bg-transparent hover:bg-gray-100"
-          >
-            <PhoneIcon />
-            <span className="ml-1">GetApp</span>
-          </Button>
-
           {session ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button className="py-1.5 px-2 h-fit font-normal" variant="secondary">
+                <Button
+                  className="py-1.5 px-2 h-fit font-normal"
+                  variant="secondary"
+                >
                   <UserIcon />
                 </Button>
               </DropdownMenuTrigger>
@@ -73,7 +98,10 @@ export const Navbar = async () => {
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
-            <Button className="py-1.5 px-2 h-fit font-normal text-white" asChild>
+            <Button
+              className="py-1.5 px-2 h-fit font-normal text-white"
+              asChild
+            >
               <Link href="/login">Login</Link>
             </Button>
           )}
