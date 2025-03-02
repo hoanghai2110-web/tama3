@@ -216,58 +216,60 @@ export function MultimodalInput({
         </div>
       )}
 
- <Textarea
-  ref={textareaRef}
-  placeholder="What do you want to know?"
-  value={input}
-  onChange={handleInput}
-  className="min-h-[24px] h-[105px] overflow-hidden resize-none rounded-xl text-base !bg-white !border !border-gray-200"
-  rows={5}
-  onKeyDown={(event) => {
-    if (event.key === "Enter" && !event.shiftKey) {
-      event.preventDefault();
-      if (isLoading) {
-        toast.error("Please wait for the model to finish its response!");
-      } else {
-        submitForm();
+<div className="relative w-full max-w-[50rem]">
+  <Textarea
+    ref={textareaRef}
+    placeholder="What do you want to know?"
+    value={input}
+    onChange={handleInput}
+    className="min-h-[32px] h-[120px] w-full resize-none rounded-2xl text-base bg-white border border-gray-300 shadow-sm transition-all duration-200 ease-out focus:ring-2 focus:ring-black focus:border-black hover:border-gray-400 placeholder:text-gray-500 py-2 px-4"
+    rows={5}
+    onKeyDown={(event) => {
+      if (event.key === "Enter" && !event.shiftKey) {
+        event.preventDefault();
+        if (isLoading) {
+          toast.error("Please wait for the model to finish its response!");
+        } else {
+          submitForm();
+        }
       }
-    }
-  }}
-/>
-      {isLoading ? (
-        <Button
-          className="rounded-full p-1.5 h-fit absolute bottom-2 right-2 m-0.5 text-white"
-          onClick={(event) => {
-            event.preventDefault();
-            stop();
-          }}
-        >
-          <StopIcon size={14} />
-        </Button>
-      ) : (
-        <Button
-          className="rounded-full p-1.5 h-fit absolute bottom-2 right-2 m-0.5 text-white"
-          onClick={(event) => {
-            event.preventDefault();
-            submitForm();
-          }}
-          disabled={input.length === 0 || uploadQueue.length > 0}
-        >
-          <ArrowUpIcon size={14} />
-        </Button>
-      )}
+    }}
+  />
+  
+  {/* Nút Submit/Stop */}
+  {isLoading ? (
+    <Button
+      className="rounded-full p-2 h-8 w-8 absolute bottom-3 right-3 bg-gray-800 text-white hover:bg-black transition-all duration-200 ease-out transform hover:scale-105"
+      onClick={(event) => {
+        event.preventDefault();
+        stop();
+      }}
+    >
+      <StopIcon size={14} />
+    </Button>
+  ) : (
+    <Button
+      className="rounded-full p-2 h-8 w-8 absolute bottom-3 right-3 bg-black text-white hover:bg-gray-900 transition-all duration-200 ease-out transform hover:scale-105 disabled:opacity-40 disabled:cursor-not-allowed"
+      onClick={(event) => {
+        event.preventDefault();
+        submitForm();
+      }}
+      disabled={input.length === 0 || uploadQueue.length > 0}
+    >
+      <ArrowUpIcon size={14} />
+    </Button>
+  )}
 
-      <Button
-        className="rounded-full p-1.5 h-fit absolute bottom-2 right-10 m-0.5 dark:border-zinc-700"
-        onClick={(event) => {
-          event.preventDefault();
-          fileInputRef.current?.click();
-        }}
-        variant="outline"
-        disabled={isLoading}
-      >
-        <PaperclipIcon size={14} />
-      </Button>
-    </div>
-  );
-}
+  {/* Nút Upload */}
+  <Button
+    className="rounded-full p-2 h-8 w-8 absolute bottom-3 right-14 bg-white text-gray-700 border border-gray-300 hover:bg-gray-100 transition-all duration-200 ease-out transform hover:scale-105 disabled:opacity-40 disabled:cursor-not-allowed"
+    onClick={(event) => {
+      event.preventDefault();
+      fileInputRef.current?.click();
+    }}
+    variant="outline"
+    disabled={isLoading}
+  >
+    <PaperclipIcon size={14} />
+  </Button>
+</div>
