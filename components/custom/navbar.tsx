@@ -14,17 +14,16 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 
-// SVG component cho icon điện thoại với border
+// SVG component cho icon điện thoại với kích thước nhỏ hơn
 const PhoneIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
+    width="18" // Giảm từ 24 xuống 18
+    height="18" // Giảm từ 24 xuống 18
     viewBox="0 0 24 24"
     fill="none"
     stroke="currentColor"
     strokeWidth="1.5"
-    className="size-6"
   >
     <rect
       x="0.5"
@@ -52,10 +51,9 @@ export const Navbar = async () => {
       <div className="bg-background absolute top-0 left-0 w-dvw py-2 px-3 justify-between flex flex-row items-center z-30">
         <div className="flex flex-row gap-3 items-center">
           <History user={session?.user} />
-          {/* Đặt nút GetApp với icon ở đây (bên trái) */}
           <Button
             variant="outline"
-            className="py-1.5 px-3 h-fit font-normal border-black bg-transparent hover:bg-gray-100 flex items-center gap-1"
+            className="py-1.5 px-4 h-fit font-normal border-black bg-transparent hover:bg-gray-100 flex items-center gap-2" // Tăng px-3 thành px-4, gap-1 thành gap-2
           >
             <PhoneIcon />
             <span>GetApp</span>
