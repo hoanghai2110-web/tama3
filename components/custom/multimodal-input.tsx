@@ -12,7 +12,8 @@ import React, {
   ChangeEvent,
 } from "react";
 import { toast } from "sonner";
-import { ArrowUpIcon, PaperclipIcon, StopIcon } from "./icons"; // Giả sử icons nằm trong ./icons
+
+import { ArrowUpIcon, PaperclipIcon, StopIcon } from "./icons";
 import { PreviewAttachment } from "./preview-attachment";
 import useWindowSize from "./use-window-size";
 import { Button } from "../ui/button";
@@ -69,7 +70,7 @@ export function MultimodalInput({
     if (textareaRef.current) {
       adjustHeight();
     }
-  }, [input]); // Thêm dependency input để height tự điều chỉnh khi input thay đổi
+  }, [input]);
 
   const adjustHeight = () => {
     if (textareaRef.current) {
@@ -146,7 +147,6 @@ export function MultimodalInput({
 
   return (
     <div className="relative w-full max-w-[50rem] flex flex-col gap-4">
-      {/* Suggested Actions */}
       {messages.length === 0 &&
         attachments.length === 0 &&
         uploadQueue.length === 0 && (
@@ -177,7 +177,6 @@ export function MultimodalInput({
           </div>
         )}
 
-      {/* File Input */}
       <input
         type="file"
         className="fixed -top-4 -left-4 size-0.5 opacity-0 pointer-events-none"
@@ -187,7 +186,6 @@ export function MultimodalInput({
         tabIndex={-1}
       />
 
-      {/* Attachments Preview */}
       {(attachments.length > 0 || uploadQueue.length > 0) && (
         <div className="flex flex-row gap-2 overflow-x-scroll pb-2">
           {attachments.map((attachment) => (
@@ -207,7 +205,6 @@ export function MultimodalInput({
         </div>
       )}
 
-      {/* Textarea và Buttons */}
       <div className="relative">
         <Textarea
           ref={textareaRef}
@@ -228,10 +225,9 @@ export function MultimodalInput({
           }}
         />
 
-        {/* Nút Submit/Stop */}
         {isLoading ? (
           <Button
-            className="rounded-full p-2 h-8 w-8 absolute bottom-3 right-3 bg-gray-800 text-white hover:bg-black transition-all duration-200 ease-out transform hover:scale-105"
+            className="rounded-full p-2 size-8 absolute bottom-3 right-3 bg-gray-800 text-white hover:bg-black transition-all duration-200 ease-out hover:scale-105"
             onClick={(event) => {
               event.preventDefault();
               stop();
@@ -241,7 +237,7 @@ export function MultimodalInput({
           </Button>
         ) : (
           <Button
-            className="rounded-full p-2 h-8 w-8 absolute bottom-3 right-3 bg-black text-white hover:bg-gray-900 transition-all duration-200 ease-out transform hover:scale-105 disabled:opacity-40 disabled:cursor-not-allowed"
+            className="rounded-full p-2 size-8 absolute bottom-3 right-3 bg-black text-white hover:bg-gray-900 transition-all duration-200 ease-out hover:scale-105 disabled:opacity-40 disabled:cursor-not-allowed"
             onClick={(event) => {
               event.preventDefault();
               submitForm();
@@ -252,9 +248,8 @@ export function MultimodalInput({
           </Button>
         )}
 
-        {/* Nút Upload */}
         <Button
-          className="rounded-full p-2 h-8 w-8 absolute bottom-3 right-14 bg-white text-gray-700 border border-gray-300 hover:bg-gray-100 transition-all duration-200 ease-out transform hover:scale-105 disabled:opacity-40 disabled:cursor-not-allowed"
+          className="rounded-full p-2 size-8 absolute bottom-3 right-14 bg-white text-gray-700 border border-gray-300 hover:bg-gray-100 transition-all duration-200 ease-out hover:scale-105 disabled:opacity-40 disabled:cursor-not-allowed"
           onClick={(event) => {
             event.preventDefault();
             fileInputRef.current?.click();
