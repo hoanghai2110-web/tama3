@@ -3,8 +3,7 @@ import Link from "next/link";
 
 import { auth, signOut } from "@/app/(auth)/auth";
 
-// Comment hoặc xóa dòng import History
-// import { History } from "./history";
+import { History } from "./history"; // Đảm bảo file history.tsx đã export History
 import { SlashIcon, MessageIcon, UserIcon } from "./icons";
 import { ThemeToggle } from "./theme-toggle";
 import { Button } from "../ui/button";
@@ -51,17 +50,16 @@ export const Navbar = async () => {
     <>
       <div className="bg-background absolute top-0 left-0 w-dvw py-2 px-3 justify-between flex flex-row items-center z-30">
         <div className="flex flex-row gap-3 items-center">
-          {/* Comment hoặc xóa dòng này nếu không có History component */}
-          {/* <History user={session?.user} /> */}
+          <History user={session?.user} />
           <Button
             variant="outline"
-            className="py-1.5 px-1 h-fit font-normal border-black bg-transparent hover:bg-gray-100"
+            className="py-1.5 px-4 h-fit font-normal border-black bg-transparent hover:bg-gray-100 flex items-center gap-2"
           >
             <PhoneIcon />
+            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+              GetApp
+            </span>
           </Button>
-          <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-            GetApp
-          </span>
         </div>
 
         <div className="flex items-center gap-3">
