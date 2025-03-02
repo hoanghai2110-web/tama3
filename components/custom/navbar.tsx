@@ -82,12 +82,10 @@ export const Navbar = async () => {
           {session ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button
-                  className="py-1.5 px-2 h-fit font-normal"
-                  variant="secondary"
-                >
-                  <UserIcon />
-                </Button>
+                <Button className="py-1.5 px-2 h-fit font-normal bg-transparent hover:bg-transparent border-none shadow-none">
+  <UserIcon />
+</Button>
+
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="border-none">
                 <DropdownMenuItem>
