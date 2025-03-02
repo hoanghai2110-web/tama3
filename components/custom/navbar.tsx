@@ -14,7 +14,6 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 
-// SVG component cho icon điện thoại
 const PhoneIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -23,7 +22,7 @@ const PhoneIcon = () => (
     viewBox="0 0 24 24"
     fill="none"
     stroke="currentColor"
-    strokeWidth="0" // Đặt strokeWidth về 0 để bỏ viền
+    strokeWidth="1.5" // Giữ viền nét vẽ rõ hơn
   >
     <rect
       x="0.5"
@@ -32,7 +31,7 @@ const PhoneIcon = () => (
       height="23"
       rx="4"
       fill="none"
-      stroke="none" // Xóa luôn border của rect
+      stroke="none"
     />
     <path
       strokeLinecap="round"
@@ -41,6 +40,7 @@ const PhoneIcon = () => (
     />
   </svg>
 );
+
 
 
 export const Navbar = async () => {
@@ -53,14 +53,14 @@ export const Navbar = async () => {
           <History user={session?.user} />
 <Button
   variant="outline"
-  className="py-1 px-4 h-fit font-normal bg-transparent hover:bg-gray-100 flex items-center justify-center gap-2 border-none outline-none shadow-none focus:ring-0"
+  className="py-1 px-4 h-fit font-normal bg-transparent hover:bg-gray-100 flex items-center justify-center gap-2 border border-gray-300 outline-none shadow-none focus:ring-0"
   style={{
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
     gap: "8px",
-    padding: "4px 16px", // Chỉnh lại để cân đối hơn
-    border: "none",
+    padding: "4px 16px",
+    border: "1px solid #ccc", // Thêm border nhẹ để không bị mất
     outline: "none",
     boxShadow: "none",
     backgroundColor: "transparent",
@@ -71,6 +71,7 @@ export const Navbar = async () => {
     GetApp
   </span>
 </Button>
+
 
 
 
