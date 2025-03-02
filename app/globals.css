@@ -3,16 +3,16 @@
 @tailwind utilities;
 
 :root {
-    --foreground-rgb: 0, 0, 0;
-    --background-start-rgb: 214, 219, 220;
-    --background-end-rgb: 255, 255, 255;
+    --foreground-rgb: 0, 0, 0; /* Đen */
+    --background-start-rgb: 255, 255, 255; /* Trắng */
+    --background-end-rgb: 255, 255, 255; /* Trắng */
 }
 
 @media (prefers-color-scheme: dark) {
     :root {
-        --foreground-rgb: 255, 255, 255;
-        --background-start-rgb: 0, 0, 0;
-        --background-end-rgb: 0, 0, 0;
+        --foreground-rgb: 255, 255, 255; /* Trắng */
+        --background-start-rgb: 0, 0, 0; /* Đen */
+        --background-end-rgb: 0, 0, 0; /* Đen */
     }
 }
 
@@ -25,88 +25,89 @@
 
 /* Skeleton Loader */
 .skeleton {
-  * {
-    pointer-events: none !important;
-  }
+    * {
+        pointer-events: none !important;
+    }
 
-  /* Áp dụng cho các phần tử có class bắt đầu bằng "text" */
-  *[class^="text"] {
-    color: transparent !important;
-    @apply rounded-sm bg-foreground/20 select-none animate-pulse;
-  }
+    /* Áp dụng cho các phần tử có class bắt đầu bằng "text" */
+    *[class^="text"] {
+        color: transparent !important;
+        @apply rounded-sm bg-foreground/20 select-none animate-pulse;
+    }
 
-  /* Áp dụng cho các phần tử có class bắt đầu bằng "no-skeleton" */
-  *[class^="no-skeleton"] {
-    opacity: 0 !important;
-  }
+    /* Áp dụng cho các phần tử có class bắt đầu bằng "no-skeleton" */
+    *[class^="no-skeleton"] {
+        opacity: 0 !important;
+    }
 
-  /* Ẩn input fields */
-  input {
-    opacity: 0 !important;
-  }
+    /* Ẩn input fields */
+    input {
+        opacity: 0 !important;
+    }
 
-  /* Áp dụng cho các phần tử skeleton với class "skeleton-bg" */
-  .skeleton-bg {
-    @apply bg-foreground/10;
-  }
+    /* Áp dụng cho các phần tử skeleton với class "skeleton-bg" */
+    .skeleton-bg {
+        @apply bg-foreground/10;
+    }
 
-  /* Áp dụng cho các phần tử skeleton với class "skeleton-div" */
-  .skeleton-div {
-    @apply bg-foreground/20 animate-pulse;
-  }
+    /* Áp dụng cho các phần tử skeleton với class "skeleton-div" */
+    .skeleton-div {
+        @apply bg-foreground/20 animate-pulse;
+    }
 }
 
 @layer base {
     :root {
-        --background: 0 0% 100%;
-        --foreground: 0 0% 11%;
-        --card: 0 0% 100%;
-        --card-foreground: 0 0% 11%;
-        --popover: 0 0% 100%;
-        --popover-foreground: 0 0% 11%;
-        --primary: 0 0% 11%;
-        --primary-foreground: 0 0% 11%;
-        --secondary: 240 4.8% 95.9%;
-        --secondary-foreground: 240 5.9% 10%;
-        --muted: 240 4.8% 95.9%;
-        --muted-foreground: 240 3.8% 46.1%;
-        --accent: 240 4.8% 95.9%;
-        --accent-foreground: 240 5.9% 10%;
-        --destructive: 0 84.2% 60.2%;
-        --destructive-foreground: 0 0% 98%;
-        --input: 240 5.9% 90%;
-        --ring: 0, 0%, 100%;
-        --chart-1: 12 76% 61%;
-        --chart-2: 173 58% 39%;
-        --chart-3: 197 37% 24%;
-        --chart-4: 43 74% 66%;
-        --chart-5: 27 87% 67%;
+        --background: 0 0% 100%; /* Trắng */
+        --foreground: 0 0% 0%; /* Đen */
+        --card: 0 0% 100%; /* Trắng */
+        --card-foreground: 0 0% 0%; /* Đen */
+        --popover: 0 0% 100%; /* Trắng */
+        --popover-foreground: 0 0% 0%; /* Đen */
+        --primary: 0 0% 0%; /* Đen (thay màu tím) */
+        --primary-foreground: 0 0% 100%; /* Trắng */
+        --secondary: 0 0% 96%; /* Xám nhạt */
+        --secondary-foreground: 0 0% 0%; /* Đen */
+        --muted: 0 0% 96%; /* Xám nhạt */
+        --muted-foreground: 0 0% 40%; /* Xám trung bình */
+        --accent: 0 0% 96%; /* Xám nhạt */
+        --accent-foreground: 0 0% 0%; /* Đen */
+        --destructive: 0 0% 20%; /* Xám đậm (thay màu đỏ) */
+        --destructive-foreground: 0 0% 100%; /* Trắng */
+        --input: 0 0% 96%; /* Xám nhạt */
+        --ring: 0 0% 100%; /* Trắng */
+        --chart-1: 0 0% 50%; /* Xám trung bình */
+        --chart-2: 0 0% 40%; /* Xám nhạt */
+        --chart-3: 0 0% 30%; /* Xám đậm */
+        --chart-4: 0 0% 60%; /* Xám nhạt */
+        --chart-5: 0 0% 70%; /* Xám nhạt */
         --radius: 0.75rem;
     }
-   .dark { 
-        --background: 240 10% 3.9%;
-        --foreground: 0 0% 98%;
-        --card: 240 10% 3.9%;
-        --card-foreground: 0 0% 98%;
-        --popover: 240 10% 3.9%;
-        --popover-foreground: 0 0% 98%;
-        --primary: 244 40% 63%;
-        --primary-foreground: 240 5.9% 10%;
-        --secondary: 240 3.7% 15.9%;
-        --secondary-foreground: 0 0% 98%;
-        --muted: 240 3.7% 15.9%;
-        --muted-foreground: 240 5% 64.9%;
-        --accent: 240 3.7% 15.9%;
-        --accent-foreground: 0 0% 98%;
-        --destructive: 0 62.8% 30.6%;
-        --destructive-foreground: 0 0% 98%;
-        --input: 240 3.7% 15.9%;
-        --ring: 0, 0%, 100%;
-        --chart-1: 220 70% 50%;
-        --chart-2: 160 60% 45%;
-        --chart-3: 30 80% 55%;
-        --chart-4: 280 65% 60%;
-        --chart-5: 340 75% 55%;
+
+    .dark {
+        --background: 0 0% 0%; /* Đen */
+        --foreground: 0 0% 100%; /* Trắng */
+        --card: 0 0% 0%; /* Đen */
+        --card-foreground: 0 0% 100%; /* Trắng */
+        --popover: 0 0% 0%; /* Đen */
+        --popover-foreground: 0 0% 100%; /* Trắng */
+        --primary: 0 0% 0%; /* Đen (thay màu tím) */
+        --primary-foreground: 0 0% 100%; /* Trắng */
+        --secondary: 0 0% 10%; /* Xám đậm */
+        --secondary-foreground: 0 0% 100%; /* Trắng */
+        --muted: 0 0% 10%; /* Xám đậm */
+        --muted-foreground: 0 0% 60%; /* Xám nhạt */
+        --accent: 0 0% 10%; /* Xám đậm */
+        --accent-foreground: 0 0% 100%; /* Trắng */
+        --destructive: 0 0% 20%; /* Xám đậm */
+        --destructive-foreground: 0 0% 100%; /* Trắng */
+        --input: 0 0% 10%; /* Xám đậm */
+        --ring: 0 0% 0%; /* Đen */
+        --chart-1: 0 0% 50%; /* Xám trung bình */
+        --chart-2: 0 0% 40%; /* Xám nhạt */
+        --chart-3: 0 0% 30%; /* Xám đậm */
+        --chart-4: 0 0% 60%; /* Xám nhạt */
+        --chart-5: 0 0% 70%; /* Xám nhạt */
     }
 }
 
@@ -114,56 +115,28 @@
     * {
         @apply border-border;
     }
-.border {
-    border-width: 0;
-}
-body {
-    @apply bg-background text-foreground;
-    font-family: "Google Sans Text", "Helvetica Neue", sans-serif;
-    font-size: 14px;
-    letter-spacing: normal;
-}
-
+    .border {
+        border-width: 0;
+    }
+    body {
+        @apply bg-background text-foreground;
+        font-family: "Google Sans Text", "Helvetica Neue", sans-serif;
+        font-size: 14px;
+        letter-spacing: normal;
+    }
 
     @font-face {
-        font-family:  "Google Sans Text","Helvetica Neue",sans-serif;
+        font-family: "Google Sans Text", "Helvetica Neue", sans-serif;
         font-style: normal;
         font-weight: 100 900;
         src: url(/fonts/geist.woff2) format("woff2");
     }
 
     @font-face {
-        font-family: "Google Sans Text","Helvetica Neue",sans-serif;
+        font-family: "Google Sans Text", "Helvetica Neue", sans-serif;
         font-style: normal;
-        font-size:14px;
+        font-size: 14px;
         font-weight: 100 900;
         src: url(/fonts/geist-mono.woff2) format("woff2");
-    }
-}
-
-.skeleton {
-    * {
-        pointer-events: none !important;
-    }
-
-    *[class^="text"] {
-        color: transparent !important;
-        @apply rounded-sm bg-foreground/20 select-none animate-pulse;
-    }
-
-    *[class^="no-skeleton"] {
-        opacity: 0 !important;
-    }
-
-    input {
-        opacity: 0 !important;
-    }
-
-    .skeleton-bg {
-        @apply bg-foreground/10;
-    }
-
-    .skeleton-div {
-        @apply bg-foreground/20 animate-pulse;
     }
 }
