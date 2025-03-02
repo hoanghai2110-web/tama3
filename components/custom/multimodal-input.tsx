@@ -211,7 +211,7 @@ export function MultimodalInput({
           placeholder="What do you want to know?"
           value={input}
           onChange={handleInput}
-          className="min-h-[32px] h-[120px] w-full resize-none rounded-2xl text-base bg-white border border-gray-300 shadow-sm transition-all duration-200 ease-out focus:ring-2 focus:ring-black focus:border-black hover:border-gray-400 placeholder:text-gray-500 py-2 px-4"
+          className="min-h-[32px] h-[120px] w-full resize-none rounded-2xl text-base bg-white border border-gray-300 shadow-sm transition-all duration-200 ease-out hover:border-gray-400 placeholder:text-gray-500 py-2 px-4"
           rows={5}
           onKeyDown={(event) => {
             if (event.key === "Enter" && !event.shiftKey) {
