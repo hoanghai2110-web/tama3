@@ -167,10 +167,10 @@ export function MultimodalInput({
                       content: suggestedAction.action,
                     });
                   }}
-                  className="border-none bg-gray-100 w-full text-left border border-gray-200 text-gray-800 rounded-lg p-3 text-sm hover:bg-gray-200 transition-colors duration-200 ease-out flex flex-col"
+                  className="border-none bg-gray-100 dark:bg-gray-800 w-full text-left border border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-200 rounded-lg p-3 text-sm hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200 ease-out flex flex-col"
                 >
                   <span className="font-medium">{suggestedAction.title}</span>
-                  <span className="text-gray-500">{suggestedAction.label}</span>
+                  <span className="text-gray-500 dark:text-gray-400">{suggestedAction.label}</span>
                 </button>
               </motion.div>
             ))}
@@ -211,7 +211,7 @@ export function MultimodalInput({
           placeholder="What do you want to know?"
           value={input}
           onChange={handleInput}
-          className="min-h-[32px] h-[120px] w-full resize-none rounded-2xl text-base bg-white border border-gray-300 shadow-sm transition-all duration-200 ease-out hover:border-gray-400 placeholder:text-gray-500 py-2 px-4"
+          className="min-h-[32px] h-[120px] w-full resize-none rounded-2xl text-base bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 shadow-sm transition-all duration-200 ease-out hover:border-gray-400 dark:hover:border-gray-600 placeholder:text-gray-500 dark:placeholder:text-gray-400 py-4 px-4" // Chỉnh py-2 thành py-4 (padding-top: 1rem)
           rows={5}
           onKeyDown={(event) => {
             if (event.key === "Enter" && !event.shiftKey) {
@@ -249,7 +249,7 @@ export function MultimodalInput({
         )}
 
         <Button
-          className="rounded-full p-2 size-8 absolute bottom-3 right-14 bg-white text-gray-700 border border-gray-300 hover:bg-gray-100 transition-all duration-200 ease-out hover:scale-105 disabled:opacity-40 disabled:cursor-not-allowed"
+          className="rounded-full p-2 size-8 absolute bottom-3 right-14 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-200 ease-out hover:scale-105 disabled:opacity-40 disabled:cursor-not-allowed"
           onClick={(event) => {
             event.preventDefault();
             fileInputRef.current?.click();
