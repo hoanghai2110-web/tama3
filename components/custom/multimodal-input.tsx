@@ -68,7 +68,7 @@ export function MultimodalInput({
 
   useEffect(() => {
     if (textareaRef.current) {
-      adjustHeight(); // Chạy ngay khi mount và khi input thay đổi
+      adjustHeight();
     }
   }, [input]);
 
@@ -211,8 +211,8 @@ export function MultimodalInput({
           placeholder="What do you want to know?"
           value={input}
           onChange={handleInput}
-          className="min-h-[24px] w-full resize-none rounded-2xl text-base bg-white dark:bg-[hsl(var(--muted)/.5)] border border-gray-300 dark:border-gray-300 shadow-sm transition-all duration-200 ease-out hover:border-gray-300 dark:hover:border-gray-300 placeholder:text-gray-500 dark:placeholder:text-gray-400 py-4 px-4"
-          rows={5}
+          className="min-h-[40px] w-full resize-none rounded-2xl text-base bg-white dark:bg-[hsl(var(--muted)/.5)] border border-gray-300 dark:border-gray-300 shadow-sm transition-all duration-200 ease-out hover:border-gray-300 dark:hover:border-gray-300 placeholder:text-gray-500 dark:placeholder:text-gray-400 py-4 px-4"
+          rows={3}
           onKeyDown={(event) => {
             if (event.key === "Enter" && !event.shiftKey) {
               event.preventDefault();
@@ -262,4 +262,4 @@ export function MultimodalInput({
       </div>
     </div>
   );
-  }
+              }
