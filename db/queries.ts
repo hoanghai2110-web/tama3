@@ -1,15 +1,14 @@
 import "server-only";
-
 import { genSaltSync, hashSync } from "bcrypt-ts";
 import { desc, eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
-
 import { user, chat, User, reservation } from "./schema";
 
 let client = postgres(`${process.env.POSTGRES_URL!}?sslmode=require`);
 let db = drizzle(client);
 
+// Lấy user theo email
 export async function getUser(email: string): Promise<Array<User>> {
   try {
     return await db.select().from(user).where(eq(user.email, email));
@@ -19,19 +18,45 @@ export async function getUser(email: string): Promise<Array<User>> {
   }
 }
 
-export async function createUser(email: string, password: string) {
+// Tạo user mới
+export async function createUser(email: string, password: string, isPro = false) {
   let salt = genSaltSync(10);
   let hash = hashSync(password, salt);
 
   try {
-    return await db.insert(user).values({ email, password: hash });
+    return await db.insert(user).values({
+      email,
+      password: hash,
+      isPro,
+      requestCount: 0,
+      requestDate: null,
+    });
   } catch (error) {
     console.error("Failed to create user in database");
     throw error;
   }
 }
 
-// ==== GIỚI HẠN SỐ LƯỢNG MESSAGE LƯU LẠI ====
+// Kiểm tra và tăng số requests của user (giới hạn 30/ngày cho thường, không giới hạn cho pro)
+export async function checkAndIncreaseRequestCount(userId: string) {
+  const today = new Date().toISOString().split('T')[0]; // "YYYY-MM-DD"
+  const [u] = await db.select().from(user).where(eq(user.id, userId));
+  if (!u) throw new Error("User not found");
+
+  if (u.isPro) return { allowed: true };
+
+  if (u.requestDate !== today) {
+    await db.update(user).set({ requestCount: 1, requestDate: today }).where(eq(user.id, userId));
+    return { allowed: true };
+  }
+
+  if (u.requestCount >= 30) return { allowed: false };
+
+  await db.update(user).set({ requestCount: u.requestCount + 1 }).where(eq(user.id, userId));
+  return { allowed: true };
+}
+
+// Lưu chat
 export async function saveChat({
   id,
   messages,
@@ -42,7 +67,7 @@ export async function saveChat({
   userId: string;
 }) {
   try {
-    const MAX_MESSAGES = 10; // Chỉ lưu 50 message cuối
+    const MAX_MESSAGES = 10;
     const trimmedMessages = Array.isArray(messages)
       ? messages.slice(-MAX_MESSAGES)
       : messages;
@@ -79,10 +104,10 @@ export async function deleteChatById({ id }: { id: string }) {
   }
 }
 
-// ==== GIỚI HẠN SỐ LƯỢNG CHAT LẤY VỀ ====
+// Lấy các chat của user (giới hạn 10 chat mới nhất)
 export async function getChatsByUserId({ id }: { id: string }) {
   try {
-    const MAX_CHATS = 10; // Chỉ lấy 20 chat mới nhất
+    const MAX_CHATS = 10;
     return await db
       .select()
       .from(chat)
@@ -128,7 +153,6 @@ export async function getReservationById({ id }: { id: string }) {
     .select()
     .from(reservation)
     .where(eq(reservation.id, id));
-
   return selectedReservation;
 }
 
