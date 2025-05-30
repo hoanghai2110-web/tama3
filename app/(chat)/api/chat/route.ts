@@ -1,4 +1,6 @@
-import type { Message } from "ai";
+import { convertToCoreMessages, Message, streamText } from "ai";
+import { geminiProModel } from "@/ai";
+import { auth } from "@/app/(auth)/auth";
 import {
   saveChat,
   checkAndIncreaseRequestCount,
@@ -8,15 +10,10 @@ import {
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
-    const { id, messages }: { id: string; messages: Array<Message> } = body;
-    
-    if (!id || !messages || !Array.isArray(messages)) {
-      return new Response("Invalid request body", { status: 400 });
-    }
-
+    const { id, messages }: { id: string; messages: Array<Message> } = await request.json();
     const session = await auth();
-    if (!session?.user?.id) {
+    
+    if (!session || !session.user) {
       return new Response("Unauthorized", { status: 401 });
     }
 
@@ -24,20 +21,29 @@ export async function POST(request: Request) {
     const check = await checkAndIncreaseRequestCount(session.user.id);
     if (!check.allowed) {
       return new Response(
-        "Bạn đã hết lượt sử dụng hôm nay. Vui lòng nâng cấp Pro để dùng không giới hạn.",
-        { status: 429 }
+        JSON.stringify({
+          error: "Bạn đã hết lượt sử dụng hôm nay. Vui lòng nâng cấp Pro để dùng không giới hạn."
+        }),
+        { 
+          status: 429,
+          headers: { 'Content-Type': 'application/json' }
+        }
       );
     }
 
     const coreMessages = convertToCoreMessages(messages).filter(
-      (m) => {
-        if (typeof m.content === "string") {
-          return m.content.trim().length > 0;
-        }
-        // Keep non-string content (images, etc.)
-        return m.content != null;
-      }
+      (m) => m.content && typeof m.content === "string" && m.content.trim().length > 0
     );
+
+    if (coreMessages.length === 0) {
+      return new Response(
+        JSON.stringify({ error: "No valid messages provided" }),
+        { 
+          status: 400,
+          headers: { 'Content-Type': 'application/json' }
+        }
+      );
+    }
 
     const result = await streamText({
       model: geminiProModel,
@@ -51,69 +57,108 @@ export async function POST(request: Request) {
           try {
             await saveChat({
               id,
-              messages: [...coreMessages, ...responseMessages],
+              messages: [...messages, ...responseMessages], // Sử dụng messages gốc thay vì coreMessages
               userId: session.user.id,
             });
           } catch (error) {
-            console.error("Failed to save chat", error);
+            console.error("Failed to save chat:", error);
           }
         }
       },
       experimental_telemetry: { isEnabled: true, functionId: "stream-text" },
     });
 
-    // SỬA TẠI ĐÂY: Trả về toàn bộ history mới nhất sau khi lưu (sau khi onFinish hoàn thành)
-    // Tuy nhiên, vì streamText trả về response dạng stream, nên không thể chờ trực tiếp history.
-    // Giải pháp: BỔ SUNG API GET để client gọi lại lấy messages mới nhất
+    return result.toDataStreamResponse({
+      headers: {
+        'Cache-Control': 'no-cache',
+        'Connection': 'keep-alive',
+      }
+    });
 
-    return result.toDataStreamResponse({});
   } catch (error) {
     console.error("API Error:", error);
-    return new Response("Internal server error", { status: 500 });
+    return new Response(
+      JSON.stringify({ 
+        error: "Internal server error",
+        details: error instanceof Error ? error.message : "Unknown error"
+      }),
+      { 
+        status: 500,
+        headers: { 'Content-Type': 'application/json' }
+      }
+    );
   }
 }
 
-// BỔ SUNG API GET để lấy lại lịch sử chat theo id
-export async function GET(request: Request) {
-  try {
-    const { searchParams } = new URL(request.url);
-    const id = searchParams.get("id");
-
-    if (!id) return new Response("Missing id", { status: 400 });
-    const chat = await getChatById({ id });
-    if (!chat) return new Response("Not found", { status: 404 });
-
-    return Response.json({ messages: chat.messages });
-  } catch (error) {
-    console.error("API GET chat error:", error);
-    return new Response("Internal server error", { status: 500 });
-  }
-}
-
-// DELETE giữ nguyên
 export async function DELETE(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const id = searchParams.get("id");
 
     if (!id) {
-      return new Response("Not Found", { status: 404 });
+      return new Response(
+        JSON.stringify({ error: "Chat ID is required" }),
+        { 
+          status: 400,
+          headers: { 'Content-Type': 'application/json' }
+        }
+      );
     }
 
     const session = await auth();
-    if (!session?.user?.id) {
-      return new Response("Unauthorized", { status: 401 });
+    if (!session || !session.user) {
+      return new Response(
+        JSON.stringify({ error: "Unauthorized" }),
+        { 
+          status: 401,
+          headers: { 'Content-Type': 'application/json' }
+        }
+      );
     }
 
     const chat = await getChatById({ id });
+    
+    if (!chat) {
+      return new Response(
+        JSON.stringify({ error: "Chat not found" }),
+        { 
+          status: 404,
+          headers: { 'Content-Type': 'application/json' }
+        }
+      );
+    }
+
     if (chat.userId !== session.user.id) {
-      return new Response("Unauthorized", { status: 401 });
+      return new Response(
+        JSON.stringify({ error: "Unauthorized - Not your chat" }),
+        { 
+          status: 403,
+          headers: { 'Content-Type': 'application/json' }
+        }
+      );
     }
 
     await deleteChatById({ id });
-    return new Response("Chat deleted", { status: 200 });
+    
+    return new Response(
+      JSON.stringify({ message: "Chat deleted successfully" }),
+      { 
+        status: 200,
+        headers: { 'Content-Type': 'application/json' }
+      }
+    );
+
   } catch (error) {
     console.error("Delete chat error:", error);
-    return new Response("Internal server error", { status: 500 });
+    return new Response(
+      JSON.stringify({ 
+        error: "An error occurred while processing your request",
+        details: error instanceof Error ? error.message : "Unknown error"
+      }),
+      { 
+        status: 500,
+        headers: { 'Content-Type': 'application/json' }
+      }
+    );
   }
-}
+        }
