@@ -1,3 +1,4 @@
+import type { Message } from "ai";
 import {
   saveChat,
   checkAndIncreaseRequestCount,
