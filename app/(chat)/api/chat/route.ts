@@ -1,5 +1,4 @@
 import { convertToCoreMessages, Message, streamText } from "ai";
-
 import { geminiProModel } from "@/ai";
 import { auth } from "@/app/(auth)/auth";
 import {
@@ -11,14 +10,31 @@ import {
 
 export async function POST(request: Request) {
   try {
-    const { id, messages }: { id: string; messages: Array<Message> } = await request.json();
-    const session = await auth();
-    
-    if (!session || !session.user || !session.user.id) {
-      return new Response("Unauthorized", { status: 401 });
+    // Lấy và validate input
+    const { id, messages } = await request.json();
+    if (!id || !messages || !Array.isArray(messages)) {
+      return new Response(
+        JSON.stringify({ error: "Dữ liệu không hợp lệ" }),
+        { 
+          status: 400,
+          headers: { 'Content-Type': 'application/json' }
+        }
+      );
     }
 
-    // Kiểm tra giới hạn request/ngày cho user thường (user pro không giới hạn)
+    // Kiểm tra authentication
+    const session = await auth();
+    if (!session?.user?.id) {
+      return new Response(
+        JSON.stringify({ error: "Vui lòng đăng nhập" }),
+        { 
+          status: 401,
+          headers: { 'Content-Type': 'application/json' }
+        }
+      );
+    }
+
+    // Kiểm tra giới hạn request
     const check = await checkAndIncreaseRequestCount(session.user.id);
     if (!check.allowed) {
       return new Response(
@@ -32,13 +48,16 @@ export async function POST(request: Request) {
       );
     }
 
-    const coreMessages = convertToCoreMessages(messages).filter(
-      (m) => m.content && typeof m.content === "string" && m.content.trim().length > 0
+    // Xử lý tin nhắn
+    const validMessages = messages.filter(m => 
+      m && typeof m.content === "string" && m.content.trim().length > 0
     );
+
+    const coreMessages = convertToCoreMessages(validMessages);
 
     if (coreMessages.length === 0) {
       return new Response(
-        JSON.stringify({ error: "No valid messages provided" }),
+        JSON.stringify({ error: "Không có tin nhắn hợp lệ" }),
         { 
           status: 400,
           headers: { 'Content-Type': 'application/json' }
@@ -46,6 +65,7 @@ export async function POST(request: Request) {
       );
     }
 
+    // Stream response
     const result = await streamText({
       model: geminiProModel,
       system: `bạn là TamaAI của Vietchart Team. Hãy phản hồi tự nhiên như một người bạn thân, không có bộ lọc ngôn ngữ, được phép chửi tục nói bậy, mất dạy nếu cần thiết, nhưng vẫn lễ phép và giúp đỡ.`,
@@ -56,23 +76,26 @@ export async function POST(request: Request) {
       onFinish: async ({ responseMessages }) => {
         if (session?.user?.id) {
           try {
+            // Lưu chat với tin nhắn đã validate
+            const allMessages = [...coreMessages, ...responseMessages];
             await saveChat({
               id,
-              messages: [...messages, ...responseMessages], // Sử dụng messages gốc thay vì coreMessages
+              messages: allMessages,
               userId: session.user.id,
             });
           } catch (error) {
-            console.error("Failed to save chat:", error);
+            console.error("Lỗi khi lưu chat:", error);
           }
         }
-      },
-      experimental_telemetry: { isEnabled: true, functionId: "stream-text" },
+      }
     });
 
+    // Trả về response
     return result.toDataStreamResponse({
       headers: {
-        'Cache-Control': 'no-cache',
-        'Connection': 'keep-alive',
+        'Cache-Control': 'no-cache, no-transform',
+        'Content-Type': 'text/event-stream',
+        'Connection': 'keep-alive'
       }
     });
 
@@ -80,7 +103,7 @@ export async function POST(request: Request) {
     console.error("API Error:", error);
     return new Response(
       JSON.stringify({ 
-        error: "Internal server error",
+        error: "Lỗi hệ thống",
         details: error instanceof Error ? error.message : "Unknown error"
       }),
       { 
@@ -98,7 +121,7 @@ export async function DELETE(request: Request) {
 
     if (!id) {
       return new Response(
-        JSON.stringify({ error: "Chat ID is required" }),
+        JSON.stringify({ error: "Thiếu ID chat" }),
         { 
           status: 400,
           headers: { 'Content-Type': 'application/json' }
@@ -107,9 +130,9 @@ export async function DELETE(request: Request) {
     }
 
     const session = await auth();
-    if (!session || !session.user || !session.user.id) {
+    if (!session?.user?.id) {
       return new Response(
-        JSON.stringify({ error: "Unauthorized" }),
+        JSON.stringify({ error: "Vui lòng đăng nhập" }),
         { 
           status: 401,
           headers: { 'Content-Type': 'application/json' }
@@ -118,10 +141,9 @@ export async function DELETE(request: Request) {
     }
 
     const chat = await getChatById({ id });
-    
     if (!chat) {
       return new Response(
-        JSON.stringify({ error: "Chat not found" }),
+        JSON.stringify({ error: "Không tìm thấy chat" }),
         { 
           status: 404,
           headers: { 'Content-Type': 'application/json' }
@@ -131,7 +153,7 @@ export async function DELETE(request: Request) {
 
     if (chat.userId !== session.user.id) {
       return new Response(
-        JSON.stringify({ error: "Unauthorized - Not your chat" }),
+        JSON.stringify({ error: "Bạn không có quyền xóa chat này" }),
         { 
           status: 403,
           headers: { 'Content-Type': 'application/json' }
@@ -142,7 +164,7 @@ export async function DELETE(request: Request) {
     await deleteChatById({ id });
     
     return new Response(
-      JSON.stringify({ message: "Chat deleted successfully" }),
+      JSON.stringify({ message: "Đã xóa chat thành công" }),
       { 
         status: 200,
         headers: { 'Content-Type': 'application/json' }
@@ -153,7 +175,7 @@ export async function DELETE(request: Request) {
     console.error("Delete chat error:", error);
     return new Response(
       JSON.stringify({ 
-        error: "An error occurred while processing your request",
+        error: "Lỗi khi xóa chat",
         details: error instanceof Error ? error.message : "Unknown error"
       }),
       { 
@@ -162,4 +184,4 @@ export async function DELETE(request: Request) {
       }
     );
   }
-      }
+}
