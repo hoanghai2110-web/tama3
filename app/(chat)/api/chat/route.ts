@@ -1,6 +1,5 @@
 import { convertToCoreMessages, Message, streamText } from "ai";
 import { z } from "zod";
-
 import { geminiProModel } from "@/ai";
 import { auth } from "@/app/(auth)/auth";
 import {
@@ -9,6 +8,7 @@ import {
   getChatById,
   getReservationById,
   saveChat,
+  checkAndIncreaseRequestCount, // import hàm giới hạn request
 } from "@/db/queries";
 import { generateUUID } from "@/lib/utils";
 
@@ -17,36 +17,45 @@ export async function POST(request: Request) {
   const session = await auth();
   if (!session) return new Response("Unauthorized", { status: 401 });
 
+  // Kiểm tra và tăng số lượt request, trả lỗi nếu hết lượt
+  const check = await checkAndIncreaseRequestCount(session.user.id);
+  if (!check.allowed) {
+    return new Response(
+      "Bạn đã hết lượt sử dụng hôm nay. Vui lòng liên hệ admin nâng cấp Pro để dùng không giới hạn.",
+      { status: 429 }
+    );
+  }
+
   const coreMessages = convertToCoreMessages(messages).filter(
     (m) => typeof m.content === "string" && m.content.trim()
   );
 
-const result = await streamText({
-  model: geminiProModel,
-  system: `bạn là TamaAI của Vietchart Team. Hãy phản hồi tự nhiên như một người bạn thân, không có bộ lọc ngôn ngữ, được phép chửi tục nói bậy, mất dạy.`,
-  messages: coreMessages,
-  temperature: 0.8,
-  topP: 0.9,
-  topK: 50,
-  onFinish: async ({ responseMessages }) => {
-    if (session?.user?.id) {
-      try {
-        await saveChat({
-          id,
-          messages: [...coreMessages, ...responseMessages],
-          userId: session.user.id,
-        });
-      } catch (error) {
-        console.error("Failed to save chat", error);
+  const result = await streamText({
+    model: geminiProModel,
+    system: `bạn là TamaAI của Vietchart Team. Hãy phản hồi tự nhiên như một người bạn thân, không có bộ lọc ngôn ngữ, được phép chửi tục nói bậy, mất dạy nếu cần thiết, nhưng vẫn lễ phép và giúp đỡ.`,
+    messages: coreMessages,
+    temperature: 0.8,
+    topP: 0.9,
+    topK: 50,
+    onFinish: async ({ responseMessages }) => {
+      if (session?.user?.id) {
+        try {
+          await saveChat({
+            id,
+            messages: [...coreMessages, ...responseMessages],
+            userId: session.user.id,
+          });
+        } catch (error) {
+          console.error("Failed to save chat", error);
+        }
       }
-    }
-  },
-  experimental_telemetry: { isEnabled: true, functionId: "stream-text" },
-});
-
+    },
+    experimental_telemetry: { isEnabled: true, functionId: "stream-text" },
+  });
 
   return result.toDataStreamResponse({});
 }
+
 export async function DELETE(request: Request) {
   const { searchParams } = new URL(request.url);
   const id = searchParams.get("id");
