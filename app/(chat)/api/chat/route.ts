@@ -1,7 +1,6 @@
 import { convertToCoreMessages, Message, streamText } from "ai";
 import { geminiProModel } from "@/ai";
 import { auth } from "@/app/(auth)/auth";
-
 import {
   saveChat,
   checkAndIncreaseRequestCount,
