@@ -1,4 +1,5 @@
 import { convertToCoreMessages, Message, streamText } from "ai";
+
 import { geminiProModel } from "@/ai";
 import { auth } from "@/app/(auth)/auth";
 import {
@@ -9,63 +10,82 @@ import {
 } from "@/db/queries";
 
 export async function POST(request: Request) {
-  const { id, messages }: { id: string; messages: Array<Message> } = await request.json();
-  const session = await auth();
-  if (!session) return new Response("Unauthorized", { status: 401 });
+  try {
+    const body = await request.json();
+    const { id, messages }: { id: string; messages: Array<Message> } = body;
+    
+    if (!id || !messages || !Array.isArray(messages)) {
+      return new Response("Invalid request body", { status: 400 });
+    }
 
-  // Kiểm tra giới hạn request/ngày cho user thường (user pro không giới hạn)
-  const check = await checkAndIncreaseRequestCount(session.user.id);
-  if (!check.allowed) {
-    return new Response(
-      "Bạn đã hết lượt sử dụng hôm nay. Vui lòng nâng cấp Pro để dùng không giới hạn.",
-      { status: 429 }
-    );
-  }
+    const session = await auth();
+    if (!session?.user?.id) {
+      return new Response("Unauthorized", { status: 401 });
+    }
 
-  const coreMessages = convertToCoreMessages(messages).filter(
-    (m) => typeof m.content === "string" && m.content.trim()
-  );
+    // Kiểm tra giới hạn request/ngày cho user thường (user pro không giới hạn)
+    const check = await checkAndIncreaseRequestCount(session.user.id);
+    if (!check.allowed) {
+      return new Response(
+        "Bạn đã hết lượt sử dụng hôm nay. Vui lòng nâng cấp Pro để dùng không giới hạn.",
+        { status: 429 }
+      );
+    }
 
-  const result = await streamText({
-    model: geminiProModel,
-    system: `bạn là TamaAI của Vietchart Team. Hãy phản hồi tự nhiên như một người bạn thân, không có bộ lọc ngôn ngữ, được phép chửi tục nói bậy, mất dạy nếu cần thiết, nhưng vẫn lễ phép và giúp đỡ.`,
-    messages: coreMessages,
-    temperature: 0.8,
-    topP: 0.9,
-    topK: 50,
-    onFinish: async ({ responseMessages }) => {
-      if (session?.user?.id) {
-        try {
-          await saveChat({
-            id,
-            messages: [...coreMessages, ...responseMessages],
-            userId: session.user.id,
-          });
-        } catch (error) {
-          console.error("Failed to save chat", error);
+    const coreMessages = convertToCoreMessages(messages).filter(
+      (m) => {
+        if (typeof m.content === "string") {
+          return m.content.trim().length > 0;
         }
+        // Keep non-string content (images, etc.)
+        return m.content != null;
       }
-    },
-    experimental_telemetry: { isEnabled: true, functionId: "stream-text" },
-  });
+    );
 
-  return result.toDataStreamResponse({});
+    const result = await streamText({
+      model: geminiProModel,
+      system: `bạn là TamaAI của Vietchart Team. Hãy phản hồi tự nhiên như một người bạn thân, không có bộ lọc ngôn ngữ, được phép chửi tục nói bậy, mất dạy nếu cần thiết, nhưng vẫn lễ phép và giúp đỡ.`,
+      messages: coreMessages,
+      temperature: 0.8,
+      topP: 0.9,
+      topK: 50,
+      onFinish: async ({ responseMessages }) => {
+        if (session?.user?.id) {
+          try {
+            await saveChat({
+              id,
+              messages: [...coreMessages, ...responseMessages],
+              userId: session.user.id,
+            });
+          } catch (error) {
+            console.error("Failed to save chat", error);
+          }
+        }
+      },
+      experimental_telemetry: { isEnabled: true, functionId: "stream-text" },
+    });
+
+    return result.toDataStreamResponse({});
+  } catch (error) {
+    console.error("API Error:", error);
+    return new Response("Internal server error", { status: 500 });
+  }
 }
 
 export async function DELETE(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const id = searchParams.get("id");
-
-  if (!id) {
-    return new Response("Not Found", { status: 404 });
-  }
-
-  const session = await auth();
-  if (!session || !session.user) {
-    return new Response("Unauthorized", { status: 401 });
-  }
-
   try {
+    const { searchParams } = new URL(request.url);
+    const id = searchParams.get("id");
+
+    if (!id) {
+      return new Response("Not Found", { status: 404 });
+    }
+
+    const session = await auth();
+    if (!session?.user?.id) {
+      return new Response("Unauthorized", { status: 401 });
+    }
+
     const chat = await getChatById({ id });
     if (chat.userId !== session.user.id) {
       return new Response("Unauthorized", { status: 401 });
@@ -74,6 +94,7 @@ export async function DELETE(request: Request) {
     await deleteChatById({ id });
     return new Response("Chat deleted", { status: 200 });
   } catch (error) {
+    console.error("Delete chat error:", error);
     return new Response("An error occurred while processing your request", {
       status: 500,
     });
