@@ -1,4 +1,3 @@
-import { Message } from "ai";
 import { InferSelectModel } from "drizzle-orm";
 import {
   pgTable,
@@ -7,12 +6,18 @@ import {
   json,
   uuid,
   boolean,
+  integer,
+  date,
 } from "drizzle-orm/pg-core";
 
+// Bảng user: thêm isPro, requestCount, requestDate
 export const user = pgTable("User", {
   id: uuid("id").primaryKey().notNull().defaultRandom(),
   email: varchar("email", { length: 64 }).notNull(),
   password: varchar("password", { length: 64 }),
+  isPro: boolean("isPro").notNull().default(false),
+  requestCount: integer("requestCount").notNull().default(0),
+  requestDate: date("requestDate"),
 });
 
 export type User = InferSelectModel<typeof user>;
@@ -26,6 +31,7 @@ export const chat = pgTable("Chat", {
     .references(() => user.id),
 });
 
+import { Message } from "ai";
 export type Chat = Omit<InferSelectModel<typeof chat>, "messages"> & {
   messages: Array<Message>;
 };
