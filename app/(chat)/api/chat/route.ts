@@ -14,7 +14,7 @@ export async function POST(request: Request) {
     const { id, messages }: { id: string; messages: Array<Message> } = await request.json();
     const session = await auth();
     
-    if (!session || !session.user) {
+    if (!session || !session.user || !session.user.id) {
       return new Response("Unauthorized", { status: 401 });
     }
 
@@ -107,7 +107,7 @@ export async function DELETE(request: Request) {
     }
 
     const session = await auth();
-    if (!session || !session.user) {
+    if (!session || !session.user || !session.user.id) {
       return new Response(
         JSON.stringify({ error: "Unauthorized" }),
         { 
