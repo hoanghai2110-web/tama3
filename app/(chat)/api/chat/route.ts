@@ -3,7 +3,6 @@ import { z } from "zod";
 
 import { geminiProModel } from "@/ai";
 import {
-  generateSampleFlightSearchResults,
   generateSampleFlightStatus,
   generateSampleSeatSelection,
 } from "@/ai/actions";
