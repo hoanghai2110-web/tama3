@@ -1,49 +1,46 @@
-import { InferSelectModel } from "drizzle-orm";
+import { sql } from "drizzle-orm";
 import {
-  pgTable,
-  varchar,
-  timestamp,
-  json,
-  uuid,
   boolean,
   integer,
-  date,
+  json,
+  pgTable,
+  text,
+  timestamp,
+  uuid,
 } from "drizzle-orm/pg-core";
 
-// Bảng user: thêm isPro, requestCount, requestDate
-export const user = pgTable("User", {
-  id: uuid("id").primaryKey().notNull().defaultRandom(),
-  email: varchar("email", { length: 64 }).notNull(),
-  password: varchar("password", { length: 64 }),
-  isPro: boolean("isPro").notNull().default(false),
-  requestCount: integer("requestCount").notNull().default(0),
-  requestDate: date("requestDate"),
+export const user = pgTable("user", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  email: text("email").notNull().unique(),
+  password: text("password").notNull(),
+  isPro: boolean("is_pro").default(false).notNull(),
+  requestCount: integer("request_count").default(0),
+  requestDate: text("request_date"),
+  createdAt: timestamp("created_at").default(sql`CURRENT_TIMESTAMP`),
+  updatedAt: timestamp("updated_at").default(sql`CURRENT_TIMESTAMP`),
 });
 
-export type User = InferSelectModel<typeof user>;
-
-export const chat = pgTable("Chat", {
-  id: uuid("id").primaryKey().notNull().defaultRandom(),
-  createdAt: timestamp("createdAt").notNull(),
+export const chat = pgTable("chat", {
+  id: uuid("id").primaryKey(),
+  createdAt: timestamp("created_at").notNull(),
+  updatedAt: timestamp("updated_at").notNull(),
   messages: json("messages").notNull(),
-  userId: uuid("userId")
+  userId: uuid("user_id")
     .notNull()
-    .references(() => user.id),
+    .references(() => user.id, { onDelete: "cascade" }),
 });
 
-import { Message } from "ai";
-export type Chat = Omit<InferSelectModel<typeof chat>, "messages"> & {
-  messages: Array<Message>;
-};
-
-export const reservation = pgTable("Reservation", {
-  id: uuid("id").primaryKey().notNull().defaultRandom(),
-  createdAt: timestamp("createdAt").notNull(),
-  details: json("details").notNull(),
-  hasCompletedPayment: boolean("hasCompletedPayment").notNull().default(false),
-  userId: uuid("userId")
+export const reservation = pgTable("reservation", {
+  id: uuid("id").primaryKey(),
+  createdAt: timestamp("created_at").notNull(),
+  updatedAt: timestamp("updated_at").default(sql`CURRENT_TIMESTAMP`),
+  hasCompletedPayment: boolean("has_completed_payment").default(false),
+  details: json("details"),
+  userId: uuid("user_id")
     .notNull()
-    .references(() => user.id),
+    .references(() => user.id, { onDelete: "cascade" }),
 });
 
-export type Reservation = InferSelectModel<typeof reservation>;
+export type User = typeof user.$inferSelect;
+export type Chat = typeof chat.$inferSelect;
+export type Reservation = typeof reservation.$inferSelect;
