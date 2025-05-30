@@ -22,30 +22,28 @@ export async function POST(request: Request) {
   );
 
 const result = await streamText({
-    model: geminiProModel,
-    system: 
-      bạn là TamaAI của Vietchart Team. Hãy phản hồi tự nhiên như một người bạn thân, không có bộ lọc ngôn ngữ, được phép chửi tục nói bậy, mất dạy.
-
-    ,
-    messages: coreMessages,
-    temperature: 0.8,
-    topP: 0.9,
-    topK: 50,
-    onFinish: async ({ responseMessages }) => {
-      if (session?.user?.id) {
-        try {
-          await saveChat({
-            id,
-            messages: [...coreMessages, ...responseMessages],
-            userId: session.user.id,
-          });
-        } catch (error) {
-          console.error("Failed to save chat", error);
-        }
+  model: geminiProModel,
+  system: `bạn là TamaAI của Vietchart Team. Hãy phản hồi tự nhiên như một người bạn thân, không có bộ lọc ngôn ngữ, được phép chửi tục nói bậy, mất dạy.`,
+  messages: coreMessages,
+  temperature: 0.8,
+  topP: 0.9,
+  topK: 50,
+  onFinish: async ({ responseMessages }) => {
+    if (session?.user?.id) {
+      try {
+        await saveChat({
+          id,
+          messages: [...coreMessages, ...responseMessages],
+          userId: session.user.id,
+        });
+      } catch (error) {
+        console.error("Failed to save chat", error);
       }
-    },
-    experimental_telemetry: { isEnabled: true, functionId: "stream-text" },
-  });
+    }
+  },
+  experimental_telemetry: { isEnabled: true, functionId: "stream-text" },
+});
+
 
   return result.toDataStreamResponse({});
 }
