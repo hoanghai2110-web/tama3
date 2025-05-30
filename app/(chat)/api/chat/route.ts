@@ -1,27 +1,24 @@
 import { convertToCoreMessages, Message, streamText } from "ai";
-import { z } from "zod";
 import { geminiProModel } from "@/ai";
 import { auth } from "@/app/(auth)/auth";
+
 import {
-  createReservation,
-  deleteChatById,
-  getChatById,
-  getReservationById,
   saveChat,
-  checkAndIncreaseRequestCount, // import hàm giới hạn request
+  checkAndIncreaseRequestCount,
+  getChatById,
+  deleteChatById,
 } from "@/db/queries";
-import { generateUUID } from "@/lib/utils";
 
 export async function POST(request: Request) {
   const { id, messages }: { id: string; messages: Array<Message> } = await request.json();
   const session = await auth();
   if (!session) return new Response("Unauthorized", { status: 401 });
 
-  // Kiểm tra và tăng số lượt request, trả lỗi nếu hết lượt
+  // Kiểm tra giới hạn request/ngày cho user thường (user pro không giới hạn)
   const check = await checkAndIncreaseRequestCount(session.user.id);
   if (!check.allowed) {
     return new Response(
-      "Bạn đã hết lượt sử dụng hôm nay. Vui lòng liên hệ admin nâng cấp Pro để dùng không giới hạn.",
+      "Bạn đã hết lượt sử dụng hôm nay. Vui lòng nâng cấp Pro để dùng không giới hạn.",
       { status: 429 }
     );
   }
